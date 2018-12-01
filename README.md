@@ -15,7 +15,7 @@
 
 ## Purpose
 
-This repo serves to demonstrate writing unit test for a PHP library using PHP Unit.
+This repository serves to demonstrate writing unit test for a PHP library using PHP Unit.
 These tests are in no way perfect, but I tried to get good coverage while still
 providing meaningful test. After all you can have 100% coverage and still not really
 test the full functionality of your application.
@@ -25,7 +25,7 @@ of this mock library. One is the `LastModified` service and the other is the `St
 
 The `LastModified` service provides a way to register `LastModifiedTimeProvider` classes
 that can return an `int` time value that represents the time that whatever the provider is
-representing (i.e. Users, files, Products, etc) was last modified. The service can take
+representing (i.e. Users, files, Products, etc.) was last modified. The service can take
 1 to many providers, and return the most recent modified time. If you could imagine, this
 could be used as part of a blog website were the providers could be one to iterate over
 the webserver files to get the last modified time, and another provider to check for the
@@ -46,7 +46,6 @@ you can have classes that need external service such as databases and cache serv
 be able to write unit tests without breaking outside the boundary of the application
 using mock objects.
 
-
 ## Standards
 
 This project adheres to PSR standards where applicable. Also I tried to design this example
@@ -54,6 +53,12 @@ project using a clean architecture that promotes SOLID principles and seeks to h
 others in writing cleaner code. I am no expert by any means, but I feel although the
 example services may be a bit contrived, the implementation of them follow at least good
 practices for the most part.
+
+I also wanted to use at least PHP 7.1 to show off easier input type validation for method
+parameters. By making PHP more strict, not only do we help the compiler out, it also makes
+our code less error prone. Imagine writing a function the takes an array as a parameter with
+no type hint, and 4 years down the road some new develop doesn't read the docs (or they weren't
+there) and passes a string into it, and :boom:, some code just blew up.
 
 ## Contributing
 

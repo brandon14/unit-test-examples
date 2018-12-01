@@ -20,6 +20,18 @@ use App\Contracts\Services\Status\StatusServiceProvider;
 use App\Contracts\Services\Status\StatusProviderNotRegisteredException;
 use App\Contracts\Services\Status\StatusService as StatusServiceInterface;
 
+/**
+ * Status service. Allows registering different
+ * {@link \App\Contracts\Services\Status\StatusServiceProvider}
+ * and will return statuses from those providers.
+ *
+ * @author    Brandon Clothier <brandon14125@gmail.com>
+ *
+ * @version   1.0.0
+ *
+ * @license   MIT
+ * @copyright 2018
+ */
 class StatusService implements StatusServiceInterface
 {
     /**
@@ -79,17 +91,20 @@ class StatusService implements StatusServiceInterface
         }
         // @codeCoverageIgnoreEnd
 
+        // Make sure a valid cache implementation is provided if caching is enabled.
         if ($cache === null && $options->isCacheEnabled()) {
             throw new InvalidArgumentException(
                 'Must provide a ['.CacheInterface::class.'] implementation if caching is enabled.'
             );
         }
 
+        // Set service options.
         $this->cache = $cache;
         $this->isCacheEnabled = $options->isCacheEnabled();
         $this->cacheTtl = $options->getCacheTtl();
         $this->cacheKey = $options->getCacheKey();
 
+        // Filter out invalid providers.
         $this->providers = array_filter(
             $providers,
             function ($provider) {
@@ -147,6 +162,7 @@ class StatusService implements StatusServiceInterface
      */
     public function getStatus(?string $providerName = 'all'): array
     {
+        // Treat null as fetching all provider statuses.
         if ($providerName === null || $providerName === 'all') {
             return $this->resolveProviderArray(array_keys($this->providers), $this->cacheKey.'_all');
         }
@@ -159,10 +175,13 @@ class StatusService implements StatusServiceInterface
      */
     public function getStatusByArray(array $providers): array
     {
+        // Must provide a list of providers to resolve.
         if (count($providers) === 0) {
             throw new InvalidArgumentException('No providers specified.');
         }
 
+        // Filter out provider array to only allow non-empty strings. It's PHP
+        // so deal with it.
         $providerNames = array_filter(
             $providers,
             function ($string) {
@@ -218,12 +237,14 @@ class StatusService implements StatusServiceInterface
      */
     protected function resolveStatus(string $providerName): array
     {
+        // Invalid (not registered) provider.
         if (! isset($this->providers[$providerName])) {
             throw new StatusProviderNotRegisteredException("No provider registered with name [{$providerName}].");
         }
 
         $cacheKey = $this->cacheKey.'_'.$providerName;
 
+        // Check the cache for the provider if enabled.
         if ($this->isCacheEnabled && ($status = $this->checkCache($cacheKey)) !== null) {
             return $status;
         }

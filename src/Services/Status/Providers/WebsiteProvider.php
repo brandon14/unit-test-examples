@@ -11,6 +11,18 @@ use const FILTER_VALIDATE_URL;
 use GuzzleHttp\ClientInterface;
 use App\Contracts\Services\Status\StatusServiceProvider;
 
+/**
+ * Website status provider. Will make an HTTP request using
+ * {@link \GuzzleHttp\ClientInterface} to see if a website
+ * responds.
+ *
+ * @author    Brandon Clothier <brandon14125@gmail.com>
+ *
+ * @version   1.0.0
+ *
+ * @license   MIT
+ * @copyright 2018
+ */
 class WebsiteProvider implements StatusServiceProvider
 {
     /**
@@ -39,6 +51,7 @@ class WebsiteProvider implements StatusServiceProvider
     {
         $this->httpClient = $httpClient;
 
+        // Validate the URL to ping.
         if (filter_var($routeToPing, FILTER_VALIDATE_URL) === false) {
             throw new InvalidArgumentException("Invalid URL [{$routeToPing}] provided.");
         }
@@ -52,6 +65,7 @@ class WebsiteProvider implements StatusServiceProvider
     public function getStatus(): array
     {
         try {
+            // Get the PSR-7 response from Guzzle.
             $response = $this->httpClient->request('GET', $this->routeToPing);
 
             $code = (int) $response->getStatusCode();

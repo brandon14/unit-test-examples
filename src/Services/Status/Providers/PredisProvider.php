@@ -8,6 +8,17 @@ use Throwable;
 use Predis\ClientInterface as Predis;
 use App\Contracts\Services\Status\StatusServiceProvider;
 
+/**
+ * Predis status provider. Allows pining a redis cache database via
+ * {@link \Predis\Predis} to check the status of the database.
+ *
+ * @author    Brandon Clothier <brandon14125@gmail.com>
+ *
+ * @version   1.0.0
+ *
+ * @license   MIT
+ * @copyright 2018
+ */
 class PredisProvider implements StatusServiceProvider
 {
     /**
@@ -35,7 +46,7 @@ class PredisProvider implements StatusServiceProvider
     public function getStatus(): array
     {
         try {
-            // Predis client returns 'PONG' on a successfull ping.
+            // Predis client returns 'PONG' on a successful ping.
             return (string) $this->redis->ping() === 'PONG'
                 ? ['status' => StatusServiceProvider::STATUS_OK]
                 : ['status' => StatusServiceProvider::STATUS_ERROR];
