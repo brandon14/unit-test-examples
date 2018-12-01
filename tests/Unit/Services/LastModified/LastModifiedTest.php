@@ -169,7 +169,7 @@ class LastModifiedTest extends TestCase
     }
 
     /**
-     * Test that service properly filters out invalid providered when class is constructed.
+     * Test that service properly filters out invalid providers when class is constructed.
      *
      * @return void
      */
@@ -324,7 +324,7 @@ class LastModifiedTest extends TestCase
 
         // Tell mock provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -384,7 +384,7 @@ class LastModifiedTest extends TestCase
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -434,11 +434,11 @@ class LastModifiedTest extends TestCase
                 $this->cacheKey.'_null_provider',
                 $lastModified->timestamp,
                 $this->cacheTtl
-            )->will($this::returnValue(false));
+            )->willReturn(false);
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -471,11 +471,11 @@ class LastModifiedTest extends TestCase
         // Assert that the cache `has` method is called with cache key and
         // it returns true to mock that the timestamp is already present in
         // the cache.
-        $cache->expects($this::once())->method('has')->with($this->cacheKey.'_all')->will($this::returnValue(true));
+        $cache->expects($this::once())->method('has')->with($this->cacheKey.'_all')->willReturn(true);
         // If there is a cached timestamp, `get` should be called and should
         // return our mock latest timestamp.
-        $cache->expects($this::once())->method('get')->with($this->cacheKey.'_all', null)->will(
-            $this::returnValue($lastModified->timestamp)
+        $cache->expects($this::once())->method('get')->with($this->cacheKey.'_all', null)->willReturn(
+            $lastModified->timestamp
         );
         // With caching enabled, and a timestamp present in the cache, we shouldn't
         // call set to update the timestamp.
@@ -541,7 +541,7 @@ class LastModifiedTest extends TestCase
                 $lastModified->timestamp,
                 $this->cacheTtl
             )
-            ->will($this::returnValue(true));
+            ->willReturn(true);
 
         // Tell mocked provider not to expect the getLastModifiedTime to be invoked as the second call to the cache
         // is mocked to succeed.
@@ -592,7 +592,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('get')
             ->with($this->cacheKey.'_null_provider', null)
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
         // With caching enabled, and a timestamp present in the cache for the provider but not the 'all' group, we should
         // save that in the cache.
         $cache->expects($this::once())
@@ -602,7 +602,7 @@ class LastModifiedTest extends TestCase
                 $lastModified->timestamp,
                 $this->cacheTtl
             )
-            ->will($this::returnValue(true));
+            ->willReturn(true);
 
         // Assert the providers `getLastModifiedTime` function is not called since it is being
         // retrieved from the cache.
@@ -649,9 +649,9 @@ class LastModifiedTest extends TestCase
 
         // Specify the timestamps the mocked providers should return.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
         $this->providers['null_provider_2']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified2->timestamp));
+            ->willReturn($lastModified2->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -689,7 +689,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::never())->method('set');
 
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -723,7 +723,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::never())->method('set');
 
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue(-1));
+            ->willReturn(-1);
 
         $instance = new LastModified(
             $cache,
@@ -762,7 +762,7 @@ class LastModifiedTest extends TestCase
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())
             ->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -799,7 +799,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(false));
+            ->willReturn(false);
         // If there is no cached timestamp, get should not be called.
         $cache->expects($this::never())->method('get');
 
@@ -807,12 +807,12 @@ class LastModifiedTest extends TestCase
             $this->cacheKey.'_null_provider',
             $lastModified->timestamp,
             $this->cacheTtl
-        )->will($this::returnValue(true));
+        )->willReturn(true);
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())
             ->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -850,13 +850,13 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(true));
+            ->willReturn(true);
         // If there is a cached timestamp, `get` should be called and should
         // return our mock latest timestamp.
         $cache->expects($this::once())
             ->method('get')
             ->with($this->cacheKey.'_null_provider', null)
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
         // With caching enabled, and a timestamp present in the cache, we shouldn't
         // call put to update the timestamp.
         $cache->expects($this::never())->method('set');
@@ -900,7 +900,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::never())->method('set');
 
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -934,7 +934,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::never())->method('set');
 
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue(-1));
+            ->willReturn(-1);
 
         $instance = new LastModified(
             $cache,
@@ -977,9 +977,9 @@ class LastModifiedTest extends TestCase
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
         $this->providers['null_provider_2']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified2->timestamp));
+            ->willReturn($lastModified2->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -1053,9 +1053,9 @@ class LastModifiedTest extends TestCase
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
         $this->providers['null_provider_2']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified2->timestamp));
+            ->willReturn($lastModified2->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -1125,7 +1125,7 @@ class LastModifiedTest extends TestCase
                 $lastModified->timestamp,
                 $this->cacheTtl
             )
-            ->will($this::returnValue(true));
+            ->willReturn(true);
 
         // Assert the providers `getLastModifiedTime` function is not called since it is being
         // retrieved from the cache.
@@ -1171,11 +1171,11 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider_null_provider_2')
-            ->will($this::returnValue(true));
+            ->willReturn(true);
         $cache->expects($this::once())
             ->method('get')
             ->with($this->cacheKey.'_null_provider_null_provider_2')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
 
         $cache->expects($this::never())->method('set');
 
@@ -1219,9 +1219,9 @@ class LastModifiedTest extends TestCase
         $cache = $this->createMock(CacheInterface::class);
 
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
         $this->providers['null_provider_2']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified2->timestamp));
+            ->willReturn($lastModified2->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -1254,9 +1254,9 @@ class LastModifiedTest extends TestCase
         $cache = $this->createMock(CacheInterface::class);
 
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue(-1));
+            ->willReturn(-1);
         $this->providers['null_provider_2']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue(-42));
+            ->willReturn(-42);
 
         $instance = new LastModified(
             $cache,
@@ -1431,7 +1431,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(true));
+            ->willReturn(true);
         // Throw a mock PSR cache exception when fetching from the cache.
         $cache->expects($this::once())
             ->method('get')
@@ -1471,7 +1471,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(true));
+            ->willReturn(true);
         // Throw an error (to force a Throwable catch) when fetching from the cache.
         $cache->expects($this::once())
             ->method('get')
@@ -1513,7 +1513,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(false));
+            ->willReturn(false);
         // If there is no cached timestamp, get should not be called.
         $cache->expects($this::never())->method('get');
 
@@ -1526,7 +1526,7 @@ class LastModifiedTest extends TestCase
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
 
         $instance = new LastModified(
             $cache,
@@ -1563,7 +1563,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(false));
+            ->willReturn(false);
         // If there is no cached timestamp, get should not be called.
         $cache->expects($this::never())->method('get');
 
@@ -1576,7 +1576,7 @@ class LastModifiedTest extends TestCase
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->will($this::returnValue($lastModified->timestamp));
+            ->willReturn($lastModified->timestamp);
 
         $instance = new LastModified(
             $cache,

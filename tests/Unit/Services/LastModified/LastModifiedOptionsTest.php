@@ -11,6 +11,9 @@ use App\Contracts\Services\LastModified\LastModifiedOptions;
 /**
  * LastModifiedOptions unit tests.
  *
+ * The only real logic this class performs is in validating the timestamp format, so that
+ * is really the only thing that needs to be tested.
+ *
  * @author    Brandon Clothier <brandon14125@gmail.com>
  *
  * @version   1.0.0

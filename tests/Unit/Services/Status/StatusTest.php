@@ -22,6 +22,12 @@ use App\Contracts\Services\Status\StatusProviderNotRegisteredException;
 /**
  * Status service tests.
  *
+ * What is important to note about the test for this class, is we don't rely on any external service. The cache
+ * implementation the service relies on it mocked away so we have complete control over the service's dependencies.
+ * Also it relies on registered providers which are also mocked. Those providers should be tested separately from the
+ * service, and the tests on the services should not depend upon concrete provider implementations, so those are mocked
+ * away as well so the only logic we test it the logic of the service itself.
+ *
  * @author    Brandon Clothier <brandon14125@gmail.com>
  *
  * @version   1.0.0
@@ -291,7 +297,7 @@ class StatusTest extends TestCase
 
         // Tell mock provider to return the set status.
         $this->providers['null_provider']->expects($this::once())->method('getStatus')
-            ->will($this::returnValue($status));
+            ->willReturn($status);
 
         $instance = new StatusService(
             $cache,
@@ -353,7 +359,7 @@ class StatusTest extends TestCase
 
         // Tell mocked provider to return the set status.
         $this->providers['null_provider']->expects($this::once())->method('getStatus')
-            ->will($this::returnValue($status));
+            ->willReturn($status);
 
         $instance = new StatusService(
             $cache,
@@ -410,7 +416,7 @@ class StatusTest extends TestCase
                 serialize(['null_provider' => $status]),
                 $this->cacheTtl
             )
-            ->will($this::returnValue(true));
+            ->willReturn(true);
 
         // Tell mocked provider not to expect the getStatus to be invoked as the second call to the cache
         // is mocked to succeed.
@@ -460,7 +466,7 @@ class StatusTest extends TestCase
         $cache->expects($this::once())
             ->method('get')
             ->with($this->cacheKey.'_null_provider', null)
-            ->will($this::returnValue(serialize($status)));
+            ->willReturn(serialize($status));
         // With caching enabled, and a status present in the cache for the provider but not the 'all' group, we should
         // save that in the cache.
         $cache->expects($this::once())
@@ -470,7 +476,7 @@ class StatusTest extends TestCase
                 serialize(['null_provider' => $status]),
                 $this->cacheTtl
             )
-            ->will($this::returnValue(true));
+            ->willReturn(true);
 
         // Assert the providers `getStatus` function is not called since it is being
         // retrieved from the cache.
@@ -512,7 +518,7 @@ class StatusTest extends TestCase
         // Tell mocked provider to return the set status.
         $this->providers['null_provider']->expects($this::once())
             ->method('getStatus')
-            ->will($this::returnValue($status));
+            ->willReturn($status);
 
         $instance = new StatusService(
             $cache,
@@ -548,7 +554,7 @@ class StatusTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(false));
+            ->willReturn(false);
         // If there is no cached status, get should not be called.
         $cache->expects($this::never())->method('get');
 
@@ -556,12 +562,12 @@ class StatusTest extends TestCase
             $this->cacheKey.'_null_provider',
             serialize($status),
             $this->cacheTtl
-        )->will($this::returnValue(true));
+        )->willReturn(true);
 
         // Tell mocked provider to return the set status.
         $this->providers['null_provider']->expects($this::once())
             ->method('getStatus')
-            ->will($this::returnValue($status));
+            ->willReturn($status);
 
         $instance = new StatusService(
             $cache,
@@ -598,13 +604,13 @@ class StatusTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(true));
+            ->willReturn(true);
         // If there is a cached status, `get` should be called and should
         // return our mock latest status.
         $cache->expects($this::once())
             ->method('get')
             ->with($this->cacheKey.'_null_provider', null)
-            ->will($this::returnValue(serialize($status)));
+            ->willReturn(serialize($status));
         // With caching enabled, and a status present in the cache, we shouldn't
         // call put to update the status.
         $cache->expects($this::never())->method('set');
@@ -654,9 +660,9 @@ class StatusTest extends TestCase
 
         // Tell mocked provider to return the set statuses.
         $this->providers['null_provider']->expects($this::once())->method('getStatus')
-            ->will($this::returnValue($status));
+            ->willReturn($status);
         $this->providers['null_provider_2']->expects($this::once())->method('getStatus')
-            ->will($this::returnValue($statusTwo));
+            ->willReturn($statusTwo);
 
         $instance = new StatusService(
             $cache,
@@ -730,9 +736,9 @@ class StatusTest extends TestCase
 
         // Tell mocked provider to return the set status.
         $this->providers['null_provider']->expects($this::once())->method('getStatus')
-            ->will($this::returnValue($status));
+            ->willReturn($status);
         $this->providers['null_provider_2']->expects($this::once())->method('getStatus')
-            ->will($this::returnValue($statusTwo));
+            ->willReturn($statusTwo);
 
         $instance = new StatusService(
             $cache,
@@ -802,7 +808,7 @@ class StatusTest extends TestCase
                 serialize(['null_provider' => $status, 'null_provider_2' => $statusTwo]),
                 $this->cacheTtl
             )
-            ->will($this::returnValue(true));
+            ->willReturn(true);
 
         // Assert the providers `getStatus` function is not called since it is being
         // retrieved from the cache.
@@ -848,11 +854,11 @@ class StatusTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider_null_provider_2')
-            ->will($this::returnValue(true));
+            ->willReturn(true);
         $cache->expects($this::once())
             ->method('get')
             ->with($this->cacheKey.'_null_provider_null_provider_2')
-            ->will($this::returnValue(serialize($status)));
+            ->willReturn(serialize($status));
 
         $cache->expects($this::never())->method('set');
 
@@ -909,11 +915,11 @@ class StatusTest extends TestCase
                 $this->cacheKey.'_null_provider',
                 serialize($status),
                 $this->cacheTtl
-            )->will($this::returnValue(false));
+            )->willReturn(false);
 
         // Tell mocked provider to return the set status.
         $this->providers['null_provider']->expects($this::once())->method('getStatus')
-            ->will($this::returnValue($status));
+            ->willReturn($status);
 
         $instance = new StatusService(
             $cache,
@@ -1085,7 +1091,7 @@ class StatusTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(true));
+            ->willReturn(true);
         // Throw a mock PSR cache exception when fetching from the cache.
         $cache->expects($this::once())
             ->method('get')
@@ -1125,7 +1131,7 @@ class StatusTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(true));
+            ->willReturn(true);
         // Throw an error (to force a Throwable catch) when fetching from the cache.
         $cache->expects($this::once())
             ->method('get')
@@ -1166,7 +1172,7 @@ class StatusTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(false));
+            ->willReturn(false);
         // If there is no cached status, get should not be called.
         $cache->expects($this::never())->method('get');
 
@@ -1179,7 +1185,7 @@ class StatusTest extends TestCase
 
         // Tell mocked provider to return the set status.
         $this->providers['null_provider']->expects($this::once())->method('getStatus')
-            ->will($this::returnValue($status));
+            ->willReturn($status);
 
         $instance = new StatusService(
             $cache,
@@ -1215,7 +1221,7 @@ class StatusTest extends TestCase
         $cache->expects($this::once())
             ->method('has')
             ->with($this->cacheKey.'_null_provider')
-            ->will($this::returnValue(false));
+            ->willReturn(false);
         // If there is no cached status, get should not be called.
         $cache->expects($this::never())->method('get');
 
@@ -1228,7 +1234,7 @@ class StatusTest extends TestCase
 
         // Tell mocked provider to return the set status.
         $this->providers['null_provider']->expects($this::once())->method('getStatus')
-            ->will($this::returnValue($status));
+            ->willReturn($status);
 
         $instance = new StatusService(
             $cache,

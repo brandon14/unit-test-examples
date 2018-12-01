@@ -14,6 +14,14 @@ use App\Contracts\Services\Status\StatusServiceProvider;
 /**
  * PdoProvider tests.
  *
+ * It's easy to imagine testing a class that uses a database connection (in this case an
+ * {@link \PDO} connection) would actually connect to a database. But by passing in the
+ * {@link \PDO} connection object to the class, we can mock that object in our tests below
+ * so we never have to leave the application boundary to test this class. As long as we
+ * force our mock to behave as a normal {@link \PDO} class would (think adhering to the
+ * documentation for the {@link \PDO} class), then we can be sure our class behaves in accordance
+ * given our assumption of how the {@link \PDO} class behaves.
+ *
  * @author    Brandon Clothier <brandon14125@gmail.com>
  *
  * @version   1.0.0
@@ -44,7 +52,7 @@ class PdoProviderTest extends TestCase
 
         // We expect query to be called, and we mock it returning false to simulate a failure to create the
         // PDOStatement object.
-        $db->expects($this::once())->method('query')->will($this::returnValue(false));
+        $db->expects($this::once())->method('query')->willReturn(false);
 
         $instance = new PdoProvider($db);
 
@@ -60,10 +68,10 @@ class PdoProviderTest extends TestCase
 
         // We expect that the execute function will be called on the statement mock and
         // we mock it to return false to simulate the statement execution failure.
-        $statement->expects($this::once())->method('execute')->will($this::returnValue(false));
+        $statement->expects($this::once())->method('execute')->willReturn(false);
 
         // We expect query to be called, and we mock it returning the mocked statement.
-        $db->expects($this::once())->method('query')->will($this::returnValue($statement));
+        $db->expects($this::once())->method('query')->willReturn($statement);
 
         $instance = new PdoProvider($db);
 
@@ -85,7 +93,7 @@ class PdoProviderTest extends TestCase
         );
 
         // We expect query to be called, and we mock it returning the mocked statement.
-        $db->expects($this::once())->method('query')->will($this::returnValue($statement));
+        $db->expects($this::once())->method('query')->willReturn($statement);
 
         $instance = new PdoProvider($db);
 
@@ -101,13 +109,13 @@ class PdoProviderTest extends TestCase
 
         // We expect that the execute function will be called on the statement mock and
         // we mock it to return true.
-        $statement->expects($this::once())->method('execute')->will($this::returnValue(true));
+        $statement->expects($this::once())->method('execute')->willReturn(true);
         // Simulate a call to errorCode returning something other than 00000 which is the SQL state
         // for success.
-        $statement->expects($this::once())->method('errorCode')->will($this::returnValue('01002'));
+        $statement->expects($this::once())->method('errorCode')->willReturn('01002');
 
         // We expect query to be called, and we mock it returning the mocked statement.
-        $db->expects($this::once())->method('query')->will($this::returnValue($statement));
+        $db->expects($this::once())->method('query')->willReturn($statement);
 
         $instance = new PdoProvider($db);
 
@@ -123,16 +131,16 @@ class PdoProviderTest extends TestCase
 
         // We expect that the execute function will be called on the statement mock and
         // we mock it to return true.
-        $statement->expects($this::once())->method('execute')->will($this::returnValue(true));
+        $statement->expects($this::once())->method('execute')->willReturn(true);
         // Mock a success error code.
-        $statement->expects($this::once())->method('errorCode')->will($this::returnValue('00000'));
+        $statement->expects($this::once())->method('errorCode')->willReturn('00000');
         // Mock that fetching the results throws a PDOException
         $statement->expects($this::once())->method('fetch')->will(
             $this::throwException(new PDOException('This is a test!'))
         );
 
         // We expect query to be called, and we mock it returning the mocked statement.
-        $db->expects($this::once())->method('query')->will($this::returnValue($statement));
+        $db->expects($this::once())->method('query')->willReturn($statement);
 
         $instance = new PdoProvider($db);
 
@@ -148,15 +156,15 @@ class PdoProviderTest extends TestCase
 
         // We expect that the execute function will be called on the statement mock and
         // we mock it to return true.
-        $statement->expects($this::once())->method('execute')->will($this::returnValue(true));
+        $statement->expects($this::once())->method('execute')->willReturn(true);
         // Mock a success error code.
-        $statement->expects($this::once())->method('errorCode')->will($this::returnValue('00000'));
+        $statement->expects($this::once())->method('errorCode')->willReturn('00000');
         // Mock the query returning no results. I mean this should never happen right? SELECT 1+1 never returning
         // 2? Oh well sue me.
-        $statement->expects($this::once())->method('fetch')->will($this::returnValue([]));
+        $statement->expects($this::once())->method('fetch')->willReturn([]);
 
         // We expect query to be called, and we mock it returning the mocked statement.
-        $db->expects($this::once())->method('query')->will($this::returnValue($statement));
+        $db->expects($this::once())->method('query')->willReturn($statement);
 
         $instance = new PdoProvider($db);
 
@@ -172,15 +180,15 @@ class PdoProviderTest extends TestCase
 
         // We expect that the execute function will be called on the statement mock and
         // we mock it to return true.
-        $statement->expects($this::once())->method('execute')->will($this::returnValue(true));
+        $statement->expects($this::once())->method('execute')->willReturn(true);
         // Mock a success error code.
-        $statement->expects($this::once())->method('errorCode')->will($this::returnValue('00000'));
+        $statement->expects($this::once())->method('errorCode')->willReturn('00000');
         // Mock the query returning the correct results meaning we could hit the database with this
         // connection.
-        $statement->expects($this::once())->method('fetch')->will($this::returnValue([0 => 2]));
+        $statement->expects($this::once())->method('fetch')->willReturn([0 => 2]);
 
         // We expect query to be called, and we mock it returning the mocked statement.
-        $db->expects($this::once())->method('query')->will($this::returnValue($statement));
+        $db->expects($this::once())->method('query')->willReturn($statement);
 
         $instance = new PdoProvider($db);
 
