@@ -1,3 +1,16 @@
+<p align="center">
+  <a href="https://travis-ci.org/brandon14/unit-test-examples"><img src="https://img.shields.io/travis/brandon14/unit-test-examples/master.svg?style=flat-square" alt="Build Status"></a>
+  <a href="https://codeclimate.com/github/brandon14/unit-test-examples"><img src="https://img.shields.io/codeclimate/github/brandon14/unit-test-examples.svg?style=flat-square" alt="Code Climate"></a>
+  <a href="https://codecov.io/gh/brandon14/unit-test-examples"><img src="https://img.shields.io/codecov/c/github/brandon14/unit-test-examples.svg?style=flat-square" alt="CodeCov"></a>
+  <a href="https://github.com/brandon14/unit-test-examples/blob/master/LICENSE"><img src="https://img.shields.io/github/license/brandon14/unit-test-examples.svg?style=flat-square" alt="License"></a>
+</p>
+<p align="center">
+  <a href="https://github.com/brandon14/unit-test-examples/issues"><img src="https://img.shields.io/github/issues/brandon14/unit-test-examples.svg?style=flat-square" alt="Issues"></a>
+  <a href="https://github.com/brandon14/unit-test-examples/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/brandon14/unit-test-examples.svg?style=flat-square" alt="Issues Closed"></a>
+  <a href="https://github.com/brandon14/unit-test-examples/pulls"><img src="https://img.shields.io/github/issues-pr/brandon14/unit-test-examples.svg?style=flat-square" alt="Pull Requests"></a>
+  <a href="https://github.com/brandon14/unit-test-examples/pulls?q=is%3Apr+is%3Aclosed"><img src="https://img.shields.io/github/issues-pr-closed/brandon14/unit-test-examples.svg?style=flat-square" alt="Pull Requests Closed"></a>
+</p>
+
 # Unit Test Examples
 
 ## Purpose
@@ -48,4 +61,16 @@ Got something you wanna add? Find a bug or otherwise bad code? Feel free to subm
 requests to add in new features, fix bugs, or clean things up. Just be sure to follow the
 [Code of Conduct](https://github.com/brandon14/unit-test-examples/blob/master/.github/CODE_OF_CONDUCT.md)
 and [Contributing Guide](https://github.com/brandon14/brandonclothier.me/blob/master/.github/CONTRIBUTING.md),
-and I encourage creating clean and well described pull request if possible.
+and I encourage creating clean and well described pull requests if possible.
+
+This code is released under the MIT license.
+
+Copyright &copy; 2017 Brandon Clothier
+
+<p align="center">
+  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/compatibility-betamax.svg" alt="Compatibility Betamax"></a>
+  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg" alt="Works 60% Of The Time"></a>
+  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/certified-steve-bruhle.svg" alt="Dr. Steve Brule"></a>
+  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/contains-technical-debt.svg" alt="Contains Technical Debt"></a>
+  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/built-by-neckbeards.svg" alt="Built By Neckbeards"></a>
+</p>

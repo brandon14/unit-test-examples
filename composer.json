@@ -52,8 +52,8 @@
         "lint:phpcs": "phpcs ./",
         "lint:phpmd": "phpmd ./ text ./phpmd.xml",
         "lint:php-cs-fixer:fix": "php-cs-fixer fix",
-        "lint:php-cs-fixer:check": "@composer run-script lint:php-cs-fixer:fix -- --dry-run --stop-on-violation",
-        "lint": "@composer run-script lint:phpcs && @composer run-script lint:php-cs-fixer:check",
-        "test": "@composer run-script lint && @composer run-script security:check && phpunit --coverage-text --coverage-html ./coverage"
+        "lint:php-cs-fixer:check": "composer run-script lint:php-cs-fixer:fix -- --dry-run --stop-on-violation",
+        "lint": "composer run-script lint:phpcs && composer run-script lint:php-cs-fixer:check",
+        "test": "composer run-script lint && composer run-script security:check && phpunit"
     }
 }
