@@ -98,19 +98,21 @@ class LastModified implements LastModifiedService
         }
         // @codeCoverageIgnoreEnd
 
+        // Make sure a valid cache implementation is provided if caching is enabled.
         if ($cache === null && $options->isCacheEnabled()) {
             throw new InvalidArgumentException(
                 'Must provide a ['.CacheInterface::class.'] implementation if caching is enabled.'
             );
         }
 
+        // Set service options.
         $this->cache = $cache;
-
         $this->isCacheEnabled = $options->isCacheEnabled();
         $this->cacheTtl = $options->getCacheTtl();
         $this->cacheKey = $options->getCacheKey();
         $this->timestampFormat = $options->getTimestampFormat();
 
+        // Filter out invalid providers.
         $this->providers = array_filter(
             $providers,
             function ($provider) {
@@ -168,6 +170,7 @@ class LastModified implements LastModifiedService
      */
     public function getLastModifiedTime(?string $providerName = 'all'): Carbon
     {
+        // Treat null as fetching all providers.
         if ($providerName === null || $providerName === 'all') {
             return Carbon::createFromTimestamp(
                 $this->resolveProviderArray(array_keys($this->providers), $this->cacheKey.'_all')
@@ -176,6 +179,7 @@ class LastModified implements LastModifiedService
 
         $timestamp = $this->resolveTimestamp($providerName);
 
+        // Prevent negative and future timestamps.
         if ($timestamp < 0 || $timestamp > time()) {
             $timestamp = time();
         }
@@ -188,10 +192,13 @@ class LastModified implements LastModifiedService
      */
     public function getLastModifiedTimeByArray(array $providers): Carbon
     {
+        // Must provide a list of providers to resolve.
         if (count($providers) === 0) {
             throw new InvalidArgumentException('No providers specified.');
         }
 
+        // Filter out provider array to only allow non-empty strings. It's PHP
+        // so deal with it.
         $providerNames = array_filter(
             $providers,
             function ($string) {
@@ -232,12 +239,14 @@ class LastModified implements LastModifiedService
 
         $timestamp = -1;
 
+        // Resolve all providers, keeping track of the most recent one.
         foreach ($providerNames as $providerName) {
             $providerTimestamp = $this->resolveTimestamp($providerName);
 
             $timestamp = $providerTimestamp > $timestamp ? $providerTimestamp : $timestamp;
         }
 
+        // Prevent negative and future timestamps.
         if ($timestamp < 0 || $timestamp > time()) {
             $timestamp = time();
         }
@@ -262,18 +271,21 @@ class LastModified implements LastModifiedService
      */
     protected function resolveTimestamp(string $providerName): int
     {
+        // Invalid (not registered) provider.
         if (! isset($this->providers[$providerName])) {
             throw new LastModifiedProviderNotRegisteredException("No provider registered with name [{$providerName}].");
         }
 
         $cacheKey = $this->cacheKey.'_'.$providerName;
 
+        // Check the cache for the provider if enabled.
         if ($this->isCacheEnabled && ($timestamp = $this->checkCache($cacheKey)) !== null) {
             return $timestamp;
         }
 
         $timestamp = $this->providers[$providerName]->getLastModifiedTime();
 
+        // Cache status for this provider.
         if ($this->isCacheEnabled) {
             $this->saveInCache($cacheKey, $timestamp);
         }

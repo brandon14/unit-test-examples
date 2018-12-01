@@ -1,8 +1,21 @@
+<p align="center">
+  <a href="https://travis-ci.org/brandon14/unit-test-examples"><img src="https://img.shields.io/travis/brandon14/unit-test-examples/master.svg?style=flat-square" alt="Build Status"></a>
+  <a href="https://codeclimate.com/github/brandon14/unit-test-examples/maintainability"><img src="https://img.shields.io/codeclimate/maintainability/brandon14/unit-test-examples.svg?style=flat-square" alt="Code Climate Maintainability"></a>
+  <a href="https://codecov.io/gh/brandon14/unit-test-examples"><img src="https://img.shields.io/codecov/c/github/brandon14/unit-test-examples.svg?style=flat-square" alt="CodeCov"></a>
+  <a href="https://github.com/brandon14/unit-test-examples/blob/master/LICENSE"><img src="https://img.shields.io/github/license/brandon14/unit-test-examples.svg?style=flat-square" alt="License"></a>
+</p>
+<p align="center">
+  <a href="https://github.com/brandon14/unit-test-examples/issues"><img src="https://img.shields.io/github/issues/brandon14/unit-test-examples.svg?style=flat-square" alt="Issues"></a>
+  <a href="https://github.com/brandon14/unit-test-examples/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/brandon14/unit-test-examples.svg?style=flat-square" alt="Issues Closed"></a>
+  <a href="https://github.com/brandon14/unit-test-examples/pulls"><img src="https://img.shields.io/github/issues-pr/brandon14/unit-test-examples.svg?style=flat-square" alt="Pull Requests"></a>
+  <a href="https://github.com/brandon14/unit-test-examples/pulls?q=is%3Apr+is%3Aclosed"><img src="https://img.shields.io/github/issues-pr-closed/brandon14/unit-test-examples.svg?style=flat-square" alt="Pull Requests Closed"></a>
+</p>
+
 # Unit Test Examples
 
 ## Purpose
 
-This repo serves to demonstrate writing unit test for a PHP library using PHP Unit.
+This repository serves to demonstrate writing unit test for a PHP library using PHP Unit.
 These tests are in no way perfect, but I tried to get good coverage while still
 providing meaningful test. After all you can have 100% coverage and still not really
 test the full functionality of your application.
@@ -12,7 +25,7 @@ of this mock library. One is the `LastModified` service and the other is the `St
 
 The `LastModified` service provides a way to register `LastModifiedTimeProvider` classes
 that can return an `int` time value that represents the time that whatever the provider is
-representing (i.e. Users, files, Products, etc) was last modified. The service can take
+representing (i.e. Users, files, Products, etc.) was last modified. The service can take
 1 to many providers, and return the most recent modified time. If you could imagine, this
 could be used as part of a blog website were the providers could be one to iterate over
 the webserver files to get the last modified time, and another provider to check for the
@@ -33,7 +46,6 @@ you can have classes that need external service such as databases and cache serv
 be able to write unit tests without breaking outside the boundary of the application
 using mock objects.
 
-
 ## Standards
 
 This project adheres to PSR standards where applicable. Also I tried to design this example
@@ -42,10 +54,28 @@ others in writing cleaner code. I am no expert by any means, but I feel although
 example services may be a bit contrived, the implementation of them follow at least good
 practices for the most part.
 
+I also wanted to use at least PHP 7.1 to show off easier input type validation for method
+parameters. By making PHP more strict, not only do we help the compiler out, it also makes
+our code less error prone. Imagine writing a function the takes an array as a parameter with
+no type hint, and 4 years down the road some new develop doesn't read the docs (or they weren't
+there) and passes a string into it, and :boom:, some code just blew up.
+
 ## Contributing
 
 Got something you wanna add? Find a bug or otherwise bad code? Feel free to submit pull
 requests to add in new features, fix bugs, or clean things up. Just be sure to follow the
 [Code of Conduct](https://github.com/brandon14/unit-test-examples/blob/master/.github/CODE_OF_CONDUCT.md)
 and [Contributing Guide](https://github.com/brandon14/brandonclothier.me/blob/master/.github/CONTRIBUTING.md),
-and I encourage creating clean and well described pull request if possible.
+and I encourage creating clean and well described pull requests if possible.
+
+This code is released under the MIT license.
+
+Copyright &copy; 2017 Brandon Clothier
+
+<p align="center">
+  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/compatibility-betamax.svg" alt="Compatibility Betamax"></a>
+  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg" alt="Works 60% Of The Time"></a>
+  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/certified-steve-bruhle.svg" alt="Dr. Steve Brule"></a>
+  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/contains-technical-debt.svg" alt="Contains Technical Debt"></a>
+  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/built-by-neckbeards.svg" alt="Built By Neckbeards"></a>
+</p>

@@ -8,6 +8,17 @@ use PDO;
 use PDOException;
 use App\Contracts\Services\Status\StatusServiceProvider;
 
+/**
+ * PDO status provider. Allows pinging a database connection created through
+ * {@link \PDO} to test the connection.
+ *
+ * @author    Brandon Clothier <brandon14125@gmail.com>
+ *
+ * @version   1.0.0
+ *
+ * @license   MIT
+ * @copyright 2018
+ */
 class PdoProvider implements StatusServiceProvider
 {
     /**
