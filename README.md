@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://travis-ci.org/brandon14/unit-test-examples"><img src="https://img.shields.io/travis/brandon14/unit-test-examples/master.svg?style=flat-square" alt="Build Status"></a>
-  <a href="https://codeclimate.com/github/brandon14/unit-test-examples"><img src="https://img.shields.io/codeclimate/github/brandon14/unit-test-examples.svg?style=flat-square" alt="Code Climate"></a>
+  <a href="https://codeclimate.com/github/brandon14/unit-test-examples/maintainability"><img src="https://img.shields.io/codeclimate/maintainability/brandon14/unit-test-examples.svg?style=flat-square" alt="Code Climate Maintainability"></a>
   <a href="https://codecov.io/gh/brandon14/unit-test-examples"><img src="https://img.shields.io/codecov/c/github/brandon14/unit-test-examples.svg?style=flat-square" alt="CodeCov"></a>
   <a href="https://github.com/brandon14/unit-test-examples/blob/master/LICENSE"><img src="https://img.shields.io/github/license/brandon14/unit-test-examples.svg?style=flat-square" alt="License"></a>
 </p>
