@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\LastModified;
 
+use App\Contracts\Services\LastModified\LastModifiedOptions;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use App\Contracts\Services\LastModified\LastModifiedOptions;
 
 /**
  * LastModifiedOptions unit tests.

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\Status\Providers;
 
+use App\Contracts\Services\Status\StatusServiceProvider;
+use App\Services\Status\Providers\PdoProvider;
 use PDO;
 use PDOException;
 use PDOStatement;
 use PHPUnit\Framework\TestCase;
-use App\Services\Status\Providers\PdoProvider;
-use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
  * PdoProvider tests.

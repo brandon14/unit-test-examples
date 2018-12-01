@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\LastModified;
 
-use Exception;
-use TypeError;
+use App\Contracts\Services\LastModified\LastModifiedCacheException;
+use App\Contracts\Services\LastModified\LastModifiedOptions;
+use App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException;
+use App\Contracts\Services\LastModified\LastModifiedTimeProvider;
+use App\Services\LastModified\LastModified;
 use Carbon\Carbon;
-use function array_keys;
-use function array_values;
+use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheException;
 use Psr\SimpleCache\CacheInterface;
-use App\Services\LastModified\LastModified;
-use App\Contracts\Services\LastModified\LastModifiedOptions;
-use App\Contracts\Services\LastModified\LastModifiedTimeProvider;
-use App\Contracts\Services\LastModified\LastModifiedCacheException;
-use App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException;
+use TypeError;
+use function array_keys;
+use function array_values;
 
 /**
  * LastModified service unit tests.

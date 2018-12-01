@@ -2,15 +2,15 @@
 
 namespace App\Services\LastModified\Providers;
 
-use Iterator;
-use function is_dir;
-use DirectoryIterator;
-use function is_array;
-use function array_filter;
-use InvalidArgumentException;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
 use App\Contracts\Services\LastModified\LastModifiedTimeProvider;
+use DirectoryIterator;
+use InvalidArgumentException;
+use Iterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use function array_filter;
+use function is_array;
+use function is_dir;
 
 /**
  * Filesystem last modified provider. Will iterate over a list opf directories
@@ -51,7 +51,7 @@ class FilesystemLastModifiedTimeProvider implements LastModifiedTimeProvider
     public function __construct(array $config)
     {
         // Validate the base path.
-        if (! isset($config['base_path']) || ! is_dir($config['base_path'])) {
+        if (!isset($config['base_path']) || !is_dir($config['base_path'])) {
             throw new InvalidArgumentException('You must provide a valid base path for this provider.');
         }
 
@@ -104,7 +104,7 @@ class FilesystemLastModifiedTimeProvider implements LastModifiedTimeProvider
         $timestamp = -1;
 
         foreach ($files as $file) {
-            if (! $file->isDir()) {
+            if (!$file->isDir()) {
                 $mTime = $file->getMTime();
                 $timestamp = $mTime > $timestamp ? $mTime : $timestamp;
             }

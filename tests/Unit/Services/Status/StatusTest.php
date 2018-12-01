@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\Status;
 
+use App\Contracts\Services\Status\StatusCacheException;
+use App\Contracts\Services\Status\StatusOptions;
+use App\Contracts\Services\Status\StatusProviderNotRegisteredException;
+use App\Contracts\Services\Status\StatusServiceProvider;
+use App\Services\Status\StatusService;
 use Exception;
-use TypeError;
-use function serialize;
-use function array_keys;
-use function array_values;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheException;
 use Psr\SimpleCache\CacheInterface;
-use App\Services\Status\StatusService;
-use App\Contracts\Services\Status\StatusOptions;
-use App\Contracts\Services\Status\StatusCacheException;
-use App\Contracts\Services\Status\StatusServiceProvider;
-use App\Contracts\Services\Status\StatusProviderNotRegisteredException;
+use TypeError;
+use function array_keys;
+use function array_values;
+use function serialize;
 
 /**
  * Status service tests.

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\LastModified\Providers;
 
+use App\Services\LastModified\Providers\FilesystemLastModifiedTimeProvider;
 use Carbon\Carbon;
 use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream as VfsStream;
-use App\Services\LastModified\Providers\FilesystemLastModifiedTimeProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Filesystem last modified provider unit tests.

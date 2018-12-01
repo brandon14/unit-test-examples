@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Status\Providers;
 
+use App\Contracts\Services\Status\StatusServiceProvider;
 use PDO;
 use PDOException;
-use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
  * PDO status provider. Allows pinging a database connection created through
@@ -68,7 +68,7 @@ class PdoProvider implements StatusServiceProvider
             // Fetch the result.
             $result = $stmt->fetch(PDO::FETCH_NUM);
 
-            if (! isset($result[0])) {
+            if (!isset($result[0])) {
                 return ['status' => StatusServiceProvider::STATUS_ERROR];
             }
 

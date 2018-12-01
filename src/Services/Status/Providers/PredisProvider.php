@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Status\Providers;
 
-use Throwable;
-use Predis\ClientInterface as Predis;
 use App\Contracts\Services\Status\StatusServiceProvider;
+use Predis\ClientInterface as Predis;
+use Throwable;
 
 /**
  * Predis status provider. Allows pining a redis cache database via

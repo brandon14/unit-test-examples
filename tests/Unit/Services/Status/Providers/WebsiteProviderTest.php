@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\Status\Providers;
 
+use App\Contracts\Services\Status\StatusServiceProvider;
+use App\Services\Status\Providers\WebsiteProvider;
 use Exception;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
-use GuzzleHttp\ClientInterface;
 use PHPUnit\Framework\TestCase;
-use GuzzleHttp\Exception\GuzzleException;
-use App\Services\Status\Providers\WebsiteProvider;
-use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
  * WebsiteProvider tests.

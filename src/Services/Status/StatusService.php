@@ -2,23 +2,23 @@
 
 namespace App\Services\Status;
 
+use App\Contracts\Services\Status\StatusCacheException;
+use App\Contracts\Services\Status\StatusOptions;
+use App\Contracts\Services\Status\StatusProviderNotRegisteredException;
+use App\Contracts\Services\Status\StatusService as StatusServiceInterface;
+use App\Contracts\Services\Status\StatusServiceProvider;
+use InvalidArgumentException;
+use Psr\SimpleCache\CacheException;
+use Psr\SimpleCache\CacheInterface;
 use Throwable;
+use function array_filter;
+use function array_keys;
 use function count;
 use function implode;
 use function is_array;
 use function is_string;
 use function serialize;
-use function array_keys;
 use function unserialize;
-use function array_filter;
-use InvalidArgumentException;
-use Psr\SimpleCache\CacheException;
-use Psr\SimpleCache\CacheInterface;
-use App\Contracts\Services\Status\StatusOptions;
-use App\Contracts\Services\Status\StatusCacheException;
-use App\Contracts\Services\Status\StatusServiceProvider;
-use App\Contracts\Services\Status\StatusProviderNotRegisteredException;
-use App\Contracts\Services\Status\StatusService as StatusServiceInterface;
 
 /**
  * Status service. Allows registering different
@@ -132,13 +132,13 @@ class StatusService implements StatusServiceInterface
      */
     public function removeProvider(string $providerName): bool
     {
-        if (! isset($this->providers[$providerName])) {
+        if (!isset($this->providers[$providerName])) {
             throw new InvalidArgumentException("No provider registered with name [{$providerName}].");
         }
 
         unset($this->providers[$providerName]);
 
-        return ! isset($this->providers[$providerName]);
+        return !isset($this->providers[$providerName]);
     }
 
     /**
@@ -238,7 +238,7 @@ class StatusService implements StatusServiceInterface
     protected function resolveStatus(string $providerName): array
     {
         // Invalid (not registered) provider.
-        if (! isset($this->providers[$providerName])) {
+        if (!isset($this->providers[$providerName])) {
             throw new StatusProviderNotRegisteredException("No provider registered with name [{$providerName}].");
         }
 
@@ -280,7 +280,7 @@ class StatusService implements StatusServiceInterface
 
                 // If the unserialization failed, or it does not result in an array, return
                 // null.
-                return $status === false || ! is_array($status) ? null : $status;
+                return $status === false || !is_array($status) ? null : $status;
             }
         } catch (CacheException | Throwable $exception) {
             throw new StatusCacheException($exception->getMessage());

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\Status\Providers;
 
-use Throwable;
-use function filter_var;
-use InvalidArgumentException;
-use const FILTER_VALIDATE_URL;
-use GuzzleHttp\ClientInterface;
 use App\Contracts\Services\Status\StatusServiceProvider;
+use GuzzleHttp\ClientInterface;
+use InvalidArgumentException;
+use Throwable;
+use const FILTER_VALIDATE_URL;
+use function filter_var;
 
 /**
  * Website status provider. Will make an HTTP request using

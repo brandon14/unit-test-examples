@@ -72,7 +72,7 @@ class LastModifiedOptions
         $this->cacheKey = $cacheKey;
         $this->timestampFormat = $timestampFormat;
 
-        if (! date($this->timestampFormat)) {
+        if (!date($this->timestampFormat)) {
             throw new InvalidArgumentException("Invalid default timestamp format [{$this->timestampFormat}] provided.");
         }
     }

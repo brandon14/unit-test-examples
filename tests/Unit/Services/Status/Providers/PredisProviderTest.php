@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\Status\Providers;
 
+use App\Contracts\Services\Status\StatusServiceProvider;
+use App\Services\Status\Providers\PredisProvider;
+use PHPUnit\Framework\TestCase;
 use Predis\ClientInterface;
 use Predis\PredisException;
-use PHPUnit\Framework\TestCase;
-use App\Services\Status\Providers\PredisProvider;
-use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
  * PredisProvider tests.

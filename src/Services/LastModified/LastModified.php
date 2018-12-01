@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Services\LastModified;
 
-use Throwable;
+use App\Contracts\Services\LastModified\LastModifiedCacheException;
+use App\Contracts\Services\LastModified\LastModifiedOptions;
+use App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException;
+use App\Contracts\Services\LastModified\LastModifiedService;
+use App\Contracts\Services\LastModified\LastModifiedTimeProvider;
 use Carbon\Carbon;
-use function time;
-use function count;
-use function implode;
-use function is_string;
-use function array_filter;
 use InvalidArgumentException;
 use Psr\SimpleCache\CacheException;
 use Psr\SimpleCache\CacheInterface;
-use App\Contracts\Services\LastModified\LastModifiedOptions;
-use App\Contracts\Services\LastModified\LastModifiedService;
-use App\Contracts\Services\LastModified\LastModifiedTimeProvider;
-use App\Contracts\Services\LastModified\LastModifiedCacheException;
-use App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException;
+use Throwable;
+use function array_filter;
+use function count;
+use function implode;
+use function is_string;
+use function time;
 
 /**
  * Last modified time service. Allows registering different
@@ -140,13 +140,13 @@ class LastModified implements LastModifiedService
      */
     public function removeProvider(string $providerName): bool
     {
-        if (! isset($this->providers[$providerName])) {
+        if (!isset($this->providers[$providerName])) {
             throw new InvalidArgumentException("No provider registered with name [{$providerName}].");
         }
 
         unset($this->providers[$providerName]);
 
-        return ! isset($this->providers[$providerName]);
+        return !isset($this->providers[$providerName]);
     }
 
     /**
@@ -272,7 +272,7 @@ class LastModified implements LastModifiedService
     protected function resolveTimestamp(string $providerName): int
     {
         // Invalid (not registered) provider.
-        if (! isset($this->providers[$providerName])) {
+        if (!isset($this->providers[$providerName])) {
             throw new LastModifiedProviderNotRegisteredException("No provider registered with name [{$providerName}].");
         }
 
