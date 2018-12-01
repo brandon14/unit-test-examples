@@ -105,7 +105,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
         $testFileTwo->lastModified($previousTime->timestamp);
         $testFileThree->lastModified($anotherPrevious->timestamp);
 
-        $baseDir = VfsStream::url($fs->path('root'));
+        $baseDir = VfsStream::url($fs->path());
 
         $instance = new FilesystemLastModifiedTimeProvider(
             [
@@ -134,7 +134,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
         // Set up empty filesystem.
         $fs = VfsStream::setup('root');
 
-        $baseDir = VfsStream::url($fs->path('root'));
+        $baseDir = VfsStream::url($fs->path());
 
         $instance = new FilesystemLastModifiedTimeProvider(
             [
@@ -180,7 +180,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
         $testFileOne->lastModified($lastModified->timestamp);
         $testFileTwo->lastModified($previousTime->timestamp);
 
-        $baseDir = VfsStream::url($fs->path('root'));
+        $baseDir = VfsStream::url($fs->path());
 
         $instance = new FilesystemLastModifiedTimeProvider(
             [

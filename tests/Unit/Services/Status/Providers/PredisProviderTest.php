@@ -13,6 +13,12 @@ use App\Contracts\Services\Status\StatusServiceProvider;
 /**
  * PredisProvider tests.
  *
+ * In this test, we want to be able to test the functionality of our class that relies on
+ * an {@link \Predis\ClientInterface}, but we don't actually want to require a redis server
+ * set up just to unit test. So we pass that interface into the class, and that allows us to
+ * mock it away during testing. As long as our mock behaves as a {@link \Predis\ClientInteraface}
+ * would, then we can be confident our class performs like we expect it to.
+ *
  * @author    Brandon Clothier <brandon14125@gmail.com>
  *
  * @version   1.0.0
@@ -72,7 +78,7 @@ class PredisProviderTest extends TestCase
             ->getMock();
 
         // Tell mocked Predis client to return a string other than PONG.
-        $mock->expects($this::once())->method('ping')->will($this::returnValue('NOT PONG'));
+        $mock->expects($this::once())->method('ping')->willReturn('NOT PONG');
 
         $instance = new PredisProvider($mock);
 
@@ -101,7 +107,7 @@ class PredisProviderTest extends TestCase
             ->getMock();
 
         // Tell mocked Predis client to return PONG.
-        $mock->expects($this::once())->method('ping')->will($this::returnValue('PONG'));
+        $mock->expects($this::once())->method('ping')->willReturn('PONG');
 
         $instance = new PredisProvider($mock);
 
