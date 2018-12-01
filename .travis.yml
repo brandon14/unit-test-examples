@@ -1,0 +1,29 @@
+os:
+  - linux
+
+language:
+  - php
+
+php:
+  - 7.1
+  - 7.2
+  - 7.3
+  - nightly
+
+sudo: required
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_script:
+  - composer self-update
+  - composer install --dev --prefer-source --no-interaction
+  - composer dump-autoload
+  - composer validate --no-check-all --strict
+
+script:
+  - composer run-script test
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

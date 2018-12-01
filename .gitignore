@@ -1,0 +1,15 @@
+# Composer vendor folder
+/vendor
+
+# PHP Unit code coverage files
+coverage.xml
+coverage.text
+coverage.html
+coverage/
+
+# PHP Coding Standards Fixer cache file
+.php_cs.cache
+
+# Editor files.
+.vscode
+.idea

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset name="unit-test-examples Standard" namespace="App\CS\Standard">
+  <description>The phpcs coding standard for the unit-test-examples project.</description>
+
+  <!-- Only process .php files. -->
+  <arg name="extensions" value="php" />
+  <!-- Show all errors. -->
+  <arg name="error-severity" value="1" />
+  <!-- Hide warnings. -->
+  <arg name="warning-severity" value="0" />
+  <arg name="colors" />
+  <arg value="sp" />
+
+  <!-- Ignore vendor folder. -->
+  <exclude-pattern>vendor</exclude-pattern>
+  <!-- Exclude tests -->
+  <exclude-pattern>tests/</exclude-pattern>
+
+  <rule ref="PSR2" />
+
+</ruleset>
