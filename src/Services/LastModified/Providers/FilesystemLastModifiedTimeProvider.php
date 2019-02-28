@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * This file is part of the unit-test-examples package.
+ *
+ * Copyright 2018-2019 Brandon Clothier
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
+declare(strict_types=1);
+
 namespace App\Services\LastModified\Providers;
 
 use Iterator;
@@ -13,15 +28,12 @@ use RecursiveDirectoryIterator;
 use App\Contracts\Services\LastModified\LastModifiedTimeProvider;
 
 /**
+ * Class FilesystemLastModifiedTimeProvider.
+ *
  * Filesystem last modified provider. Will iterate over a list opf directories
  * and get the most recently modified file time.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  */
 class FilesystemLastModifiedTimeProvider implements LastModifiedTimeProvider
 {
@@ -42,7 +54,7 @@ class FilesystemLastModifiedTimeProvider implements LastModifiedTimeProvider
     /**
      * Constructs a LastModified service object.
      *
-     * @param array $config
+     * @param array $config Provider config array
      *
      * @throws \InvalidArgumentException
      *
@@ -95,9 +107,9 @@ class FilesystemLastModifiedTimeProvider implements LastModifiedTimeProvider
      * Function to iterate over an array of files/directories and return
      * the greatest file modified time.
      *
-     * @param \Iterator $files
+     * @param \Iterator $files Iterator of files
      *
-     * @return int
+     * @return int Last modified timestamp
      */
     protected function findLastModifiedFileTime(Iterator $files): int
     {

@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * This file is part of the unit-test-examples package.
+ *
+ * Copyright 2018-2019 Brandon Clothier
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 declare(strict_types=1);
 
 namespace Tests\Unit\Services\LastModified;
@@ -20,6 +33,8 @@ use App\Contracts\Services\LastModified\LastModifiedCacheException;
 use App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException;
 
 /**
+ * Class LastModifiedTest.
+ *
  * LastModified service unit tests.
  *
  * What is important to note about the test for this class, is we don't rely on any external service. The cache
@@ -28,12 +43,7 @@ use App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredExcepti
  * service, and the tests on the services should not depend upon concrete provider implementations, so those are mocked
  * away as well so the only logic we test it the logic of the service itself.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  *
  * @SuppressWarnings("ExcessiveClassLength")
  * @SuppressWarnings("TooManyMethods")
@@ -98,7 +108,7 @@ class LastModifiedTest extends TestCase
     /**
      * Returns an {@link \App\Contracts\Services\LastModified\LastModifiedOptions} instance.
      *
-     * @return \App\Contracts\Services\LastModified\LastModifiedOptions
+     * @return \App\Contracts\Services\LastModified\LastModifiedOptions Service options
      */
     protected function getConfig(): LastModifiedOptions
     {
@@ -1589,14 +1599,11 @@ class LastModifiedTest extends TestCase
 }
 
 /**
+ * Class MockCacheException.
+ *
  * Mock class that implements the PSR cache exception interface.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  */
 class MockCacheException extends Exception implements CacheException
 {

@@ -15,50 +15,55 @@
 
 declare(strict_types=1);
 
-namespace App\Contracts\Services\Status;
+namespace App\Services\Status\Providers;
+
+use Redis;
+use Throwable;
+use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
- * Interface StatusServiceProvider.
+ * Class PhpRedisProvider.
  *
- * System status service provider interface. Allows implementation to retrieve the status
- * of a service.
+ * PHP redis status provider. Allows pinging a redis cache database via
+ * {@link \Redis} to check the status of the database.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-interface StatusServiceProvider
+class PhpRedisProvider implements StatusServiceProvider
 {
     /**
-     * Status string for a service that is okay.
+     * Redis client instance.
      *
-     * @var string
+     * @var \Redis
      */
-    public const STATUS_OK = 'OK';
+    protected $redis;
 
     /**
-     * Status string for a service that is unreachable or otherwise in error status.
+     * Construct a new PHP redis status provider.
      *
-     * @var string
+     * @param \Redis $redis Redis instance
+     *
+     * @return void
      */
-    public const STATUS_ERROR = 'ERROR';
+    public function __construct(Redis $redis)
+    {
+        $this->redis = $redis;
+    }
 
     /**
-     * Status string for a service that has been disabled.
-     *
-     * @var string
+     * {@inheritdoc}
      */
-    public const STATUS_DISABLED = 'DISABLED';
+    public function getStatus(): array
+    {
+        try {
+            // PHP redis client returns '+PONG' on a successful ping.
+            return (string) $this->redis->ping() === '+PONG'
+                ? ['status' => StatusServiceProvider::STATUS_OK]
+                : ['status' => StatusServiceProvider::STATUS_ERROR];
+        } catch (Throwable $e) {
+            // Swallow exceptions on purpose.
+        }
 
-    /**
-     * Status for a unknown condition on the service.
-     *
-     * @var string
-     */
-    public const STATUS_UNKNOWN = 'UNKNOWN';
-
-    /**
-     * Get the status of the service.
-     *
-     * @return array Array containing provider status information
-     */
-    public function getStatus(): array;
+        return ['status' => StatusServiceProvider::STATUS_ERROR];
+    }
 }

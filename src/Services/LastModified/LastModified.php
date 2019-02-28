@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * This file is part of the unit-test-examples package.
+ *
+ * Copyright 2018-2019 Brandon Clothier
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 declare(strict_types=1);
 
 namespace App\Services\LastModified;
@@ -21,16 +34,13 @@ use App\Contracts\Services\LastModified\LastModifiedCacheException;
 use App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException;
 
 /**
+ * Class LastModified.
+ *
  * Last modified time service. Allows registering different
  * {@link \App\Contracts\Services\LastModified\LastModifiedTimeProvider}
  * and will return the most recent timestamp from the providers.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  */
 class LastModified implements LastModifiedService
 {
@@ -79,9 +89,11 @@ class LastModified implements LastModifiedService
     /**
      * Constructs a LastModified service object.
      *
-     * @param \Psr\SimpleCache\CacheInterface|null                            $cache
-     * @param \App\Contracts\Services\LastModified\LastModifiedOptions|null   $options
-     * @param \App\Contracts\Services\LastModified\LastModifiedTimeProvider[] $providers
+     * @param \Psr\SimpleCache\CacheInterface|null                            $cache     PSR-16 cache implementation
+     * @param \App\Contracts\Services\LastModified\LastModifiedOptions|null   $options   Service options
+     * @param \App\Contracts\Services\LastModified\LastModifiedTimeProvider[] $providers Array of {@link App\Contracts\Services\LastModified\LastModifiedTimeProvider}
+     *
+     * @throws \InvalidArgumentException
      *
      * @return void
      */
@@ -222,13 +234,13 @@ class LastModified implements LastModifiedService
     /**
      * Get last modified timestamp for an array of providers.
      *
-     * @param array  $providerNames
-     * @param string $cacheKey
+     * @param array  $providerNames Provider names
+     * @param string $cacheKey      Cache key
      *
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
      * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
      *
-     * @return int
+     * @return int Resolved timestamp
      */
     protected function resolveProviderArray(array $providerNames, string $cacheKey): int
     {
@@ -262,12 +274,12 @@ class LastModified implements LastModifiedService
     /**
      * Resolve timestamp for a specific provider.
      *
-     * @param string $providerName
+     * @param string $providerName Provider name
      *
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
      * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
      *
-     * @return int
+     * @return int Resolved timestamp
      */
     protected function resolveTimestamp(string $providerName): int
     {
@@ -296,11 +308,11 @@ class LastModified implements LastModifiedService
     /**
      * Check the cache for the given key and return it iff it exists, otherwise return null.
      *
-     * @param string $cacheKey
+     * @param string $cacheKey Cache key
      *
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
      *
-     * @return int|null
+     * @return int|null Resolved timestamp iff found, null otherwise
      */
     protected function checkCache(string $cacheKey): ?int
     {
@@ -323,8 +335,8 @@ class LastModified implements LastModifiedService
     /**
      * Saves timestamp in cache.
      *
-     * @param string $cacheKey
-     * @param int    $timestamp
+     * @param string $cacheKey  Cache key
+     * @param int    $timestamp Timestamp to save in cache
      *
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
      *

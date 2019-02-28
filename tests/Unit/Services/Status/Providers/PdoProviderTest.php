@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * This file is part of the unit-test-examples package.
+ *
+ * Copyright 2018-2019 Brandon Clothier
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 declare(strict_types=1);
 
 namespace Tests\Unit\Services\Status\Providers;
@@ -12,6 +25,8 @@ use App\Services\Status\Providers\PdoProvider;
 use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
+ * Class PdoProviderTest.
+ *
  * PdoProvider tests.
  *
  * It's easy to imagine testing a class that uses a database connection (in this case an
@@ -22,15 +37,15 @@ use App\Contracts\Services\Status\StatusServiceProvider;
  * documentation for the {@link \PDO} class), then we can be sure our class behaves in accordance
  * given our assumption of how the {@link \PDO} class behaves.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  */
 class PdoProviderTest extends TestCase
 {
+    /**
+     * TODO: Undocumented method.
+     *
+     * @return void
+     */
     public function testGetStatusHandlesPDOExceptions(): void
     {
         $db = $this->createMock(PDO::class);
@@ -46,6 +61,11 @@ class PdoProviderTest extends TestCase
         $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
+    /**
+     * TODO: Undocumented method.
+     *
+     * @return void
+     */
     public function testGetStatusHandlesStatementFailure(): void
     {
         $db = $this->createMock(PDO::class);
@@ -61,6 +81,11 @@ class PdoProviderTest extends TestCase
         $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
+    /**
+     * TODO: Undocumented method.
+     *
+     * @return void
+     */
     public function testGetStatusHandlesStatementExecFailure(): void
     {
         $db = $this->createMock(PDO::class);
@@ -80,6 +105,11 @@ class PdoProviderTest extends TestCase
         $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
+    /**
+     * TODO: Undocumented method.
+     *
+     * @return void
+     */
     public function testGetStatusHandlesStatementExecPDOException(): void
     {
         $db = $this->createMock(PDO::class);
@@ -102,6 +132,11 @@ class PdoProviderTest extends TestCase
         $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
+    /**
+     * TODO: Undocumented method.
+     *
+     * @return void
+     */
     public function testGetStatusHandlesStatementExecQueryStateError(): void
     {
         $db = $this->createMock(PDO::class);
@@ -124,6 +159,11 @@ class PdoProviderTest extends TestCase
         $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
+    /**
+     * TODO: Undocumented method.
+     *
+     * @return void
+     */
     public function testGetStatusHandlesFetchPDOException(): void
     {
         $db = $this->createMock(PDO::class);
@@ -149,6 +189,11 @@ class PdoProviderTest extends TestCase
         $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
+    /**
+     * TODO: Undocumented method.
+     *
+     * @return void
+     */
     public function testGetStatusHandlesFetchEmptyQueryResult(): void
     {
         $db = $this->createMock(PDO::class);
@@ -173,6 +218,11 @@ class PdoProviderTest extends TestCase
         $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
+    /**
+     * TODO: Undocumented method.
+     *
+     * @return void
+     */
     public function testGetStatusReturnsDatabaseStatus(): void
     {
         $db = $this->createMock(PDO::class);

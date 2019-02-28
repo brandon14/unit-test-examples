@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * This file is part of the unit-test-examples package.
+ *
+ * Copyright 2018-2019 Brandon Clothier
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
+declare(strict_types=1);
+
 namespace App\Services\Status;
 
 use Throwable;
@@ -21,16 +36,13 @@ use App\Contracts\Services\Status\StatusProviderNotRegisteredException;
 use App\Contracts\Services\Status\StatusService as StatusServiceInterface;
 
 /**
+ * Class StatusService.
+ *
  * Status service. Allows registering different
  * {@link \App\Contracts\Services\Status\StatusServiceProvider}
  * and will return statuses from those providers.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  */
 class StatusService implements StatusServiceInterface
 {
@@ -72,9 +84,11 @@ class StatusService implements StatusServiceInterface
     /**
      * Construct a new status service.
      *
-     * @param \Psr\SimpleCache\CacheInterface|null                   $cache
-     * @param \App\Contracts\Services\Status\StatusOptions|null      $options
-     * @param \App\Contracts\Services\Status\StatusServiceProvider[] $providers
+     * @param \Psr\SimpleCache\CacheInterface|null                   $cache     PSR-16 cache implementation
+     * @param \App\Contracts\Services\Status\StatusOptions|null      $options   Service options
+     * @param \App\Contracts\Services\Status\StatusServiceProvider[] $providers Array of {@link App\Contracts\Services\Status\StatusServiceProviders}
+     *
+     * @throws \InvalidArgumentException
      *
      * @return void
      */
@@ -195,13 +209,13 @@ class StatusService implements StatusServiceInterface
     /**
      * Resolve statuses of an array of provider names.
      *
-     * @param array  $providerNames
-     * @param string $cacheKey
+     * @param array  $providerNames Array of provider names
+     * @param string $cacheKey      Cache key
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
      *
-     * @return array
+     * @return array Resolved provider statuses
      */
     protected function resolveProviderArray(array $providerNames, string $cacheKey): array
     {
@@ -228,12 +242,12 @@ class StatusService implements StatusServiceInterface
     /**
      * Resolves a status for a specific provider.
      *
-     * @param string $providerName
+     * @param string $providerName Provider name
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
      *
-     * @return array
+     * @return array Resolved provider status
      */
     protected function resolveStatus(string $providerName): array
     {
@@ -262,11 +276,11 @@ class StatusService implements StatusServiceInterface
     /**
      * Check the cache for the given key and return it if it exists, otherwise return null.
      *
-     * @param string $cacheKey
+     * @param string $cacheKey Cache key
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      *
-     * @return array|null
+     * @return array|null Status array if present, null iff no cache hit
      */
     protected function checkCache(string $cacheKey): ?array
     {
@@ -292,8 +306,8 @@ class StatusService implements StatusServiceInterface
     /**
      * Saves status in cache.
      *
-     * @param string $cacheKey
-     * @param array  $status
+     * @param string $cacheKey Cache key
+     * @param array  $status   Status to save in cache
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      *

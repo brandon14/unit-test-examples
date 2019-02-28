@@ -15,50 +15,37 @@
 
 declare(strict_types=1);
 
-namespace App\Contracts\Services\Status;
+namespace App\Services\Status\Providers;
+
+use function function_exists;
+use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
- * Interface StatusServiceProvider.
+ * Class OpcacheProvider.
  *
- * System status service provider interface. Allows implementation to retrieve the status
- * of a service.
+ * TODO: Undocumented class.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-interface StatusServiceProvider
+class OpcacheProvider implements StatusServiceProvider
 {
     /**
-     * Status string for a service that is okay.
-     *
-     * @var string
+     * {@inheritdoc}
      */
-    public const STATUS_OK = 'OK';
+    public function getStatus(): array
+    {
+        // @codeCoverageIgnoreStart
+        // It's hard to mock internal PHP functions. I mean its opcache_get_status, should
+        // either return an array of the status, or false on failure.
+        if (function_exists('opcache_get_status')) {
+            $status = \opcache_get_status(false);
 
-    /**
-     * Status string for a service that is unreachable or otherwise in error status.
-     *
-     * @var string
-     */
-    public const STATUS_ERROR = 'ERROR';
+            return $status === false || ! is_array($status)
+                ? ['status' => StatusServiceProvider::STATUS_ERROR]
+                : $status;
+        }
 
-    /**
-     * Status string for a service that has been disabled.
-     *
-     * @var string
-     */
-    public const STATUS_DISABLED = 'DISABLED';
-
-    /**
-     * Status for a unknown condition on the service.
-     *
-     * @var string
-     */
-    public const STATUS_UNKNOWN = 'UNKNOWN';
-
-    /**
-     * Get the status of the service.
-     *
-     * @return array Array containing provider status information
-     */
-    public function getStatus(): array;
+        return ['status' => StatusServiceProvider::STATUS_DISABLED];
+        // @codeCoverageIgnoreEnd
+    }
 }

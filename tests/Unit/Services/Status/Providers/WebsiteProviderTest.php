@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * This file is part of the unit-test-examples package.
+ *
+ * Copyright 2018-2019 Brandon Clothier
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 declare(strict_types=1);
 
 namespace Tests\Unit\Services\Status\Providers;
@@ -14,6 +27,8 @@ use App\Services\Status\Providers\WebsiteProvider;
 use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
+ * Class WebsiteProviderTest.
+ *
  * WebsiteProvider tests.
  *
  * Again in this example we have a class that depends upon some external service (in this case
@@ -21,12 +36,7 @@ use App\Contracts\Services\Status\StatusServiceProvider;
  * make sure the mock behaves as the actual implementation would (i.e. adhere to that interface),
  * then we can rest assured that our class behaves as intended.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  */
 class WebsiteProviderTest extends TestCase
 {
@@ -139,14 +149,11 @@ class WebsiteProviderTest extends TestCase
 }
 
 /**
+ * Class MockGuzzleException.
+ *
  * Mock GuzzleHttp exception class.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  */
 class MockGuzzleException extends Exception implements GuzzleException
 {
