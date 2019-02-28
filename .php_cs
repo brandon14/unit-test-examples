@@ -58,5 +58,6 @@ return PhpCsFixer\Config::create()
             'use_yoda_style' => false,
         ],
         'declare_strict_types' => true,
+        'phpdoc_trim_consecutive_blank_line_separation' => false,
     ])
     ->setFinder($finder);

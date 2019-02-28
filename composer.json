@@ -57,7 +57,7 @@
         "lint:php-cs-fixer:fix": "php-cs-fixer fix",
         "lint:php-cs-fixer:check": "composer run-script lint:php-cs-fixer:fix -- --dry-run",
         "lint": "composer run-script lint:phpcs:check && composer run-script lint:php-cs-fixer:check && composer run-script lint:phpmd",
-        "lint:fix": "composer run-script lint:phpcs:fix && composer run-script lint:php-cs-fix:fix",
+        "lint:fix": "composer run-script lint:phpcs:fix && composer run-script lint:php-cs-fixer:fix",
         "test": "composer run-script lint && composer run-script security:check && phpunit"
     }
 }
