@@ -25,7 +25,6 @@
         "php": "^7.1.8",
         "ext-pdo": "*",
         "ext-redis": "*",
-        "ext-zend-opcache": "*",
         "guzzlehttp/guzzle": "^6.3.3",
         "nesbot/carbon": "^2.5.4",
         "predis/predis": "^1.1.1",

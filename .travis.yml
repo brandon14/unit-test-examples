@@ -16,8 +16,9 @@ cache:
     - $HOME/.composer/cache
 
 before_script:
+  - pecl install redis -f
   - composer self-update
-  - composer install --dev --prefer-source --no-interaction
+  - composer install --prefer-source --no-interaction
   - composer dump-autoload
   - composer validate --no-check-all --strict
 
