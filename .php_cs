@@ -59,5 +59,6 @@ return PhpCsFixer\Config::create()
         ],
         'declare_strict_types' => true,
         'phpdoc_trim_consecutive_blank_line_separation' => false,
+        'phpdoc_to_comment' => false,
     ])
     ->setFinder($finder);

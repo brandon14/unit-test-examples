@@ -43,4 +43,6 @@
 
     <!-- Ignore vendor folder -->
     <exclude-pattern>vendor</exclude-pattern>
+    <!-- Ignore tests folder -->
+    <exclude-pattern>tests</exclude-pattern>
 </ruleset>

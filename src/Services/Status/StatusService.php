@@ -5,11 +5,18 @@
  *
  * Copyright 2018-2019 Brandon Clothier
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
@@ -26,7 +33,6 @@ use function array_keys;
 use function unserialize;
 use function array_filter;
 use InvalidArgumentException;
-use Psr\SimpleCache\CacheException;
 use Psr\SimpleCache\CacheInterface;
 use App\Contracts\Services\Status\StatusOptions;
 use App\Contracts\Services\Status\StatusCacheException;
@@ -48,7 +54,7 @@ class StatusService implements StatusServiceInterface
     /**
      * Application cache store.
      *
-     * @var \Psr\SimpleCache\CacheInterface
+     * @var \Psr\SimpleCache\CacheInterface|null
      */
     protected $cache;
 
@@ -76,6 +82,8 @@ class StatusService implements StatusServiceInterface
     /**
      * Associative array of 'name' => {@link \App\Contracts\Services\Status\StatusServiceProvider}.
      *
+     * @psalm-var array<string, \App\Contracts\Services\Status\StatusServiceProvider>
+     *
      * @var array
      */
     protected $providers;
@@ -83,9 +91,11 @@ class StatusService implements StatusServiceInterface
     /**
      * Construct a new status service.
      *
-     * @param \Psr\SimpleCache\CacheInterface|null                   $cache     PSR-16 cache implementation
-     * @param \App\Contracts\Services\Status\StatusOptions|null      $options   Service options
-     * @param \App\Contracts\Services\Status\StatusServiceProvider[] $providers Array of {@link App\Contracts\Services\Status\StatusServiceProviders}
+     * @param \Psr\SimpleCache\CacheInterface|null              $cache   PSR-16 cache implementation
+     * @param \App\Contracts\Services\Status\StatusOptions|null $options Service options
+     * @psalm-param array<string, \App\Contracts\Services\Status\StatusServiceProvider> $providers
+     *
+     * @param array $providers Array of {@link App\Contracts\Services\Status\StatusServiceProvider}
      *
      * @throws \InvalidArgumentException
      *
@@ -117,10 +127,23 @@ class StatusService implements StatusServiceInterface
         $this->cacheTtl = $options->getCacheTtl();
         $this->cacheKey = $options->getCacheKey();
 
+        unset($options);
+
         // Filter out invalid providers.
+        // Psalm complains because with the annotated types, it "should" be a correct provider type, but
+        // since its PHP, we filter out any incorrect providers.
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         $this->providers = array_filter(
             $providers,
-            function ($provider) {
+            /**
+             * Filter out providers that are not of instance {@link \App\Contracts\Services\Service\StatusServiceProvider}.
+             *
+             * @param mixed $provider {@link \App\Contracts\Services\Service\StatusServiceProvider}
+             *
+             * @return bool true iff it is an instance of {@link \App\Contracts\Services\Service\StatusServiceProvider},
+             *              false otherwise
+             */
+            function ($provider): bool {
                 return $provider instanceof StatusServiceProvider;
             }
         );
@@ -197,7 +220,14 @@ class StatusService implements StatusServiceInterface
         // so deal with it.
         $providerNames = array_filter(
             $providers,
-            function ($string) {
+            /**
+             * Determine if provider name is a string and not empty.
+             *
+             * @param mixed $string Provider name
+             *
+             * @return bool true iff param is a string and not empty, false otherwise
+             */
+            function ($string): bool {
                 return is_string($string) && $string !== '';
             }
         );
@@ -208,11 +238,13 @@ class StatusService implements StatusServiceInterface
     /**
      * Resolve statuses of an array of provider names.
      *
-     * @param array  $providerNames Array of provider names
-     * @param string $cacheKey      Cache key
+     * @param string[] $providerNames Array of provider names
+     * @param string   $cacheKey      Cache key
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
+     *
+     * @psalm-return array<mixed, mixed>
      *
      * @return array Resolved provider statuses
      */
@@ -246,6 +278,8 @@ class StatusService implements StatusServiceInterface
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
      *
+     * @psalm-return array<mixed, mixed>
+     *
      * @return array Resolved provider status
      */
     protected function resolveStatus(string $providerName): array
@@ -258,8 +292,12 @@ class StatusService implements StatusServiceInterface
         $cacheKey = $this->cacheKey.'_'.$providerName;
 
         // Check the cache for the provider if enabled.
-        if ($this->isCacheEnabled && ($status = $this->checkCache($cacheKey)) !== null) {
-            return $status;
+        if ($this->isCacheEnabled) {
+            $status = $this->checkCache($cacheKey);
+
+            if ($status !== null) {
+                return $status;
+            }
         }
 
         $status = $this->providers[$providerName]->getStatus();
@@ -275,9 +313,14 @@ class StatusService implements StatusServiceInterface
     /**
      * Check the cache for the given key and return it if it exists, otherwise return null.
      *
+     * @psalm-suppress PossiblyNullReference
+     * @psalm-suppress DocblockTypeContradiction
+     *
      * @param string $cacheKey Cache key
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
+     *
+     * @psalm-return array<mixed, mixed>|null
      *
      * @return array|null Status array if present, null iff no cache hit
      */
@@ -285,18 +328,40 @@ class StatusService implements StatusServiceInterface
     {
         try {
             // Check the cache.
+            // PSR's throws annotation are incorrect because the base CacheException is an interface.
+            /** @psalm-suppress MissingThrowsDocblock */
             if ($this->cache->has($cacheKey)) {
-                // Unserialize what is returned from the cache. Notice the default value of
-                // null, which when serialized will be the literal `false`. Also it should
+                /** @var string|null */
+                $cache = $this->cache->get($cacheKey, null);
+
+                // Nothing was returned from the cache, return null.
+                if ($cache === null) {
+                    return $cache;
+                }
+
+                // We don't have a serialized string, so return null since we can't
+                // serialize it.
+                // Since we can't guarantee the return type from the cache, this explicit check is still
+                // needed even though we say it will either be a string or null since PSR's cache get return
+                // type if very loose (mixed).
+                if (! is_string($cache)) {
+                    return null;
+                }
+
+                // Unserialize what is returned from the cache. Also it should
                 // only ever be an array, so no unserializing classes (RCE anyone?)
-                $status = unserialize($this->cache->get($cacheKey, null), ['allowed_classes' => false]);
+                /** @var array */
+                $status = unserialize($cache, ['allowed_classes' => false]);
 
                 // If the unserialization failed, or it does not result in an array, return
                 // null.
-                return $status === false || ! is_array($status) ? null : $status;
+                // Psalm complains, but because this is PHP, we want to be sure we return either
+                // an array or null to abide by the documented return type.
+                /** @psalm-suppress RedundantConditionGivenDocblockType */
+                return ! is_array($status) ? null : $status;
             }
-        } catch (CacheException | Throwable $exception) {
-            throw new StatusCacheException($exception->getMessage());
+        } catch (Throwable $exception) {
+            throw new StatusCacheException($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
 
         return null;
@@ -304,6 +369,10 @@ class StatusService implements StatusServiceInterface
 
     /**
      * Saves status in cache.
+     *
+     * @psalm-suppress PossiblyNullReference
+     *
+     * @psalm-param array<mixed, mixed> $status
      *
      * @param string $cacheKey Cache key
      * @param array  $status   Status to save in cache
@@ -316,14 +385,16 @@ class StatusService implements StatusServiceInterface
     {
         try {
             // Attempt to save cache item. If that fails, throw an exception.
+            // PSR's throws annotation are incorrect because the base CacheException is an interface.
+            /** @psalm-suppress MissingThrowsDocblock */
             $saved = $this->cache->set($cacheKey, serialize($status), $this->cacheTtl);
 
             // Failed to save status, raise an exception.
             if ($saved === false) {
                 throw new StatusCacheException("Unable to save status in cache for cache key n[;{$cacheKey}].");
             }
-        } catch (CacheException | Throwable $exception) {
-            throw new StatusCacheException($exception->getMessage());
+        } catch (Throwable $exception) {
+            throw new StatusCacheException($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
     }
 }

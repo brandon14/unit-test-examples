@@ -26,19 +26,20 @@
         "ext-pdo": "*",
         "ext-redis": "*",
         "guzzlehttp/guzzle": "^6.3.3",
-        "nesbot/carbon": "^2.5.4",
+        "nesbot/carbon": "^2.19.0",
         "predis/predis": "^1.1.1",
-        "psr/simple-cache": "^1.0"
+        "psr/simple-cache": "^1.0.1"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.13.1",
-        "mikey179/vfsstream": "^1.6.5",
-        "mockery/mockery": "^1.2.0",
+        "brainmaestro/composer-git-hooks": "^2.7",
+        "friendsofphp/php-cs-fixer": "^2.15.1",
+        "mikey179/vfsstream": "^1.6.6",
         "phpmd/phpmd": "^2.6.0",
-        "phpunit/phpunit": "^7.4.4",
+        "phpunit/phpunit": "^7.5.12",
         "roave/security-advisories": "dev-master",
-        "sensiolabs/security-checker": "^5.0",
-        "squizlabs/php_codesniffer": "^3.3.2"
+        "sensiolabs/security-checker": "^5.0.3",
+        "squizlabs/php_codesniffer": "^3.4.2",
+        "vimeo/psalm": "^3.3.2"
     },
     "config": {
         "preferred-install": "dist",
@@ -49,14 +50,33 @@
         }
     },
     "scripts": {
+        "analyze": "psalm",
+        "analyze:stats": "composer run-script analyze -- --stats",
         "security:check": "security-checker security:check ./composer.lock",
         "lint:phpcs:check": "phpcs ./",
         "lint:phpcs:fix": "phpcbf ./",
         "lint:phpmd": "phpmd ./ text ./phpmd.xml",
         "lint:php-cs-fixer:fix": "php-cs-fixer fix",
-        "lint:php-cs-fixer:check": "composer run-script lint:php-cs-fixer:fix -- --dry-run",
-        "lint": "composer run-script lint:phpcs:check && composer run-script lint:php-cs-fixer:check && composer run-script lint:phpmd",
+        "lint:php-cs-fixer:check": "composer run-script lint:php-cs-fixer:fix -- --dry-run --verbose",
+        "lint": "composer run-script lint:phpcs:check && composer run-script lint:php-cs-fixer:check && composer run-script lint:phpmd && composer run-script analyze",
         "lint:fix": "composer run-script lint:phpcs:fix && composer run-script lint:php-cs-fixer:fix",
-        "test": "composer run-script lint && composer run-script security:check && phpunit"
-    }
+        "test": "composer run-script lint && composer run-script security:check && phpunit",
+        "post-update-cmd": [
+            "cghooks update",
+            "phpunit"
+        ],
+        "post-install-cmd": [
+            "cghooks add --ignore-lock",
+            "phpunit"
+        ]
+    },
+    "extra": {
+        "hooks": {
+            "pre-push": [
+                "composer run-script test"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

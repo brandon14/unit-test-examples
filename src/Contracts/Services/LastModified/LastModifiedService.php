@@ -5,18 +5,25 @@
  *
  * Copyright 2018-2019 Brandon Clothier
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
 
 namespace App\Contracts\Services\LastModified;
 
-use Carbon\Carbon;
+use Carbon\CarbonInterface;
 
 /**
  * Interface LastModifiedService.
@@ -77,22 +84,22 @@ interface LastModifiedService
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
      * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
      *
-     * @return \Carbon\Carbon Last modified timestamp
+     * @return \Carbon\CarbonInterface Last modified timestamp
      */
-    public function getLastModifiedTime(?string $providerName = 'all'): Carbon;
+    public function getLastModifiedTime(?string $providerName = 'all'): CarbonInterface;
 
     /**
      * Gets the last modified time from an array of providers.
      *
-     * @param array $providers Array of provider names
+     * @param string[] $providers Array of provider names
      *
      * @throws \InvalidArgumentException
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
      * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
      *
-     * @return \Carbon\Carbon Last modified timestamp
+     * @return \Carbon\CarbonInterface Last modified timestamp
      */
-    public function getLastModifiedTimeByArray(array $providers): Carbon;
+    public function getLastModifiedTimeByArray(array $providers): CarbonInterface;
 
     /**
      * Get the default timestamp format.

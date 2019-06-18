@@ -16,3 +16,4 @@ enabled:
 disabled:
   - phpdoc_no_empty_return
   - yoda_style
+  - phpdoc_to_comment

@@ -15,8 +15,10 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+before_install:
+  echo '' | pecl install -f redis
+
 before_script:
-  - pecl install -f redis
   - composer self-update
   - composer install --prefer-source --no-interaction
   - composer dump-autoload

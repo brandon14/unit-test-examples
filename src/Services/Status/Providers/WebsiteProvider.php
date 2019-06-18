@@ -5,11 +5,18 @@
  *
  * Copyright 2018-2019 Brandon Clothier
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
@@ -54,9 +61,11 @@ class WebsiteProvider implements StatusServiceProvider
      * @param \GuzzleHttp\ClientInterface $httpClient  Guzzle HTTP client instance
      * @param string                      $routeToPing Route to hit using Guzzle client
      *
+     * @throws \InvalidArgumentException
+     *
      * @return void
      */
-    public function __construct(ClientInterface $httpClient, string $routeToPing = 'https://example.com/')
+    public function __construct(ClientInterface $httpClient, string $routeToPing)
     {
         $this->httpClient = $httpClient;
 
@@ -75,6 +84,9 @@ class WebsiteProvider implements StatusServiceProvider
     {
         try {
             // Get the PSR-7 response from Guzzle.
+            // Guzzle's throws annotations are incorrect because the base GuzzleException is defined
+            // as an interface.
+            /** @psalm-suppress MissingThrowsDocblock */
             $response = $this->httpClient->request('GET', $this->routeToPing);
 
             $code = (int) $response->getStatusCode();

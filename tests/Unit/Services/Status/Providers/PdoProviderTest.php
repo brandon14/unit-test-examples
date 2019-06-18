@@ -5,11 +5,17 @@
  *
  * Copyright 2018-2019 Brandon Clothier
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
 
@@ -42,7 +48,7 @@ use App\Contracts\Services\Status\StatusServiceProvider;
 class PdoProviderTest extends TestCase
 {
     /**
-     * TODO: Undocumented method.
+     * Test that the provider will handle when the PDO instance throws an exception.
      *
      * @return void
      */
@@ -62,7 +68,7 @@ class PdoProviderTest extends TestCase
     }
 
     /**
-     * TODO: Undocumented method.
+     * Test the the provider will handle when the PDO statement fails (returns false).
      *
      * @return void
      */
@@ -82,7 +88,7 @@ class PdoProviderTest extends TestCase
     }
 
     /**
-     * TODO: Undocumented method.
+     * Test that the provider will handle when the statement execution fails (returns false).
      *
      * @return void
      */
@@ -106,7 +112,7 @@ class PdoProviderTest extends TestCase
     }
 
     /**
-     * TODO: Undocumented method.
+     * Test that the provider handles when execute throws a {@link \PDOException}.
      *
      * @return void
      */
@@ -133,7 +139,7 @@ class PdoProviderTest extends TestCase
     }
 
     /**
-     * TODO: Undocumented method.
+     * Test that the provider will handle when the query executed returns a error code.
      *
      * @return void
      */
@@ -160,7 +166,7 @@ class PdoProviderTest extends TestCase
     }
 
     /**
-     * TODO: Undocumented method.
+     * Test that the provider handles when fetch throws a {@link \PDOException}.
      *
      * @return void
      */
@@ -190,7 +196,8 @@ class PdoProviderTest extends TestCase
     }
 
     /**
-     * TODO: Undocumented method.
+     * Test that the provider handles getting empty query results (should not happen unless something weird
+     * is going on).
      *
      * @return void
      */
@@ -219,7 +226,8 @@ class PdoProviderTest extends TestCase
     }
 
     /**
-     * TODO: Undocumented method.
+     * Test that the provider returns the database provider returns a status of OK if everything
+     * checks out.
      *
      * @return void
      */

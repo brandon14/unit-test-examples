@@ -5,11 +5,17 @@
  *
  * Copyright 2018-2019 Brandon Clothier
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
 
@@ -386,7 +392,7 @@ class StatusTest extends TestCase
     /**
      * Assert that the service will get the status from the providers if caching is enabled,
      * and there is a cache key but the actual call to resolve the value from cache fails (i.e
-     *  call to {@link \Psr\SimpleCache\CacheInterface::get} returns false).
+     * call to {@link \Psr\SimpleCache\CacheInterface::get} returns false).
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      *
@@ -417,6 +423,66 @@ class StatusTest extends TestCase
             ->will($this::onConsecutiveCalls(null, serialize($status)));
 
         // With caching enabled, and a failure to resolve cached value, set should be called
+        // once since the function continues on with its logic and the call to get the individual provider
+        // status out of cache succeeds (thus not triggering a call to save it in cache).
+        $cache->expects($this::once())
+            ->method('set')
+            ->with(
+                $this->cacheKey.'_all',
+                serialize(['null_provider' => $status]),
+                $this->cacheTtl
+            )
+            ->willReturn(true);
+
+        // Tell mocked provider not to expect the getStatus to be invoked as the second call to the cache
+        // is mocked to succeed.
+        $this->providers['null_provider']->expects($this::never())->method('getStatus');
+
+        $instance = new StatusService(
+            $cache,
+            $this->getConfig(),
+            $this->providers
+        );
+
+        $statusCall = $instance->getStatus();
+
+        // Assert the status returned is the right status.
+        $this::assertEquals(['null_provider' => $status], $statusCall);
+    }
+
+    /**
+     * Assert that the service will make sure it gets a string back from the cache before
+     * attempting to unserialize it.
+     *
+     * @throws \App\Contracts\Services\Status\StatusCacheException
+     *
+     * @return void
+     */
+    public function testCheckCacheAssertsStringIsReturnedBeforeUnserialization(): void
+    {
+        // Cache the status.
+        $this->cacheStatuses = true;
+
+        $status = ['status' => 'A-OK'];
+
+        $cache = $this->createMock(CacheInterface::class);
+
+        // Assert that the cache `has` method is called with cache key and
+        // it returns true to mock that the status is already present in
+        // the cache. Also it should also receive a call to has for the individual
+        // provider because we mocked a non-string returned from the cache.
+        $cache->expects($this::exactly(2))
+            ->method('has')
+            ->withConsecutive([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
+            ->will($this::onConsecutiveCalls(true, true));
+        // Have cache access to return something besides a string, which will not be unserialized, so
+        // it should return null.
+        $cache->expects($this::exactly(2))
+            ->method('get')
+            ->withConsecutive([$this->cacheKey.'_all', null], [$this->cacheKey.'_null_provider', null])
+            ->will($this::onConsecutiveCalls(false, serialize($status)));
+
+        // With caching enabled, no-string value from cache, set should be called
         // once since the function continues on with its logic and the call to get the individual provider
         // status out of cache succeeds (thus not triggering a call to save it in cache).
         $cache->expects($this::once())
