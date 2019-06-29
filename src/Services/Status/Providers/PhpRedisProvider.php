@@ -21,57 +21,55 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Services\LastModified;
+namespace App\Services\Status\Providers;
 
-use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
-use App\Contracts\Services\LastModified\LastModifiedOptions;
+use Redis;
+use Throwable;
+use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
- * Class LastModifiedOptionsTest.
+ * Class PhpRedisProvider.
  *
- * LastModifiedOptions unit tests.
- *
- * The only real logic this class performs is in validating the timestamp format, so that
- * is really the only thing that needs to be tested.
+ * PHP redis status provider. Allows pinging a redis cache database via
+ * {@link \Redis} to check the status of the database.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class LastModifiedOptionsTest extends TestCase
+class PhpRedisProvider implements StatusServiceProvider
 {
     /**
-     * Test that {@link \App\Contracts\Services\LastModified\LastModifiedOptions} validates a valid
-     * timestamp format has been provided.
+     * Redis client instance.
+     *
+     * @var \Redis
+     */
+    protected $redis;
+
+    /**
+     * Construct a new PHP redis status provider.
+     *
+     * @param \Redis $redis Redis instance
      *
      * @return void
      */
-    public function testThrowsInvalidArgumentExceptionWhenInvalidDateFormatIsProvided(): void
+    public function __construct(Redis $redis)
     {
-        $this->expectException(InvalidArgumentException::class);
-
-        new LastModifiedOptions(
-            true,
-            30,
-            'last_modified',
-            ''
-        );
+        $this->redis = $redis;
     }
 
     /**
-     * Test that {@link \App\Contracts\Services\LastModified\LastModifiedOptions} validates a valid
-     * timestamp format has been provided.
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    public function testDoesNotThrowsInvalidArgumentExceptionWhenValidDateFormatIsProvided(): void
+    public function getStatus(): array
     {
-        new LastModifiedOptions(
-            true,
-            30,
-            'last_modified',
-            'F jS, Y \a\t h:i:s A T'
-        );
+        try {
+            // PHP redis client returns '+PONG' on a successful ping.
+            return (string) $this->redis->ping() === '+PONG'
+                ? ['status' => StatusServiceProvider::STATUS_OK]
+                : ['status' => StatusServiceProvider::STATUS_ERROR];
+        } catch (Throwable $e) {
+            // Swallow exceptions on purpose.
+        }
 
-        $this::assertTrue(true);
+        return ['status' => StatusServiceProvider::STATUS_ERROR];
     }
 }

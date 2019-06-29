@@ -13,3 +13,6 @@ coverage/
 # Editor files.
 .vscode
 .idea
+
+# CGHooks lock file
+cghooks.lock

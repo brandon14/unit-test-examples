@@ -1,5 +1,24 @@
 <?php
 
+/**
+ * This file is part of the unit-test-examples package.
+ *
+ * Copyright 2018-2019 Brandon Clothier
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 declare(strict_types=1);
 
 namespace App\Services\LastModified;
@@ -11,8 +30,8 @@ use function count;
 use function implode;
 use function is_string;
 use function array_filter;
+use Carbon\CarbonInterface;
 use InvalidArgumentException;
-use Psr\SimpleCache\CacheException;
 use Psr\SimpleCache\CacheInterface;
 use App\Contracts\Services\LastModified\LastModifiedOptions;
 use App\Contracts\Services\LastModified\LastModifiedService;
@@ -21,23 +40,20 @@ use App\Contracts\Services\LastModified\LastModifiedCacheException;
 use App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException;
 
 /**
+ * Class LastModified.
+ *
  * Last modified time service. Allows registering different
  * {@link \App\Contracts\Services\LastModified\LastModifiedTimeProvider}
  * and will return the most recent timestamp from the providers.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  */
 class LastModified implements LastModifiedService
 {
     /**
      * Application cache store.
      *
-     * @var \Psr\SimpleCache\CacheInterface
+     * @var \Psr\SimpleCache\CacheInterface|null
      */
     protected $cache;
 
@@ -72,6 +88,8 @@ class LastModified implements LastModifiedService
     /**
      * Associative array of 'name' => {@link \App\Contracts\Services\LastModified\LastModifiedTimeProvider}.
      *
+     * @psalm-var array<string, \App\Contracts\Services\LastModified\LastModifiedTimeProvider>
+     *
      * @var array
      */
     protected $providers;
@@ -79,9 +97,13 @@ class LastModified implements LastModifiedService
     /**
      * Constructs a LastModified service object.
      *
-     * @param \Psr\SimpleCache\CacheInterface|null                            $cache
-     * @param \App\Contracts\Services\LastModified\LastModifiedOptions|null   $options
-     * @param \App\Contracts\Services\LastModified\LastModifiedTimeProvider[] $providers
+     * @param \Psr\SimpleCache\CacheInterface|null                          $cache   PSR-16 cache implementation
+     * @param \App\Contracts\Services\LastModified\LastModifiedOptions|null $options Service options
+     * @psalm-param array<string, \App\Contracts\Services\LastModified\LastModifiedTimeProvider> $providers
+     *
+     * @param array $providers Array of {@link \App\Contracts\Services\LastModified\LastModifiedTimeProvider}
+     *
+     * @throws \InvalidArgumentException
      *
      * @return void
      */
@@ -112,10 +134,23 @@ class LastModified implements LastModifiedService
         $this->cacheKey = $options->getCacheKey();
         $this->timestampFormat = $options->getTimestampFormat();
 
+        unset($options);
+
         // Filter out invalid providers.
+        // Psalm complains because with the annotated types, it "should" be a correct provider type, but
+        // since its PHP, we filter out any incorrect providers.
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         $this->providers = array_filter(
             $providers,
-            function ($provider) {
+            /**
+             * Filter out providers that are not of instance {@link \App\Contracts\Services\LastModified\LastModifiedTimeProvider}.
+             *
+             * @param mixed $provider {@link \App\Contracts\Services\LastModified\LastModifiedTimeProvider}
+             *
+             * @return bool true iff it is an instance of {@link \App\Contracts\Services\LastModified\LastModifiedTimeProvider},
+             *              false otherwise
+             */
+            function ($provider): bool {
                 return $provider instanceof LastModifiedTimeProvider;
             }
         );
@@ -168,7 +203,7 @@ class LastModified implements LastModifiedService
     /**
      * {@inheritdoc}
      */
-    public function getLastModifiedTime(?string $providerName = 'all'): Carbon
+    public function getLastModifiedTime(?string $providerName = 'all'): CarbonInterface
     {
         // Treat null as fetching all providers.
         if ($providerName === null || $providerName === 'all') {
@@ -190,7 +225,7 @@ class LastModified implements LastModifiedService
     /**
      * {@inheritdoc}
      */
-    public function getLastModifiedTimeByArray(array $providers): Carbon
+    public function getLastModifiedTimeByArray(array $providers): CarbonInterface
     {
         // Must provide a list of providers to resolve.
         if (count($providers) === 0) {
@@ -201,7 +236,14 @@ class LastModified implements LastModifiedService
         // so deal with it.
         $providerNames = array_filter(
             $providers,
-            function ($string) {
+            /**
+             * Determine if provider name is a string and not empty.
+             *
+             * @param mixed $string Provider name
+             *
+             * @return bool true iff param is a string and not empty, false otherwise
+             */
+            function ($string): bool {
                 return is_string($string) && $string !== '';
             }
         );
@@ -222,13 +264,13 @@ class LastModified implements LastModifiedService
     /**
      * Get last modified timestamp for an array of providers.
      *
-     * @param array  $providerNames
-     * @param string $cacheKey
+     * @param string[] $providerNames Provider names
+     * @param string   $cacheKey      Cache key
      *
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
      * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
      *
-     * @return int
+     * @return int Resolved timestamp
      */
     protected function resolveProviderArray(array $providerNames, string $cacheKey): int
     {
@@ -262,12 +304,12 @@ class LastModified implements LastModifiedService
     /**
      * Resolve timestamp for a specific provider.
      *
-     * @param string $providerName
+     * @param string $providerName Provider name
      *
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
      * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
      *
-     * @return int
+     * @return int Resolved timestamp
      */
     protected function resolveTimestamp(string $providerName): int
     {
@@ -279,8 +321,12 @@ class LastModified implements LastModifiedService
         $cacheKey = $this->cacheKey.'_'.$providerName;
 
         // Check the cache for the provider if enabled.
-        if ($this->isCacheEnabled && ($timestamp = $this->checkCache($cacheKey)) !== null) {
-            return $timestamp;
+        if ($this->isCacheEnabled) {
+            $timestamp = $this->checkCache($cacheKey);
+
+            if ($timestamp !== null) {
+                return $timestamp;
+            }
         }
 
         $timestamp = $this->providers[$providerName]->getLastModifiedTime();
@@ -296,16 +342,20 @@ class LastModified implements LastModifiedService
     /**
      * Check the cache for the given key and return it iff it exists, otherwise return null.
      *
-     * @param string $cacheKey
+     * @psalm-suppress PossiblyNullReference
+     *
+     * @param string $cacheKey Cache key
      *
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
      *
-     * @return int|null
+     * @return int|null Resolved timestamp iff found, null otherwise
      */
     protected function checkCache(string $cacheKey): ?int
     {
         try {
             // Check the cache.
+            // PSR's throws annotation are incorrect because the base CacheException is an interface.
+            /** @psalm-suppress MissingThrowsDocblock */
             if ($this->cache->has($cacheKey)) {
                 // Coerce cache value into an integer.
                 $timestamp = (int) $this->cache->get($cacheKey, null);
@@ -313,8 +363,8 @@ class LastModified implements LastModifiedService
                 // If the resulting timestamp is 0 (signifying an invalid timestamp) return null.
                 return $timestamp === 0 ? null : $timestamp;
             }
-        } catch (CacheException | Throwable $exception) {
-            throw new LastModifiedCacheException($exception->getMessage());
+        } catch (Throwable $exception) {
+            throw new LastModifiedCacheException($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
 
         return null;
@@ -323,8 +373,10 @@ class LastModified implements LastModifiedService
     /**
      * Saves timestamp in cache.
      *
-     * @param string $cacheKey
-     * @param int    $timestamp
+     * @psalm-suppress PossiblyNullReference
+     *
+     * @param string $cacheKey  Cache key
+     * @param int    $timestamp Timestamp to save in cache
      *
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
      *
@@ -334,13 +386,15 @@ class LastModified implements LastModifiedService
     {
         try {
             // Make sure cache entry was saved. If not throw a cache exception.
+            // PSR's throws annotation are incorrect because the base CacheException is an interface.
+            /** @psalm-suppress MissingThrowsDocblock */
             $saved = $this->cache->set($cacheKey, $timestamp, $this->cacheTtl);
 
             if ($saved === false) {
                 throw new LastModifiedCacheException("Unable to save timestamp in cache for cache key [{$cacheKey}].");
             }
-        } catch (CacheException | Throwable $exception) {
-            throw new LastModifiedCacheException($exception->getMessage());
+        } catch (Throwable $exception) {
+            throw new LastModifiedCacheException($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
     }
 }

@@ -1,10 +1,31 @@
 <?php
 
+/**
+ * This file is part of the unit-test-examples package.
+ *
+ * Copyright 2018-2019 Brandon Clothier
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 declare(strict_types=1);
 
 namespace App\Contracts\Services\Status;
 
 /**
+ * Class StatusOptions.
+ *
  * Status service options. This defines the options available for
  * the {@link \App\Contracts\Services\Status\StatusService} service.
  *
@@ -12,12 +33,7 @@ namespace App\Contracts\Services\Status;
  * Ignore code coverage for this file. It performs no logic and only provides a
  * consistent definition for options for the Status service.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  */
 class StatusOptions
 {
@@ -47,9 +63,9 @@ class StatusOptions
      *
      * @SuppressWarnings("BooleanArgumentFlag")
      *
-     * @param bool   $isCacheEnabled
-     * @param int    $cacheTtl
-     * @param string $cacheKey
+     * @param bool   $isCacheEnabled Whether caching is enabled
+     * @param int    $cacheTtl       Cache time-to-live
+     * @param string $cacheKey       Cache key
      *
      * @throws \InvalidArgumentException
      *
@@ -68,7 +84,7 @@ class StatusOptions
     /**
      * Get whether caching is enabled.
      *
-     * @return bool
+     * @return bool Whether cache is enabled
      */
     public function isCacheEnabled(): bool
     {
@@ -78,7 +94,7 @@ class StatusOptions
     /**
      * Get cache TTL option.
      *
-     * @return int
+     * @return int Cache time-to-live
      */
     public function getCacheTtl(): int
     {
@@ -88,7 +104,7 @@ class StatusOptions
     /**
      * Get cache key option.
      *
-     * @return string
+     * @return string Cache key
      */
     public function getCacheKey(): string
     {

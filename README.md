@@ -13,6 +13,28 @@
 
 # Unit Test Examples
 
+## Table Of Contents
+
+1. [Requirements](https://github.com/brandon14/unit-test-examples#requirements)
+2. [Purpose](https://github.com/brandon14/unit-test-examples#purpose)
+3. [Standards](https://github.com/brandon14/unit-test-examples#standards)
+4. [Coverage](https://github.com/brandon14/unit-test-examples#coverage)
+5. [Contributing](https://github.com/brandon14/unit-test-examples#contributing)
+
+## Requirements
+
+| Tech                                 | Version  |
+| ------------------------------------ | -------- |
+| [PHP ](https://secure.php.net/)      | >= 7.1.8 |
+| [Composer](https://getcomposer.org/) | *        |
+
+| PHP Extension    | Version |
+| ---------------- | ------- |
+| ext-pdo          | *       |
+| ext-redis        | *       |
+| ext-zend-opcache | *       |
+
+
 ## Purpose
 
 This repository serves to demonstrate writing unit test for a PHP library using PHP Unit.
@@ -57,12 +79,17 @@ practices for the most part.
 I also wanted to use at least PHP 7.1 to show off easier input type validation for method
 parameters. By making PHP more strict, not only do we help the compiler out, it also makes
 our code less error prone. Imagine writing a function the takes an array as a parameter with
-no type hint, and 4 years down the road some new develop doesn't read the docs (or they weren't
+no type hint, and 4 years down the road some new developer doesn't read the docs (or they weren't
 there) and passes a string into it, and :boom:, some code just blew up.
+
+## Coverage
+
+The latest code coverage information can be found via [Codecov](https://codecov.io/gh/brandon14/unit-test-examples). We
+strive to maintain 100% coverage as this is an example repo highlighting writing unit tests in PHP.
 
 ## Contributing
 
-Got something you wanna add? Find a bug or otherwise bad code? Feel free to submit pull
+Got something you wanna add? Found a bug or otherwise bad code? Feel free to submit pull
 requests to add in new features, fix bugs, or clean things up. Just be sure to follow the
 [Code of Conduct](https://github.com/brandon14/unit-test-examples/blob/master/.github/CODE_OF_CONDUCT.md)
 and [Contributing Guide](https://github.com/brandon14/brandonclothier.me/blob/master/.github/CONTRIBUTING.md),
@@ -70,10 +97,9 @@ and I encourage creating clean and well described pull requests if possible.
 
 This code is released under the MIT license.
 
-Copyright &copy; 2017 Brandon Clothier
+Copyright &copy; 2018-2019 Brandon Clothier
 
 <p align="center">
-  <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/compatibility-betamax.svg" alt="Compatibility Betamax"></a>
   <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg" alt="Works 60% Of The Time"></a>
   <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/certified-steve-bruhle.svg" alt="Dr. Steve Brule"></a>
   <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/contains-technical-debt.svg" alt="Contains Technical Debt"></a>

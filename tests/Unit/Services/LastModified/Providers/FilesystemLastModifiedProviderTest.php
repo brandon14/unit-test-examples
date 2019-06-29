@@ -1,5 +1,24 @@
 <?php
 
+/**
+ * This file is part of the unit-test-examples package.
+ *
+ * Copyright 2018-2019 Brandon Clothier
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 declare(strict_types=1);
 
 namespace Tests\Unit\Services\LastModified\Providers;
@@ -11,6 +30,8 @@ use org\bovigo\vfs\vfsStream as VfsStream;
 use App\Services\LastModified\Providers\FilesystemLastModifiedTimeProvider;
 
 /**
+ * Class FilesystemLastModifiedProviderTest.
+ *
  * Filesystem last modified provider unit tests.
  *
  * What is important to note about the test for this class, is we don't rely on any external service. The filesystem
@@ -18,30 +39,12 @@ use App\Services\LastModified\Providers\FilesystemLastModifiedTimeProvider;
  * filesystem. If our tests were to rely on an actual filesystem, the tests would be much more brittle because it would
  * have to cross the boundary of the application in order to access the filesystem.
  *
- * @author    Brandon Clothier <brandon14125@gmail.com>
- *
- * @version   1.0.0
- *
- * @license   MIT
- * @copyright 2018
+ * @author Brandon Clothier <brandon14125@gmail.com>
  */
 class FilesystemLastModifiedProviderTest extends TestCase
 {
     /**
-     * Test that if provided no base path config option, the class will throw an
-     * {@link \InvalidArgumentException}.
-     *
-     * @return void
-     */
-    public function testThrowsInvalidArgumentExceptionForInvalidBasePathNoBasePath(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        new FilesystemLastModifiedTimeProvider([]);
-    }
-
-    /**
-     * Test that if provided and invalid base path (i.e. non-existent directory) the
+     * Test that if provided an invalid base path (i.e. non-existent directory) the
      * class will throw an {@link \InvalidArgumentException}.
      *
      * @return void
@@ -53,11 +56,27 @@ class FilesystemLastModifiedProviderTest extends TestCase
         // Set up empty mock filesystem.
         VfsStream::setup('root');
 
-        new FilesystemLastModifiedTimeProvider(['base_path' => '/foo']);
+        new FilesystemLastModifiedTimeProvider('/foo');
     }
 
     /**
-     * Assert that the service will get the timestamp from the cache if it is
+     * Test that if provided an invalid included directory (i.e. non-existent directory) the
+     * class will throw an {@link \InvalidArgumentException}.
+     *
+     * @return void
+     */
+    public function testThrowsInvalidArgumentExceptionForInvalidIncludedDIrectories(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        // Set up empty mock filesystem.
+        VfsStream::setup('root');
+
+        new FilesystemLastModifiedTimeProvider('/', ['/bar', '/baz']);
+    }
+
+    /**
+     * Assert that the service will get the timestamp from the filesystem if it is
      * present.
      *
      * @return void
@@ -107,15 +126,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
 
         $baseDir = VfsStream::url($fs->path());
 
-        $instance = new FilesystemLastModifiedTimeProvider(
-            [
-                'base_path'            => $baseDir,
-                'included_directories' => [
-                    $baseDir.'/tests',
-                    $baseDir.'/app',
-                ],
-            ]
-        );
+        $instance = new FilesystemLastModifiedTimeProvider($baseDir, [$baseDir.'/tests', $baseDir.'/app']);
 
         // Call getLastModifiedTime to get the last modified file time.
         $lastModifiedCall = $instance->getLastModifiedTime();
@@ -136,11 +147,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
 
         $baseDir = VfsStream::url($fs->path());
 
-        $instance = new FilesystemLastModifiedTimeProvider(
-            [
-                'base_path' => $baseDir,
-            ]
-        );
+        $instance = new FilesystemLastModifiedTimeProvider($baseDir);
 
         // Call getLastModifiedTime to get the last modified file time.
         $lastModifiedCall = $instance->getLastModifiedTime();
@@ -182,15 +189,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
 
         $baseDir = VfsStream::url($fs->path());
 
-        $instance = new FilesystemLastModifiedTimeProvider(
-            [
-                'base_path'            => $baseDir,
-                'included_directories' => [
-                    $baseDir.'/tests',
-                    $baseDir.'/app',
-                ],
-            ]
-        );
+        $instance = new FilesystemLastModifiedTimeProvider($baseDir);
 
         // Call getLastModifiedTime to get the last modified file time.
         $lastModifiedCall = $instance->getLastModifiedTime();

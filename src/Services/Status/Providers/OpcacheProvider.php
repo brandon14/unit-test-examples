@@ -23,53 +23,44 @@ declare(strict_types=1);
 
 namespace App\Services\Status\Providers;
 
-use Throwable;
-use Predis\ClientInterface as Predis;
+use function function_exists;
 use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
- * Class PredisProvider.
+ * Class OpcacheProvider.
  *
- * Predis status provider. Allows pining a redis cache database via
- * {@link \Predis\Predis} to check the status of the database.
+ * PHP Opcache status provider. Class will check to see if opcache is enabled, and if so return the
+ * status array from opcache.
+ *
+ * **NOTE:**
+ * We are not testing the functionality of this class. Sometimes it is hard to test internal functions,
+ * and since this is a core PHP function so long as opcache is enabled, we check that opcache status is
+ * available, and if so we get the opcache status array. According to the PHP docs, that either returns
+ * false on failure, or an array of the status details, so if it returns false, we return a status of
+ * an error, otherwise we return the opcache status array. If opcache isn't present, we return that it
+ * is disabled.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class PredisProvider implements StatusServiceProvider
+class OpcacheProvider implements StatusServiceProvider
 {
-    /**
-     * Predis client instance.
-     *
-     * @var \Predis\ClientInterface
-     */
-    protected $redis;
-
-    /**
-     * Construct a new predis status provider.
-     *
-     * @param \Predis\ClientInterface $redis Predis instance
-     *
-     * @return void
-     */
-    public function __construct(Predis $redis)
-    {
-        $this->redis = $redis;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getStatus(): array
     {
-        try {
-            // Predis client returns 'PONG' on a successful ping.
-            return (string) $this->redis->ping() === 'PONG'
-                ? ['status' => StatusServiceProvider::STATUS_OK]
-                : ['status' => StatusServiceProvider::STATUS_ERROR];
-        } catch (Throwable $e) {
-            // Swallow exceptions on purpose.
+        // @codeCoverageIgnoreStart
+        // It's hard to mock internal PHP functions. I mean its opcache_get_status, should
+        // either return an array of the status, or false on failure.
+        if (function_exists('opcache_get_status')) {
+            $status = \opcache_get_status(false);
+
+            return $status === false
+                ? ['status' => StatusServiceProvider::STATUS_ERROR]
+                : $status;
         }
 
-        return ['status' => StatusServiceProvider::STATUS_ERROR];
+        return ['status' => StatusServiceProvider::STATUS_DISABLED];
+        // @codeCoverageIgnoreEnd
     }
 }
