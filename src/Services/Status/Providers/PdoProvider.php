@@ -24,7 +24,8 @@ declare(strict_types=1);
 namespace App\Services\Status\Providers;
 
 use PDO;
-use PDOException;
+use Throwable;
+use RuntimeException;
 use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
@@ -68,7 +69,7 @@ class PdoProvider implements StatusServiceProvider
 
             // Could not create prepared statement.
             if ($stmt === false) {
-                return ['status' => StatusServiceProvider::STATUS_ERROR];
+                throw new RuntimeException('Unable to prepare PDO statement.');
             }
 
             // Execute query.
@@ -78,7 +79,7 @@ class PdoProvider implements StatusServiceProvider
             // PDO is configured to throw exceptions, it will just throw which works as well)
             // then return an error status.
             if ($exec === false || $stmt->errorCode() !== '00000') {
-                return ['status' => StatusServiceProvider::STATUS_ERROR];
+                throw new RuntimeException('PDO statement execution failed.');
             }
 
             // Fetch the result (result is an array because of the fetch_type of FETCH_NUM).
@@ -86,11 +87,11 @@ class PdoProvider implements StatusServiceProvider
             $result = $stmt->fetch(PDO::FETCH_NUM);
 
             if (! isset($result[0])) {
-                return ['status' => StatusServiceProvider::STATUS_ERROR];
+                throw new RuntimeException('Unable to retrieve query results.');
             }
 
             return ['status' => StatusServiceProvider::STATUS_OK];
-        } catch (PDOException $e) {
+        } catch (Throwable $t) {
             // Swallow exceptions on purpose.
         }
 
