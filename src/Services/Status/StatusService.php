@@ -253,8 +253,12 @@ class StatusService implements StatusServiceInterface
         $statuses = [];
 
         // Check the cache for this particular grouping of providers.
-        if ($this->isCacheEnabled && ($status = $this->checkCache($cacheKey)) !== null) {
-            return $status;
+        if ($this->isCacheEnabled) {
+            $status = $this->checkCache($cacheKey);
+
+            if ($status !== null) {
+                return $status;
+            }
         }
 
         // Resolve each provider and store in our array.
@@ -314,7 +318,6 @@ class StatusService implements StatusServiceInterface
      * Check the cache for the given key and return it if it exists, otherwise return null.
      *
      * @psalm-suppress PossiblyNullReference
-     * @psalm-suppress DocblockTypeContradiction
      *
      * @param string $cacheKey Cache key
      *
@@ -331,40 +334,61 @@ class StatusService implements StatusServiceInterface
             // PSR's throws annotation are incorrect because the base CacheException is an interface.
             /** @psalm-suppress MissingThrowsDocblock */
             if ($this->cache->has($cacheKey)) {
-                /** @var string|null */
-                $cache = $this->cache->get($cacheKey, null);
-
-                // Nothing was returned from the cache, return null.
-                if ($cache === null) {
-                    return $cache;
-                }
-
-                // We don't have a serialized string, so return null since we can't
-                // serialize it.
-                // Since we can't guarantee the return type from the cache, this explicit check is still
-                // needed even though we say it will either be a string or null since PSR's cache get return
-                // type if very loose (mixed).
-                if (! is_string($cache)) {
-                    return null;
-                }
-
-                // Unserialize what is returned from the cache. Also it should
-                // only ever be an array, so no unserializing classes (RCE anyone?)
-                /** @var array */
-                $status = unserialize($cache, ['allowed_classes' => false]);
-
-                // If the unserialization failed, or it does not result in an array, return
-                // null.
-                // Psalm complains, but because this is PHP, we want to be sure we return either
-                // an array or null to abide by the documented return type.
-                /** @psalm-suppress RedundantConditionGivenDocblockType */
-                return ! is_array($status) ? null : $status;
+                return $this->resolveCachedStatus($cacheKey);
             }
         } catch (Throwable $exception) {
             throw new StatusCacheException($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
 
         return null;
+    }
+
+    /**
+     * Resolve cached status from cache. If no cache entry is found or cannot be resolve, null will
+     * be returned.
+     *
+     * @psalm-suppress PossiblyNullReference
+     * @psalm-suppress DocblockTypeContradiction
+     *
+     * @param string $cacheKey Cache key
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \App\Contracts\Services\Status\StatusCacheException
+     *
+     * @psalm-return array<mixed, mixed>|null
+     *
+     * @return array|null Status array if present, null iff no cache hit
+     */
+    protected function resolveCachedStatus(string $cacheKey): ?array
+    {
+        /** @var string|null */
+        $cache = $this->cache->get($cacheKey, null);
+
+        // Nothing was returned from the cache, return null.
+        if ($cache === null) {
+            return $cache;
+        }
+
+        // We don't have a serialized string, so return null since we can't
+        // serialize it.
+        // Since we can't guarantee the return type from the cache, this explicit check is still
+        // needed even though we say it will either be a string or null since PSR's cache get return
+        // type if very loose (mixed).
+        if (! is_string($cache)) {
+            return null;
+        }
+
+        // Unserialize what is returned from the cache. Also it should
+        // only ever be an array, so no unserializing classes (RCE anyone?)
+        /** @var array */
+        $status = unserialize($cache, ['allowed_classes' => false]);
+
+        // If the unserialization failed, or it does not result in an array, return
+        // null.
+        // Psalm complains, but because this is PHP, we want to be sure we return either
+        // an array or null to abide by the documented return type.
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
+        return ! is_array($status) ? null : $status;
     }
 
     /**

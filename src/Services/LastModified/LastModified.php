@@ -275,10 +275,36 @@ class LastModified implements LastModifiedService
     protected function resolveProviderArray(array $providerNames, string $cacheKey): int
     {
         // Check cache for this group of providers.
-        if ($this->isCacheEnabled && ($timestamp = $this->checkCache($cacheKey)) !== null) {
-            return $timestamp;
+        if ($this->isCacheEnabled) {
+            $timestamp = $this->checkCache($cacheKey);
+
+            if ($timestamp !== null) {
+                return $timestamp;
+            }
         }
 
+        $timestamp = $this->resolveProviderTimestamps($providerNames);
+
+        // Save in cache this provider group.
+        if ($this->isCacheEnabled) {
+            $this->saveInCache($cacheKey, (int) $timestamp);
+        }
+
+        return $timestamp;
+    }
+
+    /**
+     * Resolve latest timestamp from an array of provider names.
+     *
+     * @param string[] $providerNames Provider names
+     *
+     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
+     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
+     *
+     * @return int Resolved timestamp
+     */
+    protected function resolveProviderTimestamps(array $providerNames): int
+    {
         $timestamp = -1;
 
         // Resolve all providers, keeping track of the most recent one.
@@ -293,12 +319,7 @@ class LastModified implements LastModifiedService
             $timestamp = time();
         }
 
-        // Save in cache this provider group.
-        if ($this->isCacheEnabled) {
-            $this->saveInCache($cacheKey, $timestamp);
-        }
-
-        return $timestamp;
+        return (int) $timestamp;
     }
 
     /**
