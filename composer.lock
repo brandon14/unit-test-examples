@@ -769,16 +769,16 @@
         },
         {
             "name": "brainmaestro/composer-git-hooks",
-            "version": "v2.7.0",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BrainMaestro/composer-git-hooks.git",
-                "reference": "974e17fcae40dc389d1529e1342f5468d0b7b028"
+                "reference": "daf8ab1ad2d80255a8bd77dc266b481f0ac24334"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BrainMaestro/composer-git-hooks/zipball/974e17fcae40dc389d1529e1342f5468d0b7b028",
-                "reference": "974e17fcae40dc389d1529e1342f5468d0b7b028",
+                "url": "https://api.github.com/repos/BrainMaestro/composer-git-hooks/zipball/daf8ab1ad2d80255a8bd77dc266b481f0ac24334",
+                "reference": "daf8ab1ad2d80255a8bd77dc266b481f0ac24334",
                 "shasum": ""
             },
             "require": {
@@ -798,11 +798,10 @@
                     "pre-commit": "composer check-style",
                     "pre-push": [
                         "composer test",
-                        "appver=$(grep -o -E '\\d.\\d.\\d' cghooks)",
-                        "tag=$(git describe --tags --abbrev=0)",
-                        "if [ \"$tag\" != \"v$appver\" ]; then",
-                        "echo \"The most recent tag $tag does not match the application version $appver\\n\"",
-                        "tag=${tag#v}",
+                        "appver=$(grep -o -P '\\d.\\d.\\d' cghooks)",
+                        "tag=$(git tag --sort=-v:refname | head -n 1 | tr -d v)",
+                        "if [ \"$tag\" != \"$appver\" ]; then",
+                        "echo \"The most recent tag v$tag does not match the application version $appver\n\"",
                         "sed -i -E \"s/$appver/$tag/\" cghooks",
                         "exit 1",
                         "fi"
@@ -833,7 +832,7 @@
                 "composer",
                 "git"
             ],
-            "time": "2019-06-09T11:00:13+00:00"
+            "time": "2019-07-01T07:40:44+00:00"
         },
         {
             "name": "composer/semver",
