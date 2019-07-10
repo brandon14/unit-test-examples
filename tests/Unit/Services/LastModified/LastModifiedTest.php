@@ -101,6 +101,9 @@ class LastModifiedTest extends TestCase
     {
         parent::setUp();
 
+        // Set a mock time for our tests.
+        Carbon::setTestNow(Carbon::create(2001, 5, 15));
+
         $this->cacheTimestamp = false;
         $this->cacheTtl = 30;
         $this->cacheKey = 'last_modified';

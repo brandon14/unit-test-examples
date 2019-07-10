@@ -43,6 +43,17 @@ use App\Services\LastModified\Providers\CacheLastModifiedTimeProvider;
 class CacheLastModifiedTimeProviderTest extends TestCase
 {
     /**
+     * Set up Carbon mock time.
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        // Set a mock time for our tests.
+        Carbon::setTestNow(Carbon::create(2001, 5, 15));
+    }
+
+    /**
      * Assert that the service will get the timestamp from the cache if it is
      * present.
      *

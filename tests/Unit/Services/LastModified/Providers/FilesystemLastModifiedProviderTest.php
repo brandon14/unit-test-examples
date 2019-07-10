@@ -44,6 +44,17 @@ use App\Services\LastModified\Providers\FilesystemLastModifiedTimeProvider;
 class FilesystemLastModifiedProviderTest extends TestCase
 {
     /**
+     * Set up Carbon mock time.
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        // Set a mock time for our tests.
+        Carbon::setTestNow(Carbon::create(2001, 5, 15));
+    }
+
+    /**
      * Test that if provided an invalid base path (i.e. non-existent directory) the
      * class will throw an {@link \InvalidArgumentException}.
      *

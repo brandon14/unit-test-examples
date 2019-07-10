@@ -60,14 +60,15 @@
         "lint:php-cs-fixer:check": "composer run-script lint:php-cs-fixer:fix -- --dry-run --verbose",
         "lint": "composer run-script lint:phpcs:check && composer run-script lint:php-cs-fixer:check && composer run-script lint:phpmd && composer run-script analyze",
         "lint:fix": "composer run-script lint:phpcs:fix && composer run-script lint:php-cs-fixer:fix",
-        "test": "composer run-script lint && composer run-script security:check && phpunit",
+        "test:phpunit": "phpunit --order-by=random --testdox",
+        "test": "composer run-script lint && composer run-script security:check && composer run-script test:phpunit",
         "post-update-cmd": [
             "cghooks update",
-            "phpunit"
+            "composer run-script test:phpunit"
         ],
         "post-install-cmd": [
             "cghooks add --ignore-lock",
-            "phpunit"
+            "composer run-script test:phpunit"
         ]
     },
     "extra": {
