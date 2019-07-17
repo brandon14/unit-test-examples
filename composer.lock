@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b78b666ff374de647f114cf4109204e",
+    "content-hash": "40834d7314c10ce8b242b4e465c34147",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -844,6 +844,57 @@
                 "git"
             ],
             "time": "2019-07-01T07:40:44+00:00"
+        },
+        {
+            "name": "comcast/php-legal-licenses",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Comcast/php-legal-licenses.git",
+                "reference": "c47a0ef67ea11a4ad0e64f054c599535151e2ba9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Comcast/php-legal-licenses/zipball/c47a0ef67ea11a4ad0e64f054c599535151e2ba9",
+                "reference": "c47a0ef67ea11a4ad0e64f054c599535151e2ba9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^5.6 || ^7.0 || ^7.1",
+                "symfony/console": "~2.3|~3.0|~4.0",
+                "symfony/process": "~2.3|~3.0|~4.0"
+            },
+            "bin": [
+                "bin/php-legal-licenses"
+            ],
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Marshall",
+                    "email": "adam_marshall2@comcast.com",
+                    "role": "lead"
+                }
+            ],
+            "description": "A utility to generate a Licenses file containing the full license text for every dependency in your project for legal purposes.",
+            "homepage": "https://github.com/Comcast/php-legal-licenses",
+            "keywords": [
+                "binary",
+                "legal",
+                "license",
+                "licenses",
+                "utility"
+            ],
+            "time": "2019-02-21T15:39:57+00:00"
         },
         {
             "name": "composer/semver",
