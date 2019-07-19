@@ -23,10 +23,10 @@
 
 ## Requirements
 
-| Tech                                 | Version  |
-| ------------------------------------ | -------- |
-| [PHP ](https://secure.php.net/)      | >= 7.1.8 |
-| [Composer](https://getcomposer.org/) | *        |
+| Tech                                 | Version         |
+| ------------------------------------ | --------------- |
+| [PHP](https://secure.php.net/)       | >= 7.1.8, < 7.4 |
+| [Composer](https://getcomposer.org/) | *               |
 
 | PHP Extension    | Version |
 | ---------------- | ------- |
@@ -67,6 +67,11 @@ PHP Unit tests and have examples of mocking the filesystem, and through clean ar
 you can have classes that need external service such as databases and cache services and
 be able to write unit tests without breaking outside the boundary of the application
 using mock objects.
+
+When running the tests via `phpunit`, the order of the tests are randomized. The reason for this
+is so that you can identify tests that depend upon other tests due to shared state (i.e. database state).
+In these examples, there is no shared state amongst tests, but it is still
+good to randomize unit test order so that none of these issues will creep into the project.
 
 ## Standards
 

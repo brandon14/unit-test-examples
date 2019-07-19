@@ -32,6 +32,7 @@
     },
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.7",
+        "comcast/php-legal-licenses": "^1.1",
         "friendsofphp/php-cs-fixer": "^2.15.1",
         "mikey179/vfsstream": "^1.6.6",
         "phpmd/phpmd": "^2.6.0",
@@ -60,14 +61,18 @@
         "lint:php-cs-fixer:check": "composer run-script lint:php-cs-fixer:fix -- --dry-run --verbose",
         "lint": "composer run-script lint:phpcs:check && composer run-script lint:php-cs-fixer:check && composer run-script lint:phpmd && composer run-script analyze",
         "lint:fix": "composer run-script lint:phpcs:fix && composer run-script lint:php-cs-fixer:fix",
-        "test": "composer run-script lint && composer run-script security:check && phpunit",
+        "test:phpunit": "phpunit --order-by=random --testdox",
+        "test": "composer run-script lint && composer run-script security:check && composer run-script test:phpunit",
+        "generate:licenses": "php-legal-licenses generate",
         "post-update-cmd": [
             "cghooks update",
-            "phpunit"
+            "composer run-script test:phpunit",
+            "composer run-script generate:licenses"
         ],
         "post-install-cmd": [
             "cghooks add --ignore-lock",
-            "phpunit"
+            "composer run-script test:phpunit",
+            "composer run-script generate:licenses"
         ]
     },
     "extra": {

@@ -2,14 +2,14 @@
 
 ## General
 
-[ ] Clean up documentation.
-[ ] Clean up README.
-[ ] Build and publish project documentation.
+- [ ] Clean up documentation.
+- [ ] Clean up README.
+- [ ] Build and publish project documentation.
 
 ## Examples
 
-[ ] Build out more classes to provide more in depth examples for unit testing.
+- [ ] Build out more classes to provide more in depth examples for unit testing.
 
 ## Tests
 
-[ ] Add integration tests using filesystems, tests databases, etc for a more complete testing picture.
+- [ ] Add integration tests using filesystems, tests databases, etc for a more complete testing picture.
