@@ -49,6 +49,8 @@ class CacheLastModifiedTimeProviderTest extends TestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
+
         // Set a mock time for our tests.
         Carbon::setTestNow(Carbon::create(2001, 5, 15));
     }
