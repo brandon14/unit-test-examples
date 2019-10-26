@@ -78,8 +78,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-### nesbot/carbon (Version 2.21.2 | a8bfb66)
-A simple API extension for DateTime.
+### nesbot/carbon (Version 2.23.1 | 767617a)
+A API extension for DateTime that supports 281 different languages.
 Homepage: http://carbon.nesbot.com
 Licenses Used: MIT
 Copyright (C) Brian Nesbitt
@@ -210,7 +210,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-### symfony/polyfill-mbstring (Version v1.11.0 | fe5e94c)
+### symfony/polyfill-mbstring (Version v1.12.0 | b42a2f6)
 Symfony polyfill for the Mbstring extension
 Homepage: https://symfony.com
 Licenses Used: MIT
@@ -235,7 +235,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-### symfony/translation (Version v4.3.2 | 934ab1d)
+### symfony/translation (Version v4.3.3 | 4e3e39c)
 Symfony Translation Component
 Homepage: https://symfony.com
 Licenses Used: MIT

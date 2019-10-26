@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -349,6 +349,7 @@ class StatusService implements StatusServiceInterface
      *
      * @psalm-suppress PossiblyNullReference
      * @psalm-suppress DocblockTypeContradiction
+     * @psalm-suppress InvalidThrow
      *
      * @param string $cacheKey Cache key
      *

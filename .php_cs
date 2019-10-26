@@ -1,11 +1,15 @@
 <?php
 
+$composer = json_decode(file_get_contents(__DIR__.'/composer.json'), true);
+
+$projectName = $composer['name'];
+
 $license = file_get_contents(__DIR__.'/LICENSE');
 
 $headerComment = <<<COMMENT
-This file is part of the unit-test-examples package.
+This file is part of the {$projectName} package.
 
-$license
+{$license}
 COMMENT;
 
 $finder = PhpCsFixer\Finder::create()
