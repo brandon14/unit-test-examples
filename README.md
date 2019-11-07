@@ -23,10 +23,10 @@
 
 ## Requirements
 
-| Tech                                 | Version         |
-| ------------------------------------ | --------------- |
-| [PHP](https://secure.php.net/)       | >= 7.1.8, < 7.4 |
-| [Composer](https://getcomposer.org/) | *               |
+| Tech                                 | Version  |
+| ------------------------------------ | -------- |
+| [PHP](https://secure.php.net/)       | >= 7.1.8 |
+| [Composer](https://getcomposer.org/) | *        |
 
 | PHP Extension    | Version |
 | ---------------- | ------- |
