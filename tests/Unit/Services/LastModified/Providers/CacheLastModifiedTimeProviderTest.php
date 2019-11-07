@@ -44,8 +44,6 @@ class CacheLastModifiedTimeProviderTest extends TestCase
 {
     /**
      * Set up Carbon mock time.
-     *
-     * @return void
      */
     public function setUp(): void
     {
@@ -58,8 +56,6 @@ class CacheLastModifiedTimeProviderTest extends TestCase
     /**
      * Assert that the service will get the timestamp from the cache if it is
      * present.
-     *
-     * @return void
      */
     public function testGetsTimestampFromCache(): void
     {
@@ -86,8 +82,6 @@ class CacheLastModifiedTimeProviderTest extends TestCase
 
     /**
      * Test that if no cache entry is found, the provider will return -1.
-     *
-     * @return void
      */
     public function testReturnsNegativeOneWithNoCacheEntry(): void
     {
@@ -110,8 +104,6 @@ class CacheLastModifiedTimeProviderTest extends TestCase
 
     /**
      * Test that if the cache has method throws an exception, -1 will be returned.
-     *
-     * @return void
      */
     public function testReturnsNegativeOneWithExceptionOnHasCall(): void
     {
@@ -134,8 +126,6 @@ class CacheLastModifiedTimeProviderTest extends TestCase
 
     /**
      * Test that if the cache get method throws an exception, -1 will be returned.
-     *
-     * @return void
      */
     public function testReturnsNegativeOneWithExceptionOnGetCall(): void
     {

@@ -122,9 +122,7 @@ class LastModified implements LastModifiedService
 
         // Make sure a valid cache implementation is provided if caching is enabled.
         if ($cache === null && $options->isCacheEnabled()) {
-            throw new InvalidArgumentException(
-                'Must provide a ['.CacheInterface::class.'] implementation if caching is enabled.'
-            );
+            throw new InvalidArgumentException('Must provide a ['.CacheInterface::class.'] implementation if caching is enabled.');
         }
 
         // Set service options.
@@ -400,8 +398,6 @@ class LastModified implements LastModifiedService
      * @param int    $timestamp Timestamp to save in cache
      *
      * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
      */
     protected function saveInCache(string $cacheKey, int $timestamp): void
     {

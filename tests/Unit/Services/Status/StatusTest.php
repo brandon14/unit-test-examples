@@ -87,8 +87,6 @@ class StatusTest extends TestCase
 
     /**
      * Set up StatusService test.
-     *
-     * @return void
      */
     public function setUp(): void
     {
@@ -119,8 +117,6 @@ class StatusTest extends TestCase
 
     /**
      * Test that service can return a list of registered providers.
-     *
-     * @return void
      */
     public function testReturnsProviders(): void
     {
@@ -139,8 +135,6 @@ class StatusTest extends TestCase
 
     /**
      * Test that service can return a list of registered provider names.
-     *
-     * @return void
      */
     public function testReturnsProviderNames(): void
     {
@@ -159,8 +153,6 @@ class StatusTest extends TestCase
 
     /**
      * Test that service properly filters out invalid provided when class is constructed.
-     *
-     * @return void
      */
     public function testFiltersInvalidProvidersFromArrayUponConstruction(): void
     {
@@ -181,8 +173,6 @@ class StatusTest extends TestCase
     /**
      * Test that the service throws an {@link \InvalidArgumentException} if trying to register
      * a provider with a key that already exists.
-     *
-     * @return void
      */
     public function testThrowsExceptionIfRegisteringAProviderWhenOneWithNameAlreadyExists(): void
     {
@@ -205,8 +195,6 @@ class StatusTest extends TestCase
     /**
      * Test that the service throws an {@link \InvalidArgumentException} if you remove
      * a provider that does not exist.
-     *
-     * @return void
      */
     public function testThrowsExceptionIfRemovingProviderThatDoesNotExist(): void
     {
@@ -228,8 +216,6 @@ class StatusTest extends TestCase
     /**
      * Test that the service throws an {@link \InvalidArgumentException} if you want to cache statuses
      * but don't provided an {@link \Psr\SimpleCache\CacheInterface} implementation.
-     *
-     * @return void
      */
     public function testThrowsExceptionIfCacheEnabledWithNoImplementation(): void
     {
@@ -248,8 +234,6 @@ class StatusTest extends TestCase
 
     /**
      * Test that we can add a provider to the service.
-     *
-     * @return void
      */
     public function testRegistersANewProvider(): void
     {
@@ -268,8 +252,6 @@ class StatusTest extends TestCase
 
     /**
      * Test that we can remove a provider from the service.
-     *
-     * @return void
      */
     public function testRemovesAProvider(): void
     {
@@ -293,8 +275,6 @@ class StatusTest extends TestCase
      * providers.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testGetsStatusWithCacheDisabledAllProviders(): void
     {
@@ -332,8 +312,6 @@ class StatusTest extends TestCase
      * is configured to do so.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testChecksCacheForStatusAllProviders(): void
     {
@@ -395,8 +373,6 @@ class StatusTest extends TestCase
      * call to {@link \Psr\SimpleCache\CacheInterface::get} returns false).
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testGetsStatusFromProviderIfCacheCheckFails(): void
     {
@@ -455,8 +431,6 @@ class StatusTest extends TestCase
      * attempting to unserialize it.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testCheckCacheAssertsStringIsReturnedBeforeUnserialization(): void
     {
@@ -516,8 +490,6 @@ class StatusTest extends TestCase
      * the 'all' group level, but a cached provider entry.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testGetsStatusFromCacheIfPresentAllProvidersNoAllCache(): void
     {
@@ -574,8 +546,6 @@ class StatusTest extends TestCase
      * Assert that the service resolves the status with caching disabled.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testGetsStatusWithCacheDisabledSingleProvider(): void
     {
@@ -613,8 +583,6 @@ class StatusTest extends TestCase
      * is configured to do so.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testChecksCacheForStatusSingleProvider(): void
     {
@@ -662,8 +630,6 @@ class StatusTest extends TestCase
      * present.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testGetsStatusFromCacheIfPresentSingle(): void
     {
@@ -711,8 +677,6 @@ class StatusTest extends TestCase
      * Assert that the service resolves arrays of providers with the cache disabled.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testGetsStatusWithCacheDisabledArray(): void
     {
@@ -757,8 +721,6 @@ class StatusTest extends TestCase
      * is configured to do so for an array of providers.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testChecksCacheForStatusArray(): void
     {
@@ -837,8 +799,6 @@ class StatusTest extends TestCase
      * covering when not all providers are cached, etc to fully cover every case of the caching system.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testGetsStatusFromCacheIfPresentArray(): void
     {
@@ -910,8 +870,6 @@ class StatusTest extends TestCase
      * present from an array of providers when the group of providers is cached.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testGetsStatusFromCacheIfPresentArrayGroupCached(): void
     {
@@ -960,8 +918,6 @@ class StatusTest extends TestCase
      * is configured to do so.
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     public function testThrowsExceptionWhenCacheSaveFails(): void
     {
@@ -1011,8 +967,6 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
-     *
-     * @return void
      */
     public function testThrowsExceptionWhenGettingStatusForEmptyArray(): void
     {
@@ -1035,8 +989,6 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
-     *
-     * @return void
      */
     public function testThrowsExceptionWhenResolvingProviderThatDoesntExist(): void
     {
@@ -1060,8 +1012,6 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
-     *
-     * @return void
      */
     public function testThrowsExceptionWhenResolvingProviderThatDoesntExistArray(): void
     {
@@ -1086,8 +1036,6 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
-     *
-     * @return void
      */
     public function testTransformsCacheExceptionIntoStatusCacheExceptionOnHas(): void
     {
@@ -1118,8 +1066,6 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
-     *
-     * @return void
      */
     public function testTransformsThrowableIntoStatusCacheExceptionOnHas(): void
     {
@@ -1150,8 +1096,6 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
-     *
-     * @return void
      */
     public function testTransformsCacheExceptionIntoStatusCacheExceptionOnGet(): void
     {
@@ -1189,8 +1133,6 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
-     *
-     * @return void
      */
     public function testTransformsThrowableIntoStatusCacheExceptionOnGet(): void
     {
@@ -1229,8 +1171,6 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
-     *
-     * @return void
      */
     public function testTransformsCacheExceptionIntoStatusCacheExceptionOnSave(): void
     {
@@ -1278,8 +1218,6 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
      * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
-     *
-     * @return void
      */
     public function testTransformsThrowableIntoStatusCacheExceptionOnSave(): void
     {

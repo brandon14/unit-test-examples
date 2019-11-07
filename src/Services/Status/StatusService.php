@@ -116,9 +116,7 @@ class StatusService implements StatusServiceInterface
 
         // Make sure a valid cache implementation is provided if caching is enabled.
         if ($cache === null && $options->isCacheEnabled()) {
-            throw new InvalidArgumentException(
-                'Must provide a ['.CacheInterface::class.'] implementation if caching is enabled.'
-            );
+            throw new InvalidArgumentException('Must provide a ['.CacheInterface::class.'] implementation if caching is enabled.');
         }
 
         // Set service options.
@@ -403,8 +401,6 @@ class StatusService implements StatusServiceInterface
      * @param array  $status   Status to save in cache
      *
      * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
      */
     protected function saveInCache(string $cacheKey, array $status): void
     {

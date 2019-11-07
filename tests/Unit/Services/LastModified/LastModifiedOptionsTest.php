@@ -42,8 +42,6 @@ class LastModifiedOptionsTest extends TestCase
     /**
      * Test that {@link \App\Contracts\Services\LastModified\LastModifiedOptions} validates a valid
      * timestamp format has been provided.
-     *
-     * @return void
      */
     public function testThrowsInvalidArgumentExceptionWhenInvalidDateFormatIsProvided(): void
     {
@@ -60,8 +58,6 @@ class LastModifiedOptionsTest extends TestCase
     /**
      * Test that {@link \App\Contracts\Services\LastModified\LastModifiedOptions} validates a valid
      * timestamp format has been provided.
-     *
-     * @return void
      */
     public function testDoesNotThrowsInvalidArgumentExceptionWhenValidDateFormatIsProvided(): void
     {

@@ -45,8 +45,6 @@ class PhpRedisProviderTest extends TestCase
 {
     /**
      * Test that the provider will handle when the Redis client throws an exception.
-     *
-     * @return void
      */
     public function testProviderHandlesExceptionThrownFromPhpRedis(): void
     {
@@ -67,8 +65,6 @@ class PhpRedisProviderTest extends TestCase
 
     /**
      * Test that the provider will return an error status if it doesn't get a PONG from redis.
-     *
-     * @return void
      */
     public function testProvidersReturnsErrorStatusIfPingNotSuccessful(): void
     {
@@ -87,8 +83,6 @@ class PhpRedisProviderTest extends TestCase
 
     /**
      * Test that the provider will return an OK status when it gets a PONG from redis.
-     *
-     * @return void
      */
     public function testProviderReturnsOkStatusOnSuccessfulPong(): void
     {

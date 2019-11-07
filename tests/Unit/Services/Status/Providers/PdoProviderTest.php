@@ -49,8 +49,6 @@ class PdoProviderTest extends TestCase
 {
     /**
      * Test that the provider will handle when the PDO instance throws an exception.
-     *
-     * @return void
      */
     public function testGetStatusHandlesPDOExceptions(): void
     {
@@ -69,8 +67,6 @@ class PdoProviderTest extends TestCase
 
     /**
      * Test the the provider will handle when the PDO statement fails (returns false).
-     *
-     * @return void
      */
     public function testGetStatusHandlesStatementFailure(): void
     {
@@ -89,8 +85,6 @@ class PdoProviderTest extends TestCase
 
     /**
      * Test that the provider will handle when the statement execution fails (returns false).
-     *
-     * @return void
      */
     public function testGetStatusHandlesStatementExecFailure(): void
     {
@@ -113,8 +107,6 @@ class PdoProviderTest extends TestCase
 
     /**
      * Test that the provider handles when execute throws a {@link \PDOException}.
-     *
-     * @return void
      */
     public function testGetStatusHandlesStatementExecPDOException(): void
     {
@@ -140,8 +132,6 @@ class PdoProviderTest extends TestCase
 
     /**
      * Test that the provider will handle when the query executed returns a error code.
-     *
-     * @return void
      */
     public function testGetStatusHandlesStatementExecQueryStateError(): void
     {
@@ -167,8 +157,6 @@ class PdoProviderTest extends TestCase
 
     /**
      * Test that the provider handles when fetch throws a {@link \PDOException}.
-     *
-     * @return void
      */
     public function testGetStatusHandlesFetchPDOException(): void
     {
@@ -198,8 +186,6 @@ class PdoProviderTest extends TestCase
     /**
      * Test that the provider handles getting empty query results (should not happen unless something weird
      * is going on).
-     *
-     * @return void
      */
     public function testGetStatusHandlesFetchEmptyQueryResult(): void
     {
@@ -228,8 +214,6 @@ class PdoProviderTest extends TestCase
     /**
      * Test that the provider returns the database provider returns a status of OK if everything
      * checks out.
-     *
-     * @return void
      */
     public function testGetStatusReturnsDatabaseStatus(): void
     {
