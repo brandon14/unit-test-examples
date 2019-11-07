@@ -10,6 +10,9 @@ php:
   - 7.4snapshot
   - nightly
 
+env:
+  - PHP_CS_FIXER_IGNORE_ENV=true
+
 sudo: required
 
 cache:
