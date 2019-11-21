@@ -78,7 +78,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-### nesbot/carbon (Version 2.26.0 | e01ecc0)
+### nesbot/carbon (Version 2.27.0 | 13b8485)
 An API extension for DateTime that supports 281 different languages.
 Homepage: http://carbon.nesbot.com
 Licenses Used: MIT
@@ -235,7 +235,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-### symfony/translation (Version v4.3.6 | a3aa590)
+### symfony/translation (Version v4.4.0 | 897fb68)
 Symfony Translation Component
 Homepage: https://symfony.com
 Licenses Used: MIT
