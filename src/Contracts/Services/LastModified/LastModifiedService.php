@@ -43,7 +43,7 @@ interface LastModifiedService
      * @param string                                                        $providerName Provider name
      * @param \App\Contracts\Services\LastModified\LastModifiedTimeProvider $provider     Provider
      *
-     * @throws \InvalidArgumentException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @return bool True iff provider was added, false otherwise
      */
@@ -54,7 +54,7 @@ interface LastModifiedService
      *
      * @param string $providerName Provider name
      *
-     * @throws \InvalidArgumentException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @return bool True iff provider was removed, false otherwise
      */
@@ -81,8 +81,8 @@ interface LastModifiedService
      *
      * @param string|null $providerName Provider name
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @return \Carbon\CarbonInterface Last modified timestamp
      */
@@ -94,8 +94,8 @@ interface LastModifiedService
      * @param string[] $providers Array of provider names
      *
      * @throws \InvalidArgumentException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @return \Carbon\CarbonInterface Last modified timestamp
      */

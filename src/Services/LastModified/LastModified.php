@@ -31,13 +31,13 @@ use function implode;
 use function is_string;
 use function array_filter;
 use Carbon\CarbonInterface;
-use InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
+use App\Contracts\Services\CacheException;
+use App\Contracts\Services\ProviderRegistrationException;
 use App\Contracts\Services\LastModified\LastModifiedOptions;
 use App\Contracts\Services\LastModified\LastModifiedService;
+use App\Contracts\Services\CacheImplementationNeededException;
 use App\Contracts\Services\LastModified\LastModifiedTimeProvider;
-use App\Contracts\Services\LastModified\LastModifiedCacheException;
-use App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException;
 
 /**
  * Class LastModified.
@@ -103,7 +103,8 @@ class LastModified implements LastModifiedService
      *
      * @param array $providers Array of {@link \App\Contracts\Services\LastModified\LastModifiedTimeProvider}
      *
-     * @throws \InvalidArgumentException
+     * @throws \App\Contracts\Services\InvalidDateFormatException
+     * @throws \App\Contracts\Services\CacheImplementationNeededException
      *
      * @return void
      */
@@ -122,7 +123,7 @@ class LastModified implements LastModifiedService
 
         // Make sure a valid cache implementation is provided if caching is enabled.
         if ($cache === null && $options->isCacheEnabled()) {
-            throw new InvalidArgumentException('Must provide a ['.CacheInterface::class.'] implementation if caching is enabled.');
+            throw CacheImplementationNeededException::cacheImplementationNeeded();
         }
 
         // Set service options.
@@ -160,7 +161,7 @@ class LastModified implements LastModifiedService
     public function addProvider(string $providerName, LastModifiedTimeProvider $provider): bool
     {
         if (isset($this->providers[$providerName])) {
-            throw new InvalidArgumentException("Provider has already been registered with name [{$providerName}].");
+            throw ProviderRegistrationException::providerAlreadyRegistered($providerName);
         }
 
         $this->providers[$providerName] = $provider;
@@ -174,7 +175,7 @@ class LastModified implements LastModifiedService
     public function removeProvider(string $providerName): bool
     {
         if (! isset($this->providers[$providerName])) {
-            throw new InvalidArgumentException("No provider registered with name [{$providerName}].");
+            throw ProviderRegistrationException::noProviderRegistered($providerName);
         }
 
         unset($this->providers[$providerName]);
@@ -227,7 +228,7 @@ class LastModified implements LastModifiedService
     {
         // Must provide a list of providers to resolve.
         if (count($providers) === 0) {
-            throw new InvalidArgumentException('No providers specified.');
+            throw ProviderRegistrationException::noProvidersSpecified();
         }
 
         // Filter out provider array to only allow non-empty strings. It's PHP
@@ -265,8 +266,8 @@ class LastModified implements LastModifiedService
      * @param string[] $providerNames Provider names
      * @param string   $cacheKey      Cache key
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @return int Resolved timestamp
      */
@@ -296,8 +297,8 @@ class LastModified implements LastModifiedService
      *
      * @param string[] $providerNames Provider names
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @return int Resolved timestamp
      */
@@ -325,8 +326,8 @@ class LastModified implements LastModifiedService
      *
      * @param string $providerName Provider name
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @return int Resolved timestamp
      */
@@ -334,7 +335,7 @@ class LastModified implements LastModifiedService
     {
         // Invalid (not registered) provider.
         if (! isset($this->providers[$providerName])) {
-            throw new LastModifiedProviderNotRegisteredException("No provider registered with name [{$providerName}].");
+            throw ProviderRegistrationException::noProviderRegistered($providerName);
         }
 
         $cacheKey = $this->cacheKey.'_'.$providerName;
@@ -365,7 +366,7 @@ class LastModified implements LastModifiedService
      *
      * @param string $cacheKey Cache key
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
+     * @throws \App\Contracts\Services\CacheException
      *
      * @return int|null Resolved timestamp iff found, null otherwise
      */
@@ -383,7 +384,7 @@ class LastModified implements LastModifiedService
                 return $timestamp === 0 ? null : $timestamp;
             }
         } catch (Throwable $exception) {
-            throw new LastModifiedCacheException($exception->getMessage(), (int) $exception->getCode(), $exception);
+            throw CacheException::createFromException($exception);
         }
 
         return null;
@@ -397,7 +398,7 @@ class LastModified implements LastModifiedService
      * @param string $cacheKey  Cache key
      * @param int    $timestamp Timestamp to save in cache
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
+     * @throws \App\Contracts\Services\CacheException
      */
     protected function saveInCache(string $cacheKey, int $timestamp): void
     {
@@ -408,10 +409,10 @@ class LastModified implements LastModifiedService
             $saved = $this->cache->set($cacheKey, $timestamp, $this->cacheTtl);
 
             if ($saved === false) {
-                throw new LastModifiedCacheException("Unable to save timestamp in cache for cache key [{$cacheKey}].");
+                throw CacheException::createForTimestampSaveFailure($cacheKey);
             }
         } catch (Throwable $exception) {
-            throw new LastModifiedCacheException($exception->getMessage(), (int) $exception->getCode(), $exception);
+            throw CacheException::createFromException($exception);
         }
     }
 }

@@ -21,19 +21,29 @@
 
 declare(strict_types=1);
 
-namespace App\Contracts\Services\Status;
+namespace App\Contracts\Services;
 
-use Exception;
+use Throwable;
+use InvalidArgumentException;
 
 /**
- * Class StatusCacheException.
+ * Class InvalidDateFormatException.
  *
- * Exception thrown when the StatusService cannot store or
- * retrieve from the {@link \Psr\SimpleCache\CacheInterface}.
+ * Exception thrown when an invalid date format is provided.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class StatusCacheException extends Exception
+class InvalidDateFormatException extends InvalidArgumentException
 {
-    // No content.
+    /**
+     * Creates a new exception when an invlaid date format is encountered.
+     *
+     * @param string     $foramt   Date format provided
+     * @param int        $code     Error code
+     * @param \Throwable $previous Previous exception
+     */
+    public static function invalidFormat(string $format, int $code = 0, ?Throwable $previous = null): self
+    {
+        return new self("Invalid default timestamp format [{$format}] provided.", $code, $previous);
+    }
 }

@@ -21,19 +21,25 @@
 
 declare(strict_types=1);
 
-namespace App\Contracts\Services\LastModified;
+namespace App\Contracts\Services;
 
-use Exception;
+use InvalidArgumentException;
+use Psr\SimpleCache\CacheInterface;
 
 /**
- * Class LastModifiedCacheException.
+ * Class CacheImplementationNeededException.
  *
- * Exception thrown when the LastModifiedService cannot store or
- * retrieve from the {@link \Psr\SimpleCache\CacheInterface}.
+ * Exception thrown when no cache implementation is provided but needed.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class LastModifiedCacheException extends Exception
+class CacheImplementationNeededException extends InvalidArgumentException
 {
-    // No content.
+    /**
+     * Creates a new {@link \App\Contracts\Services\CacheImplementationNeededException} instance.
+     */
+    public static function cacheImplementationNeeded(): self
+    {
+        return new self('Must provide a ['.CacheInterface::class.'] implementation if caching is enabled.');
+    }
 }

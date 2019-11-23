@@ -67,8 +67,6 @@ class StatusOptions
      * @param int    $cacheTtl       Cache time-to-live
      * @param string $cacheKey       Cache key
      *
-     * @throws \InvalidArgumentException
-     *
      * @return void
      */
     public function __construct(

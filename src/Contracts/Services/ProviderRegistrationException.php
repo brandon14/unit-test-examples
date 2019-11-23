@@ -21,53 +21,47 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Services\LastModified;
+namespace App\Contracts\Services;
 
-use PHPUnit\Framework\TestCase;
-use App\Contracts\Services\InvalidDateFormatException;
-use App\Contracts\Services\LastModified\LastModifiedOptions;
+use InvalidArgumentException;
 
 /**
- * Class LastModifiedOptionsTest.
+ * Class ProviderRegistrationException.
  *
- * LastModifiedOptions unit tests.
- *
- * The only real logic this class performs is in validating the timestamp format, so that
- * is really the only thing that needs to be tested.
+ * Exception thrown when trying to add or remove service providers.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class LastModifiedOptionsTest extends TestCase
+class ProviderRegistrationException extends InvalidArgumentException
 {
     /**
-     * Test that {@link \App\Contracts\Services\LastModified\LastModifiedOptions} validates a valid
-     * timestamp format has been provided.
+     * Creates a new {@link \App\Contracts\Services\ProviderRegistrationException} when a provider
+     * with name {@link $providerName} is already registered.
+     *
+     * @param string $providerName Provider name
      */
-    public function testThrowsInvalidArgumentExceptionWhenInvalidDateFormatIsProvided(): void
+    public static function providerAlreadyRegistered(string $providerName): self
     {
-        $this->expectException(InvalidDateFormatException::class);
-
-        new LastModifiedOptions(
-            true,
-            30,
-            'last_modified',
-            ''
-        );
+        return new self("Provider has already been registered with name [{$providerName}].");
     }
 
     /**
-     * Test that {@link \App\Contracts\Services\LastModified\LastModifiedOptions} validates a valid
-     * timestamp format has been provided.
+     * Creates a new {@link \App\Contracts\Services\ProviderRegistrationException} for when
+     * no provider with {@link $providerName} is registered.
+     *
+     * @param string $providerName Provider name
      */
-    public function testDoesNotThrowsInvalidArgumentExceptionWhenValidDateFormatIsProvided(): void
+    public static function noProviderRegistered(string $providerName): self
     {
-        new LastModifiedOptions(
-            true,
-            30,
-            'last_modified',
-            'F jS, Y \a\t h:i:s A T'
-        );
+        return new self("No provider registered with name [{$providerName}].");
+    }
 
-        $this::assertTrue(true);
+    /**
+     * Creates a new {@link \App\Contracts\Services\ProviderRegistrationException} for
+     * when no providers where specified.
+     */
+    public static function noProvidersSpecified(): self
+    {
+        return new self('No providers specified.');
     }
 }
