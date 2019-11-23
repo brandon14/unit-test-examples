@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -45,8 +45,6 @@ class FilesystemLastModifiedProviderTest extends TestCase
 {
     /**
      * Set up Carbon mock time.
-     *
-     * @return void
      */
     public function setUp(): void
     {
@@ -59,8 +57,6 @@ class FilesystemLastModifiedProviderTest extends TestCase
     /**
      * Test that if provided an invalid base path (i.e. non-existent directory) the
      * class will throw an {@link \InvalidArgumentException}.
-     *
-     * @return void
      */
     public function testThrowsInvalidArgumentExceptionForInvalidBasePath(): void
     {
@@ -75,8 +71,6 @@ class FilesystemLastModifiedProviderTest extends TestCase
     /**
      * Test that if provided an invalid included directory (i.e. non-existent directory) the
      * class will throw an {@link \InvalidArgumentException}.
-     *
-     * @return void
      */
     public function testThrowsInvalidArgumentExceptionForInvalidIncludedDIrectories(): void
     {
@@ -91,8 +85,6 @@ class FilesystemLastModifiedProviderTest extends TestCase
     /**
      * Assert that the service will get the timestamp from the filesystem if it is
      * present.
-     *
-     * @return void
      */
     public function testGetsTimestampFromFilesystem(): void
     {
@@ -150,8 +142,6 @@ class FilesystemLastModifiedProviderTest extends TestCase
 
     /**
      * Test that if no files are found, the provider will return -1.
-     *
-     * @return void
      */
     public function testReturnsNegativeOneWithNoFiles(): void
     {
@@ -172,8 +162,6 @@ class FilesystemLastModifiedProviderTest extends TestCase
     /**
      * Test that if provided no directories to recurse through, it will still find the last
      * modified time in the base directory.
-     *
-     * @return void
      */
     public function testReturnsLastModifiedTimeWithNoRecursiveDirectories(): void
     {

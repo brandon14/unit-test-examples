@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -21,19 +21,29 @@
 
 declare(strict_types=1);
 
-namespace App\Contracts\Services\LastModified;
+namespace App\Contracts\Services;
 
-use RuntimeException;
+use Throwable;
+use InvalidArgumentException;
 
 /**
- * Class LastModifiedProviderNotRegisteredException.
+ * Class InvalidDateFormatException.
  *
- * Exception thrown when trying to get the last modified timestamp for a provider that is
- * not registered.
+ * Exception thrown when an invalid date format is provided.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class LastModifiedProviderNotRegisteredException extends RuntimeException
+class InvalidDateFormatException extends InvalidArgumentException
 {
-    // No content.
+    /**
+     * Creates a new exception when an invlaid date format is encountered.
+     *
+     * @param string     $foramt   Date format provided
+     * @param int        $code     Error code
+     * @param \Throwable $previous Previous exception
+     */
+    public static function invalidFormat(string $format, int $code = 0, ?Throwable $previous = null): self
+    {
+        return new self("Invalid default timestamp format [{$format}] provided.", $code, $previous);
+    }
 }

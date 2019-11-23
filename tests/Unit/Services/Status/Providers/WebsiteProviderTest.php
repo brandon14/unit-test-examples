@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -49,8 +49,6 @@ class WebsiteProviderTest extends TestCase
     /**
      * Test that the provider will throw an {@link \InvalidArgument\Exception} when constructed
      * with an invalid argument.
-     *
-     * @return void
      */
     public function testThrowsInvalidArgumentExceptionInvalidUrl(): void
     {
@@ -66,8 +64,6 @@ class WebsiteProviderTest extends TestCase
 
     /**
      * Test that provider will handle exceptions thrown from the {@link \GuzzleHttp\ClientInterface}.
-     *
-     * @return void
      */
     public function testProviderHandlesGuzzleException(): void
     {
@@ -93,8 +89,6 @@ class WebsiteProviderTest extends TestCase
     /**
      * Test that provider only returns an OK status when the response from Guzzle is
      * a response with a status in the 200 range.
-     *
-     * @return void
      */
     public function testProviderOnlyReturnsOkForStatusInTwoHundredRange(): void
     {
@@ -124,8 +118,6 @@ class WebsiteProviderTest extends TestCase
 
     /**
      * Test that provider returns error status for responses not in 200 range.
-     *
-     * @return void
      */
     public function testProviderReturnsErrorForStatusNotInTwoHundredRange(): void
     {

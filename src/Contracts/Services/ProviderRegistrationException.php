@@ -21,22 +21,47 @@
 
 declare(strict_types=1);
 
-namespace App\Contracts\Services\LastModified;
+namespace App\Contracts\Services;
+
+use InvalidArgumentException;
 
 /**
- * Interface LastModifiedTimeProvider.
+ * Class ProviderRegistrationException.
  *
- * Last modified time provider interface. Must implement a method
- * to return the last modified timestamp as an int.
+ * Exception thrown when trying to add or remove service providers.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-interface LastModifiedTimeProvider
+class ProviderRegistrationException extends InvalidArgumentException
 {
     /**
-     * Gets the last modified time for the provider.
+     * Creates a new {@link \App\Contracts\Services\ProviderRegistrationException} when a provider
+     * with name {@link $providerName} is already registered.
      *
-     * @return int Last modified timestamp
+     * @param string $providerName Provider name
      */
-    public function getLastModifiedTime(): int;
+    public static function providerAlreadyRegistered(string $providerName): self
+    {
+        return new self("Provider has already been registered with name [{$providerName}].");
+    }
+
+    /**
+     * Creates a new {@link \App\Contracts\Services\ProviderRegistrationException} for when
+     * no provider with {@link $providerName} is registered.
+     *
+     * @param string $providerName Provider name
+     */
+    public static function noProviderRegistered(string $providerName): self
+    {
+        return new self("No provider registered with name [{$providerName}].");
+    }
+
+    /**
+     * Creates a new {@link \App\Contracts\Services\ProviderRegistrationException} for
+     * when no providers where specified.
+     */
+    public static function noProvidersSpecified(): self
+    {
+        return new self('No providers specified.');
+    }
 }

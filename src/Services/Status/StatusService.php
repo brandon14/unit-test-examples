@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -32,12 +32,12 @@ use function serialize;
 use function array_keys;
 use function unserialize;
 use function array_filter;
-use InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
+use App\Contracts\Services\CacheException;
 use App\Contracts\Services\Status\StatusOptions;
-use App\Contracts\Services\Status\StatusCacheException;
 use App\Contracts\Services\Status\StatusServiceProvider;
-use App\Contracts\Services\Status\StatusProviderNotRegisteredException;
+use App\Contracts\Services\ProviderRegistrationException;
+use App\Contracts\Services\CacheImplementationNeededException;
 use App\Contracts\Services\Status\StatusService as StatusServiceInterface;
 
 /**
@@ -97,7 +97,7 @@ class StatusService implements StatusServiceInterface
      *
      * @param array $providers Array of {@link App\Contracts\Services\Status\StatusServiceProvider}
      *
-     * @throws \InvalidArgumentException
+     * @throws \App\Contracts\Services\CacheImplementationNeededException
      *
      * @return void
      */
@@ -116,9 +116,7 @@ class StatusService implements StatusServiceInterface
 
         // Make sure a valid cache implementation is provided if caching is enabled.
         if ($cache === null && $options->isCacheEnabled()) {
-            throw new InvalidArgumentException(
-                'Must provide a ['.CacheInterface::class.'] implementation if caching is enabled.'
-            );
+            throw CacheImplementationNeededException::cacheImplementationNeeded();
         }
 
         // Set service options.
@@ -155,7 +153,7 @@ class StatusService implements StatusServiceInterface
     public function addProvider(string $providerName, StatusServiceProvider $provider): bool
     {
         if (isset($this->providers[$providerName])) {
-            throw new InvalidArgumentException("Provider has already been registered with name [{$providerName}].");
+            throw ProviderRegistrationException::providerAlreadyRegistered($providerName);
         }
 
         $this->providers[$providerName] = $provider;
@@ -169,7 +167,7 @@ class StatusService implements StatusServiceInterface
     public function removeProvider(string $providerName): bool
     {
         if (! isset($this->providers[$providerName])) {
-            throw new InvalidArgumentException("No provider registered with name [{$providerName}].");
+            throw ProviderRegistrationException::noProviderRegistered($providerName);
         }
 
         unset($this->providers[$providerName]);
@@ -213,7 +211,7 @@ class StatusService implements StatusServiceInterface
     {
         // Must provide a list of providers to resolve.
         if (count($providers) === 0) {
-            throw new InvalidArgumentException('No providers specified.');
+            throw ProviderRegistrationException::noProvidersSpecified();
         }
 
         // Filter out provider array to only allow non-empty strings. It's PHP
@@ -241,8 +239,8 @@ class StatusService implements StatusServiceInterface
      * @param string[] $providerNames Array of provider names
      * @param string   $cacheKey      Cache key
      *
-     * @throws \App\Contracts\Services\Status\StatusCacheException
-     * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @psalm-return array<mixed, mixed>
      *
@@ -279,8 +277,8 @@ class StatusService implements StatusServiceInterface
      *
      * @param string $providerName Provider name
      *
-     * @throws \App\Contracts\Services\Status\StatusCacheException
-     * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @psalm-return array<mixed, mixed>
      *
@@ -290,7 +288,7 @@ class StatusService implements StatusServiceInterface
     {
         // Invalid (not registered) provider.
         if (! isset($this->providers[$providerName])) {
-            throw new StatusProviderNotRegisteredException("No provider registered with name [{$providerName}].");
+            throw ProviderRegistrationException::noProviderRegistered($providerName);
         }
 
         $cacheKey = $this->cacheKey.'_'.$providerName;
@@ -321,7 +319,7 @@ class StatusService implements StatusServiceInterface
      *
      * @param string $cacheKey Cache key
      *
-     * @throws \App\Contracts\Services\Status\StatusCacheException
+     * @throws \App\Contracts\Services\CacheException
      *
      * @psalm-return array<mixed, mixed>|null
      *
@@ -337,7 +335,7 @@ class StatusService implements StatusServiceInterface
                 return $this->resolveCachedStatus($cacheKey);
             }
         } catch (Throwable $exception) {
-            throw new StatusCacheException($exception->getMessage(), (int) $exception->getCode(), $exception);
+            throw CacheException::createFromException($exception);
         }
 
         return null;
@@ -349,11 +347,12 @@ class StatusService implements StatusServiceInterface
      *
      * @psalm-suppress PossiblyNullReference
      * @psalm-suppress DocblockTypeContradiction
+     * @psalm-suppress InvalidThrow
      *
      * @param string $cacheKey Cache key
      *
+     * @throws \App\Contracts\Services\CacheException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \App\Contracts\Services\Status\StatusCacheException
      *
      * @psalm-return array<mixed, mixed>|null
      *
@@ -366,14 +365,14 @@ class StatusService implements StatusServiceInterface
 
         // Nothing was returned from the cache, return null.
         if ($cache === null) {
-            return $cache;
+            return null;
         }
 
         // We don't have a serialized string, so return null since we can't
         // serialize it.
         // Since we can't guarantee the return type from the cache, this explicit check is still
         // needed even though we say it will either be a string or null since PSR's cache get return
-        // type if very loose (mixed).
+        // type is very loose (mixed).
         if (! is_string($cache)) {
             return null;
         }
@@ -401,9 +400,7 @@ class StatusService implements StatusServiceInterface
      * @param string $cacheKey Cache key
      * @param array  $status   Status to save in cache
      *
-     * @throws \App\Contracts\Services\Status\StatusCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     protected function saveInCache(string $cacheKey, array $status): void
     {
@@ -413,12 +410,12 @@ class StatusService implements StatusServiceInterface
             /** @psalm-suppress MissingThrowsDocblock */
             $saved = $this->cache->set($cacheKey, serialize($status), $this->cacheTtl);
 
-            // Failed to save status, raise an exception.
+            // Failed to save status, throw an exception.
             if ($saved === false) {
-                throw new StatusCacheException("Unable to save status in cache for cache key n[;{$cacheKey}].");
+                throw CacheException::createForStatusSaveFailure($cacheKey);
             }
         } catch (Throwable $exception) {
-            throw new StatusCacheException($exception->getMessage(), (int) $exception->getCode(), $exception);
+            throw CacheException::createFromException($exception);
         }
     }
 }

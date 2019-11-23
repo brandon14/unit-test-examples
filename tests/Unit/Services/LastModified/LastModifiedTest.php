@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -28,15 +28,15 @@ use TypeError;
 use Carbon\Carbon;
 use function array_keys;
 use function array_values;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Psr\SimpleCache\CacheException;
 use Psr\SimpleCache\CacheInterface;
+use App\Contracts\Services\CacheException;
 use App\Services\LastModified\LastModified;
+use Psr\SimpleCache\CacheException as PsrCacheException;
+use App\Contracts\Services\ProviderRegistrationException;
 use App\Contracts\Services\LastModified\LastModifiedOptions;
+use App\Contracts\Services\CacheImplementationNeededException;
 use App\Contracts\Services\LastModified\LastModifiedTimeProvider;
-use App\Contracts\Services\LastModified\LastModifiedCacheException;
-use App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException;
 
 /**
  * Class LastModifiedTest.
@@ -94,8 +94,6 @@ class LastModifiedTest extends TestCase
 
     /**
      * Set up LastModified service test.
-     *
-     * @return void
      */
     public function setUp(): void
     {
@@ -131,8 +129,6 @@ class LastModifiedTest extends TestCase
 
     /**
      * Simple test to hit the `getDefaultTimestampFormat` function.
-     *
-     * @return void
      */
     public function testReturnsDefaultTimestampFormat(): void
     {
@@ -149,8 +145,6 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test that service can return a list of registered providers.
-     *
-     * @return void
      */
     public function testReturnsProviders(): void
     {
@@ -169,8 +163,6 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test that service can return a list of registered provider names.
-     *
-     * @return void
      */
     public function testReturnsProviderNames(): void
     {
@@ -189,8 +181,6 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test that service properly filters out invalid providers when class is constructed.
-     *
-     * @return void
      */
     public function testFiltersInvalidProvidersFromArrayUponConstruction(): void
     {
@@ -209,15 +199,13 @@ class LastModifiedTest extends TestCase
     }
 
     /**
-     * Test that the service throws an {@link \InvalidArgumentException} if trying to register
+     * Test that the service throws an {@link \App\Contracts\Services\ProviderRegistrationException} if trying to register
      * a provider with a key that already exists.
-     *
-     * @return void
      */
     public function testThrowsExceptionIfRegisteringAProviderWhenOneWithNameAlreadyExists(): void
     {
-        // We expect an InvalidArgumentException to be thrown.
-        $this->expectException(InvalidArgumentException::class);
+        // We expect an ProviderRegistrationException to be thrown.
+        $this->expectException(ProviderRegistrationException::class);
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -233,15 +221,13 @@ class LastModifiedTest extends TestCase
     }
 
     /**
-     * Test that the service throws an {@link \InvalidArgumentException} if you remove
+     * Test that the service throws an {@link \App\Contracts\Services\ProviderRegistrationException} if you remove
      * a provider that does not exist.
-     *
-     * @return void
      */
     public function testThrowsExceptionIfRemovingProviderThatDoesNotExist(): void
     {
-        // We expect an InvalidArgumentException to be thrown.
-        $this->expectException(InvalidArgumentException::class);
+        // We expect an ProviderRegistrationException to be thrown.
+        $this->expectException(ProviderRegistrationException::class);
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -256,15 +242,13 @@ class LastModifiedTest extends TestCase
     }
 
     /**
-     * Test that the service throws an {@link \InvalidArgumentException} if you want to cache timestamps
+     * Test that the service throws an {@link \App\Contracts\Services\CacheImplementationNeededException} if you want to cache timestamps
      * but don't provided an {@link \Psr\SimpleCache\CacheInterface} implementation.
-     *
-     * @return void
      */
     public function testThrowsExceptionIfCacheEnabledWithNoImplementation(): void
     {
-        // We expect an InvalidArgumentException to be thrown.
-        $this->expectException(InvalidArgumentException::class);
+        // We expect an CacheImplementationNeededException to be thrown.
+        $this->expectException(CacheImplementationNeededException::class);
 
         // We want to cache timestamps, but provide a null cache implementation.
         $this->cacheTimestamp = true;
@@ -278,8 +262,6 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test that we can add a provider to the service.
-     *
-     * @return void
      */
     public function testRegistersANewProvider(): void
     {
@@ -298,8 +280,6 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test that we can remove a provider from the service.
-     *
-     * @return void
      */
     public function testRemovesAProvider(): void
     {
@@ -322,9 +302,7 @@ class LastModifiedTest extends TestCase
      * Test the last modified service with the caching feature disabled when resolving all
      * providers.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testGetsTimestampWithCacheDisabledAllProviders(): void
     {
@@ -361,9 +339,7 @@ class LastModifiedTest extends TestCase
      * Assert that the service checks the cache for a timestamp if the service
      * is configured to do so.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testChecksCacheForTimestampAllProviders(): void
     {
@@ -421,14 +397,12 @@ class LastModifiedTest extends TestCase
      * Assert that the service checks the cache for a timestamp if the service
      * is configured to do so.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testThrowsExceptionWhenCacheSaveFails(): void
     {
         // We expect service to throw a cache exception upon failure to persist to cache.
-        $this->expectException(LastModifiedCacheException::class);
+        $this->expectException(CacheException::class);
 
         // Cache the timestamp.
         $this->cacheTimestamp = true;
@@ -473,9 +447,7 @@ class LastModifiedTest extends TestCase
      * present for all configured providers. This is mocking that it is cached
      * at the 'all' group level.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testGetsTimestampFromCacheIfPresentAllProviders(): void
     {
@@ -521,9 +493,7 @@ class LastModifiedTest extends TestCase
      * and there is a cache key but the actual call to resolve the value from cache fails (i.e
      *  call to {@link \Psr\SimpleCache\CacheInterface::get} returns false).
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testGetsTimestampFromProviderIfCacheCheckFails(): void
     {
@@ -583,9 +553,7 @@ class LastModifiedTest extends TestCase
      * present for all configured providers. This is to test with no cache entry at
      * the 'all' group level, but a cached provider entry.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testGetsTimestampFromCacheIfPresentAllProvidersNoAllCache(): void
     {
@@ -642,9 +610,7 @@ class LastModifiedTest extends TestCase
     /**
      * Test that the service gets the most recent timestamp from multiple providers.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testReturnsMostRecentTimestampFromAllProviders(): void
     {
@@ -688,9 +654,7 @@ class LastModifiedTest extends TestCase
     /**
      * Test that the service prevents returning timestamps past the current time.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testPreventsFutureTimestampsAllProviders(): void
     {
@@ -725,9 +689,7 @@ class LastModifiedTest extends TestCase
     /**
      * Test that the service prevents returning timestamps past the current time.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testPreventsNegativeTimestampsAllProviders(): void
     {
@@ -759,9 +721,7 @@ class LastModifiedTest extends TestCase
     /**
      * Assert that the service resolves the timestamp with caching disabled.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testGetsTimestampWithCacheDisabledSingleProvider(): void
     {
@@ -799,9 +759,7 @@ class LastModifiedTest extends TestCase
      * Assert that the service checks the cache for a timestamp if the service
      * is configured to do so.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testChecksCacheForTimestampSingleProvider(): void
     {
@@ -849,9 +807,7 @@ class LastModifiedTest extends TestCase
      * Assert that the service will get the timestamp from the cache if it is
      * present.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testGetsTimestampFromCacheIfPresentSingle(): void
     {
@@ -899,9 +855,7 @@ class LastModifiedTest extends TestCase
     /**
      * Test that the service prevents returning timestamps past the current time.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testPreventsFutureTimestampsSingleProviders(): void
     {
@@ -936,9 +890,7 @@ class LastModifiedTest extends TestCase
     /**
      * Test that the service prevents returning timestamps past the current time.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testPreventsNegativeTimestampsSingleProvider(): void
     {
@@ -970,9 +922,7 @@ class LastModifiedTest extends TestCase
     /**
      * Assert that the service resolves arrays of providers with the cache disabled.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testGetsTimestampWithCacheDisabledArray(): void
     {
@@ -1016,9 +966,7 @@ class LastModifiedTest extends TestCase
      * Assert that the service checks the cache for a timestamp if the service
      * is configured to do so for an array of providers.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testChecksCacheForTimestampArray(): void
     {
@@ -1092,13 +1040,7 @@ class LastModifiedTest extends TestCase
      * Assert that the service will get the timestamp from the cache if it is
      * present for an array of providers.
      *
-     * **NOTE:**
-     * This test covers when the providers are cached and the group is not. Should write tests
-     * covering when not all providers are cached, etc to fully cover every case of the caching system.
-     *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testGetsTimestampFromCacheIfPresentArray(): void
     {
@@ -1169,9 +1111,7 @@ class LastModifiedTest extends TestCase
      * Assert that the service will get the timestamp from the cache if it is
      * present from an array of providers when the group of providers is cached.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testGetsTimestampFromCacheIfPresentArrayGroupCached(): void
     {
@@ -1219,9 +1159,7 @@ class LastModifiedTest extends TestCase
      * Test that the service prevents returning timestamps past the current time for an array
      * of providers.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testPreventsFutureTimestampsArray(): void
     {
@@ -1258,9 +1196,7 @@ class LastModifiedTest extends TestCase
      * Test that the service prevents returning timestamps past the current time for an array
      * of providers.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
      */
     public function testPreventsNegativeTimestampsArray(): void
     {
@@ -1292,14 +1228,12 @@ class LastModifiedTest extends TestCase
     /**
      * Test that we properly handle empty arrays.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      */
     public function testThrowsExceptionWhenGettingTimestampForEmptyArray(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ProviderRegistrationException::class);
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -1316,15 +1250,13 @@ class LastModifiedTest extends TestCase
     /**
      * Test handling an unregistered provider.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      */
     public function testThrowsExceptionWhenResolvingProviderThatDoesntExist(): void
     {
-        // We expect an InvalidArgumentException to be thrown.
-        $this->expectException(LastModifiedProviderNotRegisteredException::class);
+        // We expect an ProviderRegistrationException to be thrown.
+        $this->expectException(ProviderRegistrationException::class);
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -1341,15 +1273,13 @@ class LastModifiedTest extends TestCase
     /**
      * Test handling an unregistered provider.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      */
     public function testThrowsExceptionWhenResolvingProviderThatDoesntExistArray(): void
     {
-        // We expect an InvalidArgumentException to be thrown.
-        $this->expectException(LastModifiedProviderNotRegisteredException::class);
+        // We expect an ProviderRegistrationException to be thrown.
+        $this->expectException(ProviderRegistrationException::class);
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -1365,16 +1295,14 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test we handle any cache exception from the PSR cache implementation on check and transform it into
-     * an {@link \App\Contracts\Services\LastModified\LastModifiedCacheException}.
+     * an {@link \App\Contracts\Services\CacheException}.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsCacheExceptionIntoLastModifiedCacheExceptionOnHas(): void
+    public function testTransformsCacheExceptionIntoCacheExceptionOnHas(): void
     {
-        $this->expectException(LastModifiedCacheException::class);
+        $this->expectException(CacheException::class);
         // Cache the timestamp.
         $this->cacheTimestamp = true;
 
@@ -1397,16 +1325,14 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test it transforms a throwable caught when checking the cache into an
-     * {@link \App\Contracts\Services\LastModified\LastModifiedCacheException}.
+     * {@link \App\Contracts\Services\CacheException}.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsThrowableIntoLastModifiedCacheExceptionOnHas(): void
+    public function testTransformsThrowableIntoCacheExceptionOnHas(): void
     {
-        $this->expectException(LastModifiedCacheException::class);
+        $this->expectException(CacheException::class);
         // Cache the timestamp.
         $this->cacheTimestamp = true;
 
@@ -1429,16 +1355,14 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test we handle any cache exception from the PSR cache implementation on get and transform it into
-     * an {@link \App\Contracts\Services\LastModified\LastModifiedCacheException}.
+     * an {@link \App\Contracts\Services\CacheException}.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsCacheExceptionIntoLastModifiedCacheExceptionOnGet(): void
+    public function testTransformsCacheExceptionIntoCacheExceptionOnGet(): void
     {
-        $this->expectException(LastModifiedCacheException::class);
+        $this->expectException(CacheException::class);
         // Cache the timestamp.
         $this->cacheTimestamp = true;
 
@@ -1468,16 +1392,14 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test we handle any throwable from the PSR cache implementation on get and transform it into
-     * an {@link \App\Contracts\Services\LastModified\LastModifiedCacheException}.
+     * an {@link \App\Contracts\Services\CacheException}.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsThrowableIntoLastModifiedCacheExceptionOnGet(): void
+    public function testTransformsThrowableIntoCacheExceptionOnGet(): void
     {
-        $this->expectException(LastModifiedCacheException::class);
+        $this->expectException(CacheException::class);
 
         // Cache the timestamp.
         $this->cacheTimestamp = true;
@@ -1508,16 +1430,14 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test we handle any cache exception from the PSR cache implementation on save and transform it into
-     * an {@link \App\Contracts\Services\LastModified\LastModifiedCacheException}.
+     * an {@link \App\Contracts\Services\CacheException}.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsCacheExceptionIntoLastModifiedCacheExceptionOnSave(): void
+    public function testTransformsCacheExceptionIntoCacheExceptionOnSave(): void
     {
-        $this->expectException(LastModifiedCacheException::class);
+        $this->expectException(CacheException::class);
 
         // Cache the timestamp.
         $this->cacheTimestamp = true;
@@ -1558,16 +1478,14 @@ class LastModifiedTest extends TestCase
 
     /**
      * Test we handle any throwable from the PSR cache implementation on save and transform it into
-     * an {@link \App\Contracts\Services\LastModified\LastModifiedCacheException}.
+     * an {@link \App\Contracts\Services\CacheException}.
      *
-     * @throws \App\Contracts\Services\LastModified\LastModifiedCacheException
-     * @throws \App\Contracts\Services\LastModified\LastModifiedProviderNotRegisteredException
-     *
-     * @return void
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsThrowableIntoLastModifiedCacheExceptionOnSave(): void
+    public function testTransformsThrowableIntoCacheExceptionOnSave(): void
     {
-        $this->expectException(LastModifiedCacheException::class);
+        $this->expectException(CacheException::class);
 
         // Cache the timestamp.
         $this->cacheTimestamp = true;
@@ -1614,7 +1532,7 @@ class LastModifiedTest extends TestCase
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class MockCacheException extends Exception implements CacheException
+class MockCacheException extends Exception implements PsrCacheException
 {
     // Intentionally left blank.
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace App\Contracts\Services\LastModified;
 
-use InvalidArgumentException;
+use App\Contracts\Services\InvalidDateFormatException;
 
 /**
  * Class LastModifiedOptions.
@@ -73,7 +73,7 @@ class LastModifiedOptions
      * @param string $cacheKey        Cache key
      * @param string $timestampFormat Timestamp format
      *
-     * @throws \InvalidArgumentException
+     * @throws \App\Contracts\Services\InvalidDateFormatException
      *
      * @return void
      */
@@ -89,7 +89,7 @@ class LastModifiedOptions
         $this->timestampFormat = $timestampFormat;
 
         if (! date($this->timestampFormat)) {
-            throw new InvalidArgumentException("Invalid default timestamp format [{$this->timestampFormat}] provided.");
+            throw InvalidDateFormatException::invalidFormat($this->timestampFormat);
         }
     }
 

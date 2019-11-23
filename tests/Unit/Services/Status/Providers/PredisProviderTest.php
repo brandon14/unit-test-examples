@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -46,8 +46,6 @@ class PredisProviderTest extends TestCase
 {
     /**
      * Test that the provider will handle when Predis client throws an exception.
-     *
-     * @return void
      */
     public function testProviderHandlesExceptionThrownFromPredis(): void
     {
@@ -82,8 +80,6 @@ class PredisProviderTest extends TestCase
 
     /**
      * Test that provider will return an error status if it gets not PONG from redis.
-     *
-     * @return void
      */
     public function testProvidersReturnsErrorStatusIfPingNotSuccessful(): void
     {
@@ -116,8 +112,6 @@ class PredisProviderTest extends TestCase
 
     /**
      * Test that provider will return an OK status when it gets a PONG back from redis.
-     *
-     * @return void
      */
     public function testProviderReturnsOkStatusOnSuccessfulPong(): void
     {

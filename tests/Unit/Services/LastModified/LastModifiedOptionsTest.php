@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -23,8 +23,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\LastModified;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use App\Contracts\Services\InvalidDateFormatException;
 use App\Contracts\Services\LastModified\LastModifiedOptions;
 
 /**
@@ -42,12 +42,10 @@ class LastModifiedOptionsTest extends TestCase
     /**
      * Test that {@link \App\Contracts\Services\LastModified\LastModifiedOptions} validates a valid
      * timestamp format has been provided.
-     *
-     * @return void
      */
     public function testThrowsInvalidArgumentExceptionWhenInvalidDateFormatIsProvided(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidDateFormatException::class);
 
         new LastModifiedOptions(
             true,
@@ -60,8 +58,6 @@ class LastModifiedOptionsTest extends TestCase
     /**
      * Test that {@link \App\Contracts\Services\LastModified\LastModifiedOptions} validates a valid
      * timestamp format has been provided.
-     *
-     * @return void
      */
     public function testDoesNotThrowsInvalidArgumentExceptionWhenValidDateFormatIsProvided(): void
     {

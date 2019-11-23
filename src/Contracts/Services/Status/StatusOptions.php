@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -66,8 +66,6 @@ class StatusOptions
      * @param bool   $isCacheEnabled Whether caching is enabled
      * @param int    $cacheTtl       Cache time-to-live
      * @param string $cacheKey       Cache key
-     *
-     * @throws \InvalidArgumentException
      *
      * @return void
      */

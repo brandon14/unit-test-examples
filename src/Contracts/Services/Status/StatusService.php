@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -39,7 +39,7 @@ interface StatusService
      * @param string                                               $providerName Provider name
      * @param \App\Contracts\Services\Status\StatusServiceProvider $provider     Provider
      *
-     * @throws \InvalidArgumentException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @return bool True iff the provider was added, false otherwise
      */
@@ -50,7 +50,7 @@ interface StatusService
      *
      * @param string $providerName Provider name
      *
-     * @throws \InvalidArgumentException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @return bool True iff the provider was removed, false otherwise
      */
@@ -77,8 +77,8 @@ interface StatusService
      *
      * @param string|null $providerName Provider name
      *
-     * @throws \App\Contracts\Services\Status\StatusCacheException
-     * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @psalm-return array<mixed, mixed>
      *
@@ -94,8 +94,8 @@ interface StatusService
      * @param array $providers Array of providers
      *
      * @throws \InvalidArgumentException
-     * @throws \App\Contracts\Services\Status\StatusCacheException
-     * @throws \App\Contracts\Services\Status\StatusProviderNotRegisteredException
+     * @throws \App\Contracts\Services\CacheException
+     * @throws \App\Contracts\Services\ProviderRegistrationException
      *
      * @psalm-return array<mixed, mixed>
      *

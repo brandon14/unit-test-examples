@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the unit-test-examples package.
+ * This file is part of the brandon14/unit-test-examples package.
  *
  * Copyright 2018-2019 Brandon Clothier
  *
@@ -21,19 +21,25 @@
 
 declare(strict_types=1);
 
-namespace App\Contracts\Services\Status;
+namespace App\Contracts\Services;
 
-use Exception;
+use InvalidArgumentException;
+use Psr\SimpleCache\CacheInterface;
 
 /**
- * Class StatusCacheException.
+ * Class CacheImplementationNeededException.
  *
- * Exception thrown when the StatusService cannot store or
- * retrieve from the {@link \Psr\SimpleCache\CacheInterface}.
+ * Exception thrown when no cache implementation is provided but needed.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class StatusCacheException extends Exception
+class CacheImplementationNeededException extends InvalidArgumentException
 {
-    // No content.
+    /**
+     * Creates a new {@link \App\Contracts\Services\CacheImplementationNeededException} instance.
+     */
+    public static function cacheImplementationNeeded(): self
+    {
+        return new self('Must provide a ['.CacheInterface::class.'] implementation if caching is enabled.');
+    }
 }
