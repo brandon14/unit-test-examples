@@ -10,6 +10,10 @@ php:
   - 7.4snapshot
   - nightly
 
+jobs:
+  allow_failures:
+    - php: nightly
+
 env:
   - PHP_CS_FIXER_IGNORE_ENV=true
 
