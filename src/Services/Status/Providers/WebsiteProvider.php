@@ -68,7 +68,7 @@ class WebsiteProvider implements StatusServiceProvider
      *
      * @param \Psr\Http\Client\ClientInterface          $httpClient     PSR HTTP client instance
      * @param \Psr\Http\Message\RequestFactoryInterface $requestFactory PSR HTTP request factory instance
-     * @param string                                    $routeToPing    Route to hit using Guzzle client
+     * @param string                                    $routeToPing    Route to hit using PSR HTTP client
      *
      * @throws \InvalidArgumentException
      *
