@@ -14,9 +14,6 @@ jobs:
   allow_failures:
     - php: nightly
 
-env:
-  - PHP_CS_FIXER_IGNORE_ENV=true
-
 sudo: required
 
 cache:
@@ -27,6 +24,7 @@ before_install:
   echo '' | pecl install -f redis
 
 before_script:
+  - phpenv config-add travis.ini
   - composer self-update
   - composer install --prefer-source --no-interaction
   - composer dump-autoload

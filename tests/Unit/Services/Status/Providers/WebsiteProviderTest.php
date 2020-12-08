@@ -24,11 +24,13 @@ declare(strict_types=1);
 namespace Tests\Unit\Services\Status\Providers;
 
 use Exception;
-use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
-use GuzzleHttp\ClientInterface;
 use PHPUnit\Framework\TestCase;
-use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Client\ClientInterface;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use App\Services\Status\Providers\WebsiteProvider;
 use App\Contracts\Services\Status\StatusServiceProvider;
 
@@ -38,9 +40,12 @@ use App\Contracts\Services\Status\StatusServiceProvider;
  * WebsiteProvider tests.
  *
  * Again in this example we have a class that depends upon some external service (in this case
- * an HTTP connection), so we mock that {@link \GuzzleHttp\ClientInterface} and so long as we
+ * an HTTP connection), so we mock that {@link \Psr\Http\Client\ClientInterface} and so long as we
  * make sure the mock behaves as the actual implementation would (i.e. adhere to that interface),
  * then we can rest assured that our class behaves as intended.
+ *
+ * We are using the PSR-18 HTTP client interface as this allows a wide range of satisfiable HTTP client
+ * to be used (including Guzzle via an adapter).
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
@@ -56,29 +61,38 @@ class WebsiteProviderTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $mockClient = $this->createMock(ClientInterface::class);
+        $mockFactory = $this->createMock(RequestFactoryInterface::class);
 
         $url = 'this_is_not_a_valid_url';
 
-        new WebsiteProvider($mockClient, $url);
+        new WebsiteProvider($mockClient, $mockFactory, $url);
     }
 
     /**
-     * Test that provider will handle exceptions thrown from the {@link \GuzzleHttp\ClientInterface}.
+     * Test that provider will handle exceptions thrown from the {@link \Psr\Http\Client\ClientInterface}.
      */
     public function testProviderHandlesGuzzleException(): void
     {
         $url = 'https://www.example.com';
+        $request = (new Psr17Factory())->createRequest('GET', $url);
 
-        // Create Guzzle client mock.
+        // Create PSR HTTP client mock.
         $mockClient = $this->createMock(ClientInterface::class);
-        // Force mock to throw a GuzzleException to simulate Guzzle being unable to complete
+        // Force mock to throw a HTTP client exception to simulate client being unable to complete
         // request.
         $mockClient->expects($this::once())
-            ->method('request')
-            ->with('GET', $url)
-            ->will($this::throwException(new MockGuzzleException('This is an exception')));
+            ->method('sendRequest')
+            ->with($request)
+            ->will($this::throwException(new MockClientException('This is an exception')));
 
-        $instance = new WebsiteProvider($mockClient, $url);
+        $mockFactory = $this->createMock(RequestFactoryInterface::class);
+
+        $mockFactory->expects($this::once())
+            ->method('createRequest')
+            ->with('GET', $url)
+            ->will($this::returnValue($request));
+
+        $instance = new WebsiteProvider($mockClient, $mockFactory, $url);
 
         $status = $instance->getStatus();
 
@@ -87,28 +101,36 @@ class WebsiteProviderTest extends TestCase
     }
 
     /**
-     * Test that provider only returns an OK status when the response from Guzzle is
+     * Test that provider only returns an OK status when the response from PSR HTTP client is
      * a response with a status in the 200 range.
      */
     public function testProviderOnlyReturnsOkForStatusInTwoHundredRange(): void
     {
         $url = 'https://www.example.com';
+        $request = (new Psr17Factory())->createRequest('GET', $url);
 
-        // Create a mock Guzzle pSR7 response class.
-        $mockResponse = $this->createMock(Response::class);
+        // Create a mock PSR7 response class.
+        $mockResponse = $this->createMock(ResponseInterface::class);
 
         // Have mock response be a successful 200 HTML response.
         $mockResponse->expects($this::once())->method('getStatusCode')->willReturn(200);
 
-        // Create Guzzle client mock.
+        // Create PSR HTTP client mock.
         $mockClient = $this->createMock(ClientInterface::class);
         // Force mock to return the mocked PSR7 response.
         $mockClient->expects($this::once())
-            ->method('request')
-            ->with('GET', $url)
+            ->method('sendRequest')
+            ->with($request)
             ->willReturn($mockResponse);
 
-        $instance = new WebsiteProvider($mockClient, $url);
+        $mockFactory = $this->createMock(RequestFactoryInterface::class);
+
+        $mockFactory->expects($this::once())
+            ->method('createRequest')
+            ->with('GET', $url)
+            ->will($this::returnValue($request));
+
+        $instance = new WebsiteProvider($mockClient, $mockFactory, $url);
 
         $status = $instance->getStatus();
 
@@ -122,22 +144,30 @@ class WebsiteProviderTest extends TestCase
     public function testProviderReturnsErrorForStatusNotInTwoHundredRange(): void
     {
         $url = 'https://www.example.com';
+        $request = (new Psr17Factory())->createRequest('GET', $url);
 
-        // Create a mock Guzzle PSR7 response class.
-        $mockResponse = $this->createMock(Response::class);
+        // Create a mock PSR7 response class.
+        $mockResponse = $this->createMock(ResponseInterface::class);
 
         // Have mock response be a 404 not found
         $mockResponse->expects($this::once())->method('getStatusCode')->willReturn(404);
 
-        // Create Guzzle client mock.
+        // Create PSR HTTP client mock.
         $mockClient = $this->createMock(ClientInterface::class);
         // Force mock to return the mocked PSR7 response.
         $mockClient->expects($this::once())
-            ->method('request')
-            ->with('GET', $url)
+            ->method('sendRequest')
+            ->with($request)
             ->willReturn($mockResponse);
 
-        $instance = new WebsiteProvider($mockClient, $url);
+        $mockFactory = $this->createMock(RequestFactoryInterface::class);
+
+        $mockFactory->expects($this::once())
+            ->method('createRequest')
+            ->with('GET', $url)
+            ->will($this::returnValue($request));
+
+        $instance = new WebsiteProvider($mockClient, $mockFactory, $url);
 
         $status = $instance->getStatus();
 
@@ -147,13 +177,13 @@ class WebsiteProviderTest extends TestCase
 }
 
 /**
- * Class MockGuzzleException.
+ * Class MockClientException.
  *
- * Mock GuzzleHttp exception class.
+ * Mock Http client exception class.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class MockGuzzleException extends Exception implements GuzzleException
+class MockClientException extends Exception implements ClientExceptionInterface
 {
     // Intentionally left blank.
 }

@@ -27,14 +27,15 @@ use Throwable;
 use function filter_var;
 use InvalidArgumentException;
 use const FILTER_VALIDATE_URL;
-use GuzzleHttp\ClientInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use App\Contracts\Services\Status\StatusServiceProvider;
 
 /**
  * Class WebsiteProvider.
  *
  * Website status provider. Will make an HTTP request using
- * {@link \GuzzleHttp\ClientInterface} to see if a website
+ * {@link \Psr\Http\Client\ClientInterface} to see if a website
  * responds.
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
@@ -42,11 +43,18 @@ use App\Contracts\Services\Status\StatusServiceProvider;
 class WebsiteProvider implements StatusServiceProvider
 {
     /**
-     * Guzzle HTTP client.
+     * PSR HTTP client.
      *
-     * @var \GuzzleHttp\ClientInterface
+     * @var \Psr\Http\Client\ClientInterface
      */
     protected $httpClient;
+
+    /**
+     * PSR HTTP request factory.
+     *
+     * @var \Psr\Http\Message\RequestFactoryInterface
+     */
+    protected $requestFactory;
 
     /**
      * Route to hit to check website status.
@@ -58,22 +66,23 @@ class WebsiteProvider implements StatusServiceProvider
     /**
      * Construct a new website status provider.
      *
-     * @param \GuzzleHttp\ClientInterface $httpClient  Guzzle HTTP client instance
-     * @param string                      $routeToPing Route to hit using Guzzle client
+     * @param \Psr\Http\Client\ClientInterface          $httpClient     PSR HTTP client instance
+     * @param \Psr\Http\Message\RequestFactoryInterface $requestFactory PSR HTTP request factory instance
+     * @param string                                    $routeToPing    Route to hit using PSR HTTP client
      *
      * @throws \InvalidArgumentException
      *
      * @return void
      */
-    public function __construct(ClientInterface $httpClient, string $routeToPing)
+    public function __construct(ClientInterface $httpClient, RequestFactoryInterface $requestFactory, string $routeToPing)
     {
-        $this->httpClient = $httpClient;
-
         // Validate the URL to ping.
         if (filter_var($routeToPing, FILTER_VALIDATE_URL) === false) {
             throw new InvalidArgumentException("Invalid URL [{$routeToPing}] provided.");
         }
 
+        $this->httpClient = $httpClient;
+        $this->requestFactory = $requestFactory;
         $this->routeToPing = $routeToPing;
     }
 
@@ -83,11 +92,10 @@ class WebsiteProvider implements StatusServiceProvider
     public function getStatus(): array
     {
         try {
-            // Get the PSR-7 response from Guzzle.
-            // Guzzle's throws annotations are incorrect because the base GuzzleException is defined
-            // as an interface.
-            /** @psalm-suppress MissingThrowsDocblock */
-            $response = $this->httpClient->request('GET', $this->routeToPing);
+            $request = $this->requestFactory->createRequest('GET', $this->routeToPing);
+
+            // Get the PSR-7 response from HTTP client.
+            $response = $this->httpClient->sendRequest($request);
 
             $code = (int) $response->getStatusCode();
 
