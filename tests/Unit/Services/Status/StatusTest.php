@@ -88,7 +88,7 @@ class StatusTest extends TestCase
     /**
      * Set up StatusService test.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

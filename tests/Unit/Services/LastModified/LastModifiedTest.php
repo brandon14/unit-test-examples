@@ -95,7 +95,7 @@ class LastModifiedTest extends TestCase
     /**
      * Set up LastModified service test.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
