@@ -63,7 +63,7 @@ class PhpRedisProvider implements StatusServiceProvider
     {
         try {
             // PHP redis client returns '+PONG' on a successful ping.
-            return (string) $this->redis->ping() === '+PONG'
+            return $this->redis->ping() === '+PONG'
                 ? ['status' => StatusServiceProvider::STATUS_OK]
                 : ['status' => StatusServiceProvider::STATUS_ERROR];
         } catch (Throwable $e) {

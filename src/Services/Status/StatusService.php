@@ -216,6 +216,7 @@ class StatusService implements StatusServiceInterface
 
         // Filter out provider array to only allow non-empty strings. It's PHP
         // so deal with it.
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         $providerNames = array_filter(
             $providers,
             /**

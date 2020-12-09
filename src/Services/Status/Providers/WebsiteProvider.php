@@ -97,6 +97,9 @@ class WebsiteProvider implements StatusServiceProvider
             // Get the PSR-7 response from HTTP client.
             $response = $this->httpClient->sendRequest($request);
 
+            // Suppress psalm because we can't always assume every PSR standard library will completely adhere
+            // to the interface documentation.
+            /** @psalm-suppress RedundantCastGivenDocblockType */
             $code = (int) $response->getStatusCode();
 
             // Check for a successful HTTP response.

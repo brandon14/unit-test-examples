@@ -233,6 +233,7 @@ class LastModified implements LastModifiedService
 
         // Filter out provider array to only allow non-empty strings. It's PHP
         // so deal with it.
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         $providerNames = array_filter(
             $providers,
             /**
@@ -286,7 +287,7 @@ class LastModified implements LastModifiedService
 
         // Save in cache this provider group.
         if ($this->isCacheEnabled) {
-            $this->saveInCache($cacheKey, (int) $timestamp);
+            $this->saveInCache($cacheKey, $timestamp);
         }
 
         return $timestamp;
@@ -318,7 +319,7 @@ class LastModified implements LastModifiedService
             $timestamp = time();
         }
 
-        return (int) $timestamp;
+        return $timestamp;
     }
 
     /**
