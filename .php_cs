@@ -19,7 +19,8 @@ $finder = PhpCsFixer\Finder::create()
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
 
-return PhpCsFixer\Config::create()
+$config = new PhpCsFixer\Config();
+return $config
     ->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
@@ -44,7 +45,7 @@ return PhpCsFixer\Config::create()
         'no_useless_else' => true,
         'no_useless_return' => true,
         'ordered_imports' => [
-            'sortAlgorithm' => 'length',
+            'sort_algorithm' => 'length',
         ],
         'php_unit_strict' => true,
         'phpdoc_no_empty_return' => false,
@@ -58,9 +59,7 @@ return PhpCsFixer\Config::create()
         ],
         'native_function_invocation'=> false,
         'native_constant_invocation' => false,
-        'is_null' => [
-            'use_yoda_style' => false,
-        ],
+        'is_null' => true,
         'declare_strict_types' => true,
         'phpdoc_to_comment' => false,
     ])

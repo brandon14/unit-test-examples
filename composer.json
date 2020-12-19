@@ -34,7 +34,7 @@
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8.2",
         "comcast/php-legal-licenses": "^1.1",
-        "friendsofphp/php-cs-fixer": "^2.16.0",
+        "friendsofphp/php-cs-fixer": "^3.0.0",
         "mikey179/vfsstream": "^1.6.8",
         "nesbot/carbon": "^2.42",
         "nyholm/psr7": "^1.2",
