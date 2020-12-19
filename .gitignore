@@ -7,6 +7,9 @@ coverage.text
 coverage.html
 coverage/
 
+# PHP Unit cache files
+.phpunit.result.cache
+
 # PHP Coding Standards Fixer cache file
 .php_cs.cache
 

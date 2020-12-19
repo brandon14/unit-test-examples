@@ -25,14 +25,14 @@
 
 | Tech                                 | Version  |
 | ------------------------------------ | -------- |
-| [PHP](https://secure.php.net/)       | >= 7.1.8 |
+| [PHP](https://secure.php.net/)       | >= 7.4.0 |
 | [Composer](https://getcomposer.org/) | *        |
 
-| PHP Extension    | Version |
-| ---------------- | ------- |
-| ext-pdo          | *       |
-| ext-redis        | *       |
-| ext-zend-opcache | *       |
+| PHP Extension    | Version  |
+| ---------------- | -------- |
+| ext-pdo          | *        |
+| ext-redis        | >= 5.0.0 |
+| ext-zend-opcache | *        |
 
 
 ## Purpose

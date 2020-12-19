@@ -3,7 +3,7 @@
 /**
  * This file is part of the brandon14/unit-test-examples package.
  *
- * Copyright 2018-2019 Brandon Clothier
+ * Copyright (c) 2018-2020 Brandon Clothier
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -71,7 +71,7 @@ class PhpRedisProviderTest extends TestCase
         $mock = $this->createMock(Redis::class);
 
         // Tell mocked PhpRedis client to return a string other than PONG.
-        $mock->expects($this::once())->method('ping')->willReturn('+NOT PONG');
+        $mock->expects($this::once())->method('ping')->willReturn(false);
 
         $instance = new PhpRedisProvider($mock);
 
@@ -89,7 +89,7 @@ class PhpRedisProviderTest extends TestCase
         $mock = $this->createMock(Redis::class);
 
         // Tell mocked PhpRedis client to return PONG.
-        $mock->expects($this::once())->method('ping')->willReturn('+PONG');
+        $mock->expects($this::once())->method('ping')->willReturn(true);
 
         $instance = new PhpRedisProvider($mock);
 

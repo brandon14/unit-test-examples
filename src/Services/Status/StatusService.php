@@ -3,7 +3,7 @@
 /**
  * This file is part of the brandon14/unit-test-examples package.
  *
- * Copyright 2018-2019 Brandon Clothier
+ * Copyright (c) 2018-2020 Brandon Clothier
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -141,9 +141,7 @@ class StatusService implements StatusServiceInterface
              * @return bool true iff it is an instance of {@link \App\Contracts\Services\Service\StatusServiceProvider},
              *              false otherwise
              */
-            function ($provider): bool {
-                return $provider instanceof StatusServiceProvider;
-            }
+            static fn ($provider): bool => $provider instanceof StatusServiceProvider
         );
     }
 
@@ -226,9 +224,7 @@ class StatusService implements StatusServiceInterface
              *
              * @return bool true iff param is a string and not empty, false otherwise
              */
-            function ($string): bool {
-                return is_string($string) && $string !== '';
-            }
+            static fn ($string): bool => is_string($string) && $string !== ''
         );
 
         return $this->resolveProviderArray($providerNames, $this->cacheKey.'_'.implode('_', $providerNames));

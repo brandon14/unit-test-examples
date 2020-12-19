@@ -3,7 +3,7 @@
 /**
  * This file is part of the brandon14/unit-test-examples package.
  *
- * Copyright 2018-2019 Brandon Clothier
+ * Copyright (c) 2018-2020 Brandon Clothier
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace App\Contracts\Services\LastModified;
 
-use Carbon\CarbonInterface;
+use DateTimeInterface;
 
 /**
  * Interface LastModifiedService.
@@ -84,9 +84,9 @@ interface LastModifiedService
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      *
-     * @return \Carbon\CarbonInterface Last modified timestamp
+     * @return \DateTimeInterface Last modified timestamp
      */
-    public function getLastModifiedTime(?string $providerName = 'all'): CarbonInterface;
+    public function getLastModifiedTime(?string $providerName = 'all'): DateTimeInterface;
 
     /**
      * Gets the last modified time from an array of providers.
@@ -97,9 +97,9 @@ interface LastModifiedService
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      *
-     * @return \Carbon\CarbonInterface Last modified timestamp
+     * @return \DateTimeInterface Last modified timestamp
      */
-    public function getLastModifiedTimeByArray(array $providers): CarbonInterface;
+    public function getLastModifiedTimeByArray(array $providers): DateTimeInterface;
 
     /**
      * Get the default timestamp format.

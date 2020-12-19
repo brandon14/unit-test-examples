@@ -3,7 +3,7 @@
 /**
  * This file is part of the brandon14/unit-test-examples package.
  *
- * Copyright 2018-2019 Brandon Clothier
+ * Copyright (c) 2018-2020 Brandon Clothier
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -23,8 +23,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\LastModified;
 
+use DateTime;
 use Exception;
 use TypeError;
+use DateInterval;
 use Carbon\Carbon;
 use function array_keys;
 use function array_values;
@@ -310,7 +312,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = false;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -321,7 +323,7 @@ class LastModifiedTest extends TestCase
 
         // Tell mock provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -332,7 +334,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -347,7 +349,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -366,12 +368,12 @@ class LastModifiedTest extends TestCase
             ->withConsecutive(
                 [
                     $this->cacheKey.'_null_provider',
-                    $lastModified->timestamp,
+                    $lastModified->getTimestamp(),
                     $this->cacheTtl,
                 ],
                 [
                     $this->cacheKey.'_all',
-                    $lastModified->timestamp,
+                    $lastModified->getTimestamp(),
                     $this->cacheTtl,
                 ]
             )
@@ -379,7 +381,7 @@ class LastModifiedTest extends TestCase
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -390,7 +392,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -408,7 +410,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -425,13 +427,13 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('set')->with(
                 $this->cacheKey.'_null_provider',
-                $lastModified->timestamp,
+                $lastModified->getTimestamp(),
                 $this->cacheTtl
             )->willReturn(false);
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -455,7 +457,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -466,7 +468,7 @@ class LastModifiedTest extends TestCase
         // If there is a cached timestamp, `get` should be called and should
         // return our mock latest timestamp.
         $cache->expects($this::once())->method('get')->with($this->cacheKey.'_all', null)->willReturn(
-            $lastModified->timestamp
+            $lastModified->getTimestamp()
         );
         // With caching enabled, and a timestamp present in the cache, we shouldn't
         // call set to update the timestamp.
@@ -485,7 +487,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -501,7 +503,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -518,7 +520,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::exactly(2))
             ->method('get')
             ->withConsecutive([$this->cacheKey.'_all', null], [$this->cacheKey.'_null_provider', null])
-            ->will($this::onConsecutiveCalls(null, $lastModified->timestamp));
+            ->will($this::onConsecutiveCalls(null, $lastModified->getTimestamp()));
 
         // With caching enabled, and a failure to resolve cached value, set should be called
         // once since the function continues on with its logic and the call to get the individual provider
@@ -527,7 +529,7 @@ class LastModifiedTest extends TestCase
             ->method('set')
             ->with(
                 $this->cacheKey.'_all',
-                $lastModified->timestamp,
+                $lastModified->getTimestamp(),
                 $this->cacheTtl
             )
             ->willReturn(true);
@@ -545,7 +547,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -561,7 +563,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -579,14 +581,14 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('get')
             ->with($this->cacheKey.'_null_provider', null)
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
         // With caching enabled, and a timestamp present in the cache for the provider but not the 'all' group, we should
         // save that in the cache.
         $cache->expects($this::once())
             ->method('set')
             ->with(
                 $this->cacheKey.'_all',
-                $lastModified->timestamp,
+                $lastModified->getTimestamp(),
                 $this->cacheTtl
             )
             ->willReturn(true);
@@ -604,7 +606,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -621,9 +623,9 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = false;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
         // Second timestamp is earlier than the first, so it should chose the latest.
-        $lastModified2 = Carbon::now()->subDay();
+        $lastModified2 = (new DateTime())->sub(new DateInterval('P1D'));
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -634,9 +636,9 @@ class LastModifiedTest extends TestCase
 
         // Specify the timestamps the mocked providers should return.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
         $this->providers['null_provider_2']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified2->timestamp);
+            ->willReturn($lastModified2->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -647,8 +649,8 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
-        $this::assertGreaterThan($lastModified2->timestamp, $lastModifiedCall->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
+        $this::assertGreaterThan($lastModified2->getTimestamp(), $lastModifiedCall->getTimestamp());
     }
 
     /**
@@ -662,7 +664,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = false;
 
         // This will be our fixed last modified timestamp (in the future).
-        $lastModified = Carbon::now()->addDays(1);
+        $lastModified = (new DateTime())->add(new DateInterval('P1D'));
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -672,7 +674,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::never())->method('set');
 
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -683,7 +685,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is less than or equal to current time.
-        $this::assertLessThanOrEqual(time(), $lastModifiedCall->timestamp);
+        $this::assertLessThanOrEqual(time(), $lastModifiedCall->getTimestamp());
     }
 
     /**
@@ -715,7 +717,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is less than or equal to current time.
-        $this::assertGreaterThan(-1, $lastModifiedCall->timestamp);
+        $this::assertGreaterThan(-1, $lastModifiedCall->getTimestamp());
     }
 
     /**
@@ -729,7 +731,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = false;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -741,7 +743,7 @@ class LastModifiedTest extends TestCase
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())
             ->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -752,7 +754,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime('null_provider');
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -767,7 +769,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -782,14 +784,14 @@ class LastModifiedTest extends TestCase
 
         $cache->expects($this::once())->method('set')->with(
             $this->cacheKey.'_null_provider',
-            $lastModified->timestamp,
+            $lastModified->getTimestamp(),
             $this->cacheTtl
         )->willReturn(true);
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())
             ->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -800,7 +802,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime('null_provider');
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -815,7 +817,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -831,7 +833,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('get')
             ->with($this->cacheKey.'_null_provider', null)
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
         // With caching enabled, and a timestamp present in the cache, we shouldn't
         // call put to update the timestamp.
         $cache->expects($this::never())->method('set');
@@ -849,7 +851,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime('null_provider');
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -863,7 +865,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = false;
 
         // This will be our fixed last modified timestamp (in the future).
-        $lastModified = Carbon::now()->addDays(1);
+        $lastModified = (new DateTime())->add(new DateInterval('P1D'));
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -873,7 +875,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::never())->method('set');
 
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -884,7 +886,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime('null_provider');
 
         // Assert the timestamp returned is less than or equal to current time.
-        $this::assertLessThanOrEqual(time(), $lastModifiedCall->timestamp);
+        $this::assertLessThanOrEqual(time(), $lastModifiedCall->getTimestamp());
     }
 
     /**
@@ -916,7 +918,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime('null_provider');
 
         // Assert the timestamp returned is less than or equal to current time.
-        $this::assertGreaterThan(-1, $lastModifiedCall->timestamp);
+        $this::assertGreaterThan(-1, $lastModifiedCall->getTimestamp());
     }
 
     /**
@@ -933,9 +935,9 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = false;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
         // Second timestamp is earlier than the first, so it should chose the latest.
-        $lastModified2 = Carbon::now()->subDay();
+        $lastModified2 = (new DateTime())->sub(new DateInterval('P1D'));
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -946,9 +948,9 @@ class LastModifiedTest extends TestCase
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
         $this->providers['null_provider_2']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified2->timestamp);
+            ->willReturn($lastModified2->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -959,7 +961,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTimeByArray(['null_provider', 'null_provider_2']);
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -977,9 +979,9 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
         // Second timestamp is earlier than the first, so it should chose the latest.
-        $lastModified2 = Carbon::now()->subDay();
+        $lastModified2 = (new DateTime())->sub(new DateInterval('P1D'));
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -1002,17 +1004,17 @@ class LastModifiedTest extends TestCase
             ->withConsecutive(
                 [
                     $this->cacheKey.'_null_provider',
-                    $lastModified->timestamp,
+                    $lastModified->getTimestamp(),
                     $this->cacheTtl,
                 ],
                 [
                     $this->cacheKey.'_null_provider_2',
-                    $lastModified2->timestamp,
+                    $lastModified2->getTimestamp(),
                     $this->cacheTtl,
                 ],
                 [
                     $this->cacheKey.'_null_provider_null_provider_2',
-                    $lastModified->timestamp,
+                    $lastModified->getTimestamp(),
                     $this->cacheTtl,
                 ]
             )
@@ -1020,9 +1022,9 @@ class LastModifiedTest extends TestCase
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
         $this->providers['null_provider_2']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified2->timestamp);
+            ->willReturn($lastModified2->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -1033,7 +1035,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTimeByArray(['null_provider', 'null_provider_2']);
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -1051,9 +1053,9 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
         // Second timestamp is earlier than the first, so it should chose the latest.
-        $lastModified2 = Carbon::now()->subDay();
+        $lastModified2 = (new DateTime())->sub(new DateInterval('P1D'));
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -1076,14 +1078,14 @@ class LastModifiedTest extends TestCase
             ->withConsecutive(
                 [$this->cacheKey.'_null_provider', null],
                 [$this->cacheKey.'_null_provider_2', null]
-            )->will($this::onConsecutiveCalls($lastModified->timestamp, $lastModified2->timestamp));
+            )->will($this::onConsecutiveCalls($lastModified->getTimestamp(), $lastModified2->getTimestamp()));
 
         // Should cache the group cache key.
         $cache->expects($this::once())
             ->method('set')
             ->with(
                 $this->cacheKey.'_null_provider_null_provider_2',
-                $lastModified->timestamp,
+                $lastModified->getTimestamp(),
                 $this->cacheTtl
             )
             ->willReturn(true);
@@ -1104,7 +1106,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTimeByArray(['null_provider', 'null_provider_2']);
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -1122,7 +1124,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -1134,7 +1136,7 @@ class LastModifiedTest extends TestCase
         $cache->expects($this::once())
             ->method('get')
             ->with($this->cacheKey.'_null_provider_null_provider_2')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
 
         $cache->expects($this::never())->method('set');
 
@@ -1152,7 +1154,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTimeByArray(['null_provider', 'null_provider_2']);
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModifiedCall->timestamp, $lastModified->timestamp);
+        $this::assertEquals($lastModifiedCall->getTimestamp(), $lastModified->getTimestamp());
     }
 
     /**
@@ -1170,15 +1172,15 @@ class LastModifiedTest extends TestCase
         $this->providers['null_provider_2'] = $this->createMock(LastModifiedTimeProvider::class);
 
         // This will be our fixed last modified timestamp (in the future).
-        $lastModified = Carbon::now()->addDays(1);
-        $lastModified2 = Carbon::now()->addDays(2);
+        $lastModified = (new DateTime())->add(new DateInterval('P1D'));
+        $lastModified2 = (new DateTime())->add(new DateInterval('P2D'));
 
         $cache = $this->createMock(CacheInterface::class);
 
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
         $this->providers['null_provider_2']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified2->timestamp);
+            ->willReturn($lastModified2->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -1189,7 +1191,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTimeByArray(['null_provider', 'null_provider_2']);
 
         // Assert the timestamp returned is less than or equal to current time.
-        $this::assertLessThanOrEqual(time(), $lastModifiedCall->timestamp);
+        $this::assertLessThanOrEqual(time(), $lastModifiedCall->getTimestamp());
     }
 
     /**
@@ -1222,7 +1224,7 @@ class LastModifiedTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is less than or equal to current time.
-        $this::assertGreaterThan(-1, $lastModifiedCall->timestamp);
+        $this::assertGreaterThan(-1, $lastModifiedCall->getTimestamp());
     }
 
     /**
@@ -1443,7 +1445,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -1459,13 +1461,13 @@ class LastModifiedTest extends TestCase
         // Throw a mock PSR cache exception when trying to save something in the cache.
         $cache->expects($this::once())->method('set')->with(
             $this->cacheKey.'_null_provider',
-            $lastModified->timestamp,
+            $lastModified->getTimestamp(),
             $this->cacheTtl
         )->will($this::throwException(new MockCacheException('Test exception')));
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
 
         $instance = new LastModified(
             $cache,
@@ -1491,7 +1493,7 @@ class LastModifiedTest extends TestCase
         $this->cacheTimestamp = true;
 
         // This will be our fixed last modified timestamp.
-        $lastModified = Carbon::now();
+        $lastModified = new DateTime();
 
         $cache = $this->createMock(CacheInterface::class);
 
@@ -1507,13 +1509,13 @@ class LastModifiedTest extends TestCase
         // Throw an error (to force catching a Throwable) when we call set to save the timestamp.
         $cache->expects($this::once())->method('set')->with(
             $this->cacheKey.'_null_provider',
-            $lastModified->timestamp,
+            $lastModified->getTimestamp(),
             $this->cacheTtl
         )->will($this::throwException(new TypeError('Test exception')));
 
         // Tell mocked provider to return the set timestamp.
         $this->providers['null_provider']->expects($this::once())->method('getLastModifiedTime')
-            ->willReturn($lastModified->timestamp);
+            ->willReturn($lastModified->getTimestamp());
 
         $instance = new LastModified(
             $cache,
