@@ -19,8 +19,7 @@ $finder = PhpCsFixer\Finder::create()
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
 
-$config = new PhpCsFixer\Config();
-return $config
+return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
@@ -59,7 +58,9 @@ return $config
         ],
         'native_function_invocation'=> false,
         'native_constant_invocation' => false,
-        'is_null' => true,
+        'is_null' => [
+            'use_yoda_style' => false,
+        ],
         'declare_strict_types' => true,
         'phpdoc_to_comment' => false,
     ])

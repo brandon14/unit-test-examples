@@ -34,7 +34,7 @@
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8.2",
         "comcast/php-legal-licenses": "^1.1",
-        "friendsofphp/php-cs-fixer": "^3.0.0",
+        "friendsofphp/php-cs-fixer": "^2.17.2",
         "mikey179/vfsstream": "^1.6.8",
         "nesbot/carbon": "^2.42",
         "nyholm/psr7": "^1.2",
@@ -60,7 +60,10 @@
         "lint:phpcs:check": "phpcs ./",
         "lint:phpcs:fix": "phpcbf ./",
         "lint:phpmd": "phpmd ./ text ./phpmd.xml",
-        "lint:php-cs-fixer:fix": "php-cs-fixer fix",
+        "lint:php-cs-fixer:fix": [
+            "@putenv PHP_CS_FIXER_IGNORE_ENV=1",
+            "php-cs-fixer fix"
+        ],
         "lint:php-cs-fixer:check": "composer run-script lint:php-cs-fixer:fix -- --dry-run --verbose",
         "lint": "composer run-script lint:phpcs:check && composer run-script lint:php-cs-fixer:check && composer run-script lint:phpmd && composer run-script analyze",
         "lint:fix": "composer run-script lint:phpcs:fix && composer run-script lint:php-cs-fixer:fix",
