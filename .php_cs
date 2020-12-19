@@ -44,7 +44,7 @@ return PhpCsFixer\Config::create()
         'no_useless_else' => true,
         'no_useless_return' => true,
         'ordered_imports' => [
-            'sortAlgorithm' => 'length',
+            'sort_algorithm' => 'length',
         ],
         'php_unit_strict' => true,
         'phpdoc_no_empty_return' => false,

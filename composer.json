@@ -22,10 +22,9 @@
         }
     },
     "require": {
-        "php": "^7.1.8",
+        "php": "^7.4.0",
         "ext-pdo": "*",
-        "ext-redis": "*",
-        "nesbot/carbon": "^2.26.0",
+        "ext-redis": ">=5.0.0",
         "predis/predis": "^1.1.1",
         "psr/http-client": "^1.0",
         "psr/http-factory": "^1.0",
@@ -35,11 +34,12 @@
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8.2",
         "comcast/php-legal-licenses": "^1.1",
-        "friendsofphp/php-cs-fixer": "^2.16.0",
+        "friendsofphp/php-cs-fixer": "^2.17.2",
         "mikey179/vfsstream": "^1.6.8",
+        "nesbot/carbon": "^2.42",
         "nyholm/psr7": "^1.2",
         "phpmd/phpmd": "^2.6.0",
-        "phpunit/phpunit": "^7.5.17",
+        "phpunit/phpunit": "^9.5.0",
         "roave/security-advisories": "dev-master",
         "sensiolabs/security-checker": "^6.0.3",
         "squizlabs/php_codesniffer": "^3.5.2",
@@ -50,7 +50,7 @@
         "sort-packages": true,
         "optimize-autoloader": true,
         "platform": {
-            "php": "7.1.8"
+            "php": "7.4.0"
         }
     },
     "scripts": {
@@ -60,7 +60,10 @@
         "lint:phpcs:check": "phpcs ./",
         "lint:phpcs:fix": "phpcbf ./",
         "lint:phpmd": "phpmd ./ text ./phpmd.xml",
-        "lint:php-cs-fixer:fix": "php-cs-fixer fix",
+        "lint:php-cs-fixer:fix": [
+            "@putenv PHP_CS_FIXER_IGNORE_ENV=1",
+            "php-cs-fixer fix"
+        ],
         "lint:php-cs-fixer:check": "composer run-script lint:php-cs-fixer:fix -- --dry-run --verbose",
         "lint": "composer run-script lint:phpcs:check && composer run-script lint:php-cs-fixer:check && composer run-script lint:phpmd && composer run-script analyze",
         "lint:fix": "composer run-script lint:phpcs:fix && composer run-script lint:php-cs-fixer:fix",

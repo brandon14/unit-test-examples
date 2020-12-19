@@ -3,7 +3,7 @@
 /**
  * This file is part of the brandon14/unit-test-examples package.
  *
- * Copyright 2018-2019 Brandon Clothier
+ * Copyright (c) 2018-2020 Brandon Clothier
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -23,14 +23,14 @@ declare(strict_types=1);
 
 namespace App\Services\LastModified;
 
+use DateTime;
 use Throwable;
-use Carbon\Carbon;
 use function time;
 use function count;
 use function implode;
+use DateTimeInterface;
 use function is_string;
 use function array_filter;
-use Carbon\CarbonInterface;
 use Psr\SimpleCache\CacheInterface;
 use App\Contracts\Services\CacheException;
 use App\Contracts\Services\ProviderRegistrationException;
@@ -149,9 +149,7 @@ class LastModified implements LastModifiedService
              * @return bool true iff it is an instance of {@link \App\Contracts\Services\LastModified\LastModifiedTimeProvider},
              *              false otherwise
              */
-            function ($provider): bool {
-                return $provider instanceof LastModifiedTimeProvider;
-            }
+            static fn ($provider): bool => $provider instanceof LastModifiedTimeProvider
         );
     }
 
@@ -202,11 +200,11 @@ class LastModified implements LastModifiedService
     /**
      * {@inheritdoc}
      */
-    public function getLastModifiedTime(?string $providerName = 'all'): CarbonInterface
+    public function getLastModifiedTime(?string $providerName = 'all'): DateTimeInterface
     {
         // Treat null as fetching all providers.
         if ($providerName === null || $providerName === 'all') {
-            return Carbon::createFromTimestamp(
+            return (new DateTime())->setTimeStamp(
                 $this->resolveProviderArray(array_keys($this->providers), $this->cacheKey.'_all')
             );
         }
@@ -218,13 +216,13 @@ class LastModified implements LastModifiedService
             $timestamp = time();
         }
 
-        return Carbon::createFromTimestamp($timestamp);
+        return (new DateTime())->setTimestamp($timestamp);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getLastModifiedTimeByArray(array $providers): CarbonInterface
+    public function getLastModifiedTimeByArray(array $providers): DateTimeInterface
     {
         // Must provide a list of providers to resolve.
         if (count($providers) === 0) {
@@ -243,12 +241,10 @@ class LastModified implements LastModifiedService
              *
              * @return bool true iff param is a string and not empty, false otherwise
              */
-            function ($string): bool {
-                return is_string($string) && $string !== '';
-            }
+            static fn ($string): bool => is_string($string) && $string !== ''
         );
 
-        return Carbon::createFromTimestamp(
+        return (new DateTime())->setTimestamp(
             $this->resolveProviderArray($providerNames, $this->cacheKey.'_'.implode('_', $providerNames))
         );
     }
