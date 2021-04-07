@@ -144,7 +144,7 @@ class FilesystemLastModifiedTimeProvider implements LastModifiedTimeProvider
     {
         $timestamp = -1;
 
-        foreach ($files as /* @psalm-var \SplFileInfo */$file) {
+        foreach ($files as /* @psalm-var \SplFileInfo */ $file) {
             if (! $file->isDir()) {
                 $mTime = $file->getMTime();
                 $timestamp = $mTime > $timestamp ? $mTime : $timestamp;
