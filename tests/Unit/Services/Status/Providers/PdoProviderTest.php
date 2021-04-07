@@ -50,7 +50,7 @@ class PdoProviderTest extends TestCase
     /**
      * Test that the provider will handle when the PDO instance throws an exception.
      */
-    public function testGetStatusHandlesPDOExceptions(): void
+    final public function testGetStatusHandlesPDOExceptions(): void
     {
         $db = $this->createMock(PDO::class);
 
@@ -68,7 +68,7 @@ class PdoProviderTest extends TestCase
     /**
      * Test the the provider will handle when the PDO statement fails (returns false).
      */
-    public function testGetStatusHandlesStatementFailure(): void
+    final public function testGetStatusHandlesStatementFailure(): void
     {
         $db = $this->createMock(PDO::class);
 
@@ -86,7 +86,7 @@ class PdoProviderTest extends TestCase
     /**
      * Test that the provider will handle when the statement execution fails (returns false).
      */
-    public function testGetStatusHandlesStatementExecFailure(): void
+    final public function testGetStatusHandlesStatementExecFailure(): void
     {
         $db = $this->createMock(PDO::class);
         $statement = $this->createMock(PDOStatement::class);
@@ -108,7 +108,7 @@ class PdoProviderTest extends TestCase
     /**
      * Test that the provider handles when execute throws a {@link \PDOException}.
      */
-    public function testGetStatusHandlesStatementExecPDOException(): void
+    final public function testGetStatusHandlesStatementExecPDOException(): void
     {
         $db = $this->createMock(PDO::class);
         $statement = $this->createMock(PDOStatement::class);
@@ -133,7 +133,7 @@ class PdoProviderTest extends TestCase
     /**
      * Test that the provider will handle when the query executed returns a error code.
      */
-    public function testGetStatusHandlesStatementExecQueryStateError(): void
+    final public function testGetStatusHandlesStatementExecQueryStateError(): void
     {
         $db = $this->createMock(PDO::class);
         $statement = $this->createMock(PDOStatement::class);
@@ -158,7 +158,7 @@ class PdoProviderTest extends TestCase
     /**
      * Test that the provider handles when fetch throws a {@link \PDOException}.
      */
-    public function testGetStatusHandlesFetchPDOException(): void
+    final public function testGetStatusHandlesFetchPDOException(): void
     {
         $db = $this->createMock(PDO::class);
         $statement = $this->createMock(PDOStatement::class);
@@ -187,7 +187,7 @@ class PdoProviderTest extends TestCase
      * Test that the provider handles getting empty query results (should not happen unless something weird
      * is going on).
      */
-    public function testGetStatusHandlesFetchEmptyQueryResult(): void
+    final public function testGetStatusHandlesFetchEmptyQueryResult(): void
     {
         $db = $this->createMock(PDO::class);
         $statement = $this->createMock(PDOStatement::class);
@@ -215,7 +215,7 @@ class PdoProviderTest extends TestCase
      * Test that the provider returns the database provider returns a status of OK if everything
      * checks out.
      */
-    public function testGetStatusReturnsDatabaseStatus(): void
+    final public function testGetStatusReturnsDatabaseStatus(): void
     {
         $db = $this->createMock(PDO::class);
         $statement = $this->createMock(PDOStatement::class);

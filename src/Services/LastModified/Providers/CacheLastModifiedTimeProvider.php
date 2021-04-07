@@ -38,17 +38,13 @@ class CacheLastModifiedTimeProvider implements LastModifiedTimeProvider
 {
     /**
      * PSR cache implementation.
-     *
-     * @var \Psr\SimpleCache\CacheInterface
      */
-    protected $cache;
+    protected CacheInterface $cache;
 
     /**
      * Cache key.
-     *
-     * @var string
      */
-    protected $cacheKey;
+    protected string $cacheKey;
 
     /**
      * Constructs a cache based last modified provider.

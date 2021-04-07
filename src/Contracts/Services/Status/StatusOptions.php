@@ -39,24 +39,18 @@ class StatusOptions
 {
     /**
      * Whether to cache the statuses or not.
-     *
-     * @var bool
      */
-    protected $isCacheEnabled;
+    protected bool $isCacheEnabled;
 
     /**
      * How long to cache the statuses for.
-     *
-     * @var int
      */
-    protected $cacheTtl;
+    protected int $cacheTtl;
 
     /**
      * Cache key.
-     *
-     * @var string
      */
-    protected $cacheKey;
+    protected string $cacheKey;
 
     /**
      * Constructs a new set of {@link \App\Contracts\Services\Status\StatusService} options.

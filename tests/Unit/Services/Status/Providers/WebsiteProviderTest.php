@@ -55,7 +55,7 @@ class WebsiteProviderTest extends TestCase
      * Test that the provider will throw an {@link \InvalidArgument\Exception} when constructed
      * with an invalid argument.
      */
-    public function testThrowsInvalidArgumentExceptionInvalidUrl(): void
+    final public function testThrowsInvalidArgumentExceptionInvalidUrl(): void
     {
         // Expect an InvalidArgumentException when providing an invalid URL.
         $this->expectException(InvalidArgumentException::class);
@@ -71,7 +71,7 @@ class WebsiteProviderTest extends TestCase
     /**
      * Test that provider will handle exceptions thrown from the {@link \Psr\Http\Client\ClientInterface}.
      */
-    public function testProviderHandlesGuzzleException(): void
+    final public function testProviderHandlesGuzzleException(): void
     {
         $url = 'https://www.example.com';
         $request = (new Psr17Factory())->createRequest('GET', $url);
@@ -90,7 +90,7 @@ class WebsiteProviderTest extends TestCase
         $mockFactory->expects($this::once())
             ->method('createRequest')
             ->with('GET', $url)
-            ->will($this::returnValue($request));
+            ->willReturn($request);
 
         $instance = new WebsiteProvider($mockClient, $mockFactory, $url);
 
@@ -104,7 +104,7 @@ class WebsiteProviderTest extends TestCase
      * Test that provider only returns an OK status when the response from PSR HTTP client is
      * a response with a status in the 200 range.
      */
-    public function testProviderOnlyReturnsOkForStatusInTwoHundredRange(): void
+    final public function testProviderOnlyReturnsOkForStatusInTwoHundredRange(): void
     {
         $url = 'https://www.example.com';
         $request = (new Psr17Factory())->createRequest('GET', $url);
@@ -128,7 +128,7 @@ class WebsiteProviderTest extends TestCase
         $mockFactory->expects($this::once())
             ->method('createRequest')
             ->with('GET', $url)
-            ->will($this::returnValue($request));
+            ->willReturn($request);
 
         $instance = new WebsiteProvider($mockClient, $mockFactory, $url);
 
@@ -141,7 +141,7 @@ class WebsiteProviderTest extends TestCase
     /**
      * Test that provider returns error status for responses not in 200 range.
      */
-    public function testProviderReturnsErrorForStatusNotInTwoHundredRange(): void
+    final public function testProviderReturnsErrorForStatusNotInTwoHundredRange(): void
     {
         $url = 'https://www.example.com';
         $request = (new Psr17Factory())->createRequest('GET', $url);
@@ -165,7 +165,7 @@ class WebsiteProviderTest extends TestCase
         $mockFactory->expects($this::once())
             ->method('createRequest')
             ->with('GET', $url)
-            ->will($this::returnValue($request));
+            ->willReturn($request);
 
         $instance = new WebsiteProvider($mockClient, $mockFactory, $url);
 
@@ -183,7 +183,7 @@ class WebsiteProviderTest extends TestCase
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class MockClientException extends Exception implements ClientExceptionInterface
+final class MockClientException extends Exception implements ClientExceptionInterface
 {
     // Intentionally left blank.
 }

@@ -39,10 +39,8 @@ class PredisProvider implements StatusServiceProvider
 {
     /**
      * Predis client instance.
-     *
-     * @var \Predis\ClientInterface
      */
-    protected $redis;
+    protected Predis $redis;
 
     /**
      * Construct a new predis status provider.

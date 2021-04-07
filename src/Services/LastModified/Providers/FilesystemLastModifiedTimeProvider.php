@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace App\Services\LastModified\Providers;
 
 use Iterator;
+use SplFileInfo;
 use function is_dir;
 use DirectoryIterator;
 use FilesystemIterator;
@@ -45,17 +46,15 @@ class FilesystemLastModifiedTimeProvider implements LastModifiedTimeProvider
 {
     /**
      * Base path to start the file traversal.
-     *
-     * @var string
      */
-    protected $basePath;
+    protected string $basePath;
 
     /**
      * List of directories to traverse to determine last modified file time.
      *
      * @var string[]
      */
-    protected $includedDirectories;
+    protected array $includedDirectories;
 
     /**
      * Constructs filesystem last modified provider.
@@ -109,23 +108,22 @@ class FilesystemLastModifiedTimeProvider implements LastModifiedTimeProvider
                 /**
                  * Callback to filter out hidden files from recursive directory iterator.
                  *
-                 * @param \DirectoryIterator $current Current items value
+                 * @param \SplFileInfo $current Current items value
+                 * @psalm-suppress MismatchingDocblockParamType
+                 * @psalm-suppress InvalidArgument
                  *
                  * @return bool true iff file/directory isn't hidden
                  */
-                function ($current) {
-                    if ($current->getFilename()[0] === '.') {
-                        return false;
-                    }
-
-                    return true;
+                static function (SplFileInfo $current) {
+                    return ! ($current->getFilename()[0] === '.');
                 }
             );
             // Should always be a recursive iterator for a directory iterator since that is what the filter is
             // built using.
-            /** @psalm-var \DirectoryIterator $dir */
+            /** @psalm-var \DirectoryIterator|\RecursiveIteratorIterator $dir */
             $dir = new RecursiveIteratorIterator($filter);
 
+            /* @psalm-suppress MixedArgumentTypeCoercion */
             $subDirTimestamp = $this->findLastModifiedFileTime($dir);
             $timestamp = $subDirTimestamp > $timestamp ? $subDirTimestamp : $timestamp;
         }
@@ -137,7 +135,8 @@ class FilesystemLastModifiedTimeProvider implements LastModifiedTimeProvider
      * Function to iterate over an array of files/directories and return
      * the greatest file modified time.
      *
-     * @param \DirectoryIterator $files Iterator of files
+     * @param \Iterator $files Iterator of files
+     * @psalm-param DirectoryIterator|RecursiveIteratorIterator<\IteratorAggregate|\RecursiveIterator> $files
      *
      * @return int Last modified timestamp
      */
@@ -145,7 +144,7 @@ class FilesystemLastModifiedTimeProvider implements LastModifiedTimeProvider
     {
         $timestamp = -1;
 
-        foreach ($files as $file) {
+        foreach ($files as /* @psalm-var \SplFileInfo */ $file) {
             if (! $file->isDir()) {
                 $mTime = $file->getMTime();
                 $timestamp = $mTime > $timestamp ? $mTime : $timestamp;

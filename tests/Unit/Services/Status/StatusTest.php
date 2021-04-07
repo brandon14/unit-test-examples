@@ -60,30 +60,30 @@ class StatusTest extends TestCase
     /**
      * Whether to cache statuses.
      *
-     * @var bool
+     * @var bool|null
      */
-    private $cacheStatuses;
+    private bool $cacheStatuses;
 
     /**
      * Cache time-to-live.
      *
-     * @var int
+     * @var int|null
      */
-    private $cacheTtl;
+    private int $cacheTtl;
 
     /**
      * Cache key.
      *
-     * @var string
+     * @var string|null
      */
-    private $cacheKey;
+    private string $cacheKey;
 
     /**
      * Associative array of 'name' => {@link \App\Contracts\Services\Status\StatusServiceProvider}.
      *
-     * @var array
+     * @var array|null
      */
-    private $providers;
+    private array $providers;
 
     /**
      * Set up StatusService test.
@@ -118,7 +118,7 @@ class StatusTest extends TestCase
     /**
      * Test that service can return a list of registered providers.
      */
-    public function testReturnsProviders(): void
+    final public function testReturnsProviders(): void
     {
         $cache = $this->createMock(CacheInterface::class);
 
@@ -136,7 +136,7 @@ class StatusTest extends TestCase
     /**
      * Test that service can return a list of registered provider names.
      */
-    public function testReturnsProviderNames(): void
+    final public function testReturnsProviderNames(): void
     {
         $cache = $this->createMock(CacheInterface::class);
 
@@ -154,7 +154,7 @@ class StatusTest extends TestCase
     /**
      * Test that service properly filters out invalid provided when class is constructed.
      */
-    public function testFiltersInvalidProvidersFromArrayUponConstruction(): void
+    final public function testFiltersInvalidProvidersFromArrayUponConstruction(): void
     {
         $cache = $this->createMock(CacheInterface::class);
 
@@ -174,7 +174,7 @@ class StatusTest extends TestCase
      * Test that the service throws an {@link \App\Contracts\Services\ProviderRegistrationException} if trying to register
      * a provider with a key that already exists.
      */
-    public function testThrowsExceptionIfRegisteringAProviderWhenOneWithNameAlreadyExists(): void
+    final public function testThrowsExceptionIfRegisteringAProviderWhenOneWithNameAlreadyExists(): void
     {
         // We expect an ProviderRegistrationException to be thrown.
         $this->expectException(ProviderRegistrationException::class);
@@ -196,7 +196,7 @@ class StatusTest extends TestCase
      * Test that the service throws an {@link \App\Contracts\Services\ProviderRegistrationException} if you remove
      * a provider that does not exist.
      */
-    public function testThrowsExceptionIfRemovingProviderThatDoesNotExist(): void
+    final public function testThrowsExceptionIfRemovingProviderThatDoesNotExist(): void
     {
         // We expect an ProviderRegistrationException to be thrown.
         $this->expectException(ProviderRegistrationException::class);
@@ -217,7 +217,7 @@ class StatusTest extends TestCase
      * Test that the service throws an {@link \App\Contracts\Services\CacheImplementationNeededException} if you want to cache statuses
      * but don't provided an {@link \Psr\SimpleCache\CacheInterface} implementation.
      */
-    public function testThrowsExceptionIfCacheEnabledWithNoImplementation(): void
+    final public function testThrowsExceptionIfCacheEnabledWithNoImplementation(): void
     {
         // We expect an CacheImplementationNeededException to be thrown.
         $this->expectException(CacheImplementationNeededException::class);
@@ -235,7 +235,7 @@ class StatusTest extends TestCase
     /**
      * Test that we can add a provider to the service.
      */
-    public function testRegistersANewProvider(): void
+    final public function testRegistersANewProvider(): void
     {
         $cache = $this->createMock(CacheInterface::class);
 
@@ -253,7 +253,7 @@ class StatusTest extends TestCase
     /**
      * Test that we can remove a provider from the service.
      */
-    public function testRemovesAProvider(): void
+    final public function testRemovesAProvider(): void
     {
         $cache = $this->createMock(CacheInterface::class);
 
@@ -276,7 +276,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testGetsStatusWithCacheDisabledAllProviders(): void
+    final public function testGetsStatusWithCacheDisabledAllProviders(): void
     {
         // Disable status caching.
         $this->cacheStatuses = false;
@@ -313,7 +313,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testChecksCacheForStatusAllProviders(): void
+    final public function testChecksCacheForStatusAllProviders(): void
     {
         // Cache the status.
         $this->cacheStatuses = true;
@@ -327,7 +327,7 @@ class StatusTest extends TestCase
         // both return false to mock no cache entries present.
         $cache->expects($this::exactly(2))
             ->method('has')
-            ->withConsecutive([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
+            ->willReturnOnConsecutiveCalls([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
             ->will($this::onConsecutiveCalls(false, false));
         // If there is no cached status, get should not be called.
         $cache->expects($this::never())->method('get');
@@ -337,7 +337,7 @@ class StatusTest extends TestCase
         // the keys with the provider names. Otherwise for a single provider, it is just the status.
         $cache->expects($this::exactly(2))
             ->method('set')
-            ->withConsecutive(
+            ->willReturnOnConsecutiveCalls(
                 [
                     $this->cacheKey.'_null_provider',
                     serialize($status),
@@ -374,7 +374,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testGetsStatusFromProviderIfCacheCheckFails(): void
+    final public function testGetsStatusFromProviderIfCacheCheckFails(): void
     {
         // Cache the status.
         $this->cacheStatuses = true;
@@ -389,13 +389,13 @@ class StatusTest extends TestCase
         // provider because we mocked a failure to get the cache value.
         $cache->expects($this::exactly(2))
             ->method('has')
-            ->withConsecutive([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
+            ->willReturnOnConsecutiveCalls([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
             ->will($this::onConsecutiveCalls(true, true));
         // Simulate a failure to retrieve cached item by forcing get to return null on the all provider check.
         // Also the call to get the individual provider from cache with success.
         $cache->expects($this::exactly(2))
             ->method('get')
-            ->withConsecutive([$this->cacheKey.'_all', null], [$this->cacheKey.'_null_provider', null])
+            ->willReturnOnConsecutiveCalls([$this->cacheKey.'_all', null], [$this->cacheKey.'_null_provider', null])
             ->will($this::onConsecutiveCalls(null, serialize($status)));
 
         // With caching enabled, and a failure to resolve cached value, set should be called
@@ -432,7 +432,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testCheckCacheAssertsStringIsReturnedBeforeUnserialization(): void
+    final public function testCheckCacheAssertsStringIsReturnedBeforeUnserialization(): void
     {
         // Cache the status.
         $this->cacheStatuses = true;
@@ -447,13 +447,13 @@ class StatusTest extends TestCase
         // provider because we mocked a non-string returned from the cache.
         $cache->expects($this::exactly(2))
             ->method('has')
-            ->withConsecutive([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
+            ->willReturnOnConsecutiveCalls([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
             ->will($this::onConsecutiveCalls(true, true));
         // Have cache access to return something besides a string, which will not be unserialized, so
         // it should return null.
         $cache->expects($this::exactly(2))
             ->method('get')
-            ->withConsecutive([$this->cacheKey.'_all', null], [$this->cacheKey.'_null_provider', null])
+            ->willReturnOnConsecutiveCalls([$this->cacheKey.'_all', null], [$this->cacheKey.'_null_provider', null])
             ->will($this::onConsecutiveCalls(false, serialize($status)));
 
         // With caching enabled, no-string value from cache, set should be called
@@ -491,7 +491,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testGetsStatusFromCacheIfPresentAllProvidersNoAllCache(): void
+    final public function testGetsStatusFromCacheIfPresentAllProvidersNoAllCache(): void
     {
         // Cache the statuses.
         $this->cacheStatuses = true;
@@ -506,7 +506,7 @@ class StatusTest extends TestCase
         // to force it to check the cache for each individual provider.
         $cache->expects($this::exactly(2))
             ->method('has')
-            ->withConsecutive([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
+            ->willReturnOnConsecutiveCalls([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
             ->will($this::onConsecutiveCalls(false, true));
 
         // If there is a cached status, `get` should be called and should
@@ -547,7 +547,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testGetsStatusWithCacheDisabledSingleProvider(): void
+    final public function testGetsStatusWithCacheDisabledSingleProvider(): void
     {
         // Disable the cache.
         $this->cacheStatuses = false;
@@ -584,7 +584,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testChecksCacheForStatusSingleProvider(): void
+    final public function testChecksCacheForStatusSingleProvider(): void
     {
         // Cache the status.
         $this->cacheStatuses = true;
@@ -631,7 +631,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testGetsStatusFromCacheIfPresentSingle(): void
+    final public function testGetsStatusFromCacheIfPresentSingle(): void
     {
         // Cache the status.
         $this->cacheStatuses = true;
@@ -678,7 +678,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testGetsStatusWithCacheDisabledArray(): void
+    final public function testGetsStatusWithCacheDisabledArray(): void
     {
         // Add another provider.
         $this->providers['null_provider_2'] = $this->createMock(StatusServiceProvider::class);
@@ -722,7 +722,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testChecksCacheForStatusArray(): void
+    final public function testChecksCacheForStatusArray(): void
     {
         // Add another provider.
         $this->providers['null_provider_2'] = $this->createMock(StatusServiceProvider::class);
@@ -742,7 +742,7 @@ class StatusTest extends TestCase
         // Second provider is not cached as well....
         $cache->expects($this::exactly(3))
             ->method('has')
-            ->withConsecutive(
+            ->willReturnOnConsecutiveCalls(
                 [$this->cacheKey.'_null_provider_null_provider_2'],
                 [$this->cacheKey.'_null_provider'],
                 [$this->cacheKey.'_null_provider_2']
@@ -753,7 +753,7 @@ class StatusTest extends TestCase
         // Should cache all providers and the group cache value.
         $cache->expects($this::exactly(3))
             ->method('set')
-            ->withConsecutive(
+            ->willReturnOnConsecutiveCalls(
                 [
                     $this->cacheKey.'_null_provider',
                     serialize($status),
@@ -800,7 +800,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testGetsStatusFromCacheIfPresentArray(): void
+    final public function testGetsStatusFromCacheIfPresentArray(): void
     {
         // Add another provider.
         $this->providers['null_provider_2'] = $this->createMock(StatusServiceProvider::class);
@@ -821,7 +821,7 @@ class StatusTest extends TestCase
         // the cache. Assuming all providers are cached.
         $cache->expects($this::exactly(3))
             ->method('has')
-            ->withConsecutive(
+            ->willReturnOnConsecutiveCalls(
                 [$this->cacheKey.'_null_provider_null_provider_2'],
                 [$this->cacheKey.'_null_provider'],
                 [$this->cacheKey.'_null_provider_2']
@@ -831,7 +831,7 @@ class StatusTest extends TestCase
         // return our mock statuses.
         $cache->expects($this::exactly(2))
             ->method('get')
-            ->withConsecutive(
+            ->willReturnOnConsecutiveCalls(
                 [$this->cacheKey.'_null_provider', null],
                 [$this->cacheKey.'_null_provider_2', null]
             )->will($this::onConsecutiveCalls(serialize($status), serialize($statusTwo)));
@@ -871,7 +871,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testGetsStatusFromCacheIfPresentArrayGroupCached(): void
+    final public function testGetsStatusFromCacheIfPresentArrayGroupCached(): void
     {
         // Add another provider.
         $this->providers['null_provider_2'] = $this->createMock(StatusServiceProvider::class);
@@ -919,7 +919,7 @@ class StatusTest extends TestCase
      *
      * @throws \App\Contracts\Services\CacheException
      */
-    public function testThrowsExceptionWhenCacheSaveFails(): void
+    final public function testThrowsExceptionWhenCacheSaveFails(): void
     {
         // We expect service to throw a cache exception upon failure to persist to cache.
         $this->expectException(CacheException::class);
@@ -936,7 +936,7 @@ class StatusTest extends TestCase
         // both return false to mock no cache entries present.
         $cache->expects($this::exactly(2))
             ->method('has')
-            ->withConsecutive([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
+            ->willReturnOnConsecutiveCalls([$this->cacheKey.'_all'], [$this->cacheKey.'_null_provider'])
             ->will($this::onConsecutiveCalls(false, false));
         // If there is no cached status, get should not be called.
         $cache->expects($this::never())->method('get');
@@ -968,7 +968,7 @@ class StatusTest extends TestCase
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testThrowsExceptionWhenGettingStatusForEmptyArray(): void
+    final public function testThrowsExceptionWhenGettingStatusForEmptyArray(): void
     {
         $this->expectException(ProviderRegistrationException::class);
 
@@ -990,7 +990,7 @@ class StatusTest extends TestCase
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testThrowsExceptionWhenResolvingProviderThatDoesntExist(): void
+    final public function testThrowsExceptionWhenResolvingProviderThatDoesntExist(): void
     {
         // We expect an ProviderRegistrationException to be thrown.
         $this->expectException(ProviderRegistrationException::class);
@@ -1013,7 +1013,7 @@ class StatusTest extends TestCase
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testThrowsExceptionWhenResolvingProviderThatDoesntExistArray(): void
+    final public function testThrowsExceptionWhenResolvingProviderThatDoesntExistArray(): void
     {
         // We expect an ProviderRegistrationException to be thrown.
         $this->expectException(ProviderRegistrationException::class);
@@ -1037,7 +1037,7 @@ class StatusTest extends TestCase
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsCacheExceptionIntoCacheExceptionOnHas(): void
+    final public function testTransformsCacheExceptionIntoCacheExceptionOnHas(): void
     {
         $this->expectException(CacheException::class);
         // Cache the status.
@@ -1067,7 +1067,7 @@ class StatusTest extends TestCase
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsThrowableIntoCacheExceptionOnHas(): void
+    final public function testTransformsThrowableIntoCacheExceptionOnHas(): void
     {
         $this->expectException(CacheException::class);
         // Cache the status.
@@ -1097,7 +1097,7 @@ class StatusTest extends TestCase
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsCacheExceptionIntoCacheExceptionOnGet(): void
+    final public function testTransformsCacheExceptionIntoCacheExceptionOnGet(): void
     {
         $this->expectException(CacheException::class);
         // Cache the status.
@@ -1134,7 +1134,7 @@ class StatusTest extends TestCase
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsThrowableIntoCacheExceptionOnGet(): void
+    final public function testTransformsThrowableIntoCacheExceptionOnGet(): void
     {
         $this->expectException(CacheException::class);
 
@@ -1172,7 +1172,7 @@ class StatusTest extends TestCase
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsCacheExceptionIntoCacheExceptionOnSave(): void
+    final public function testTransformsCacheExceptionIntoCacheExceptionOnSave(): void
     {
         $this->expectException(CacheException::class);
 
@@ -1219,7 +1219,7 @@ class StatusTest extends TestCase
      * @throws \App\Contracts\Services\CacheException
      * @throws \App\Contracts\Services\ProviderRegistrationException
      */
-    public function testTransformsThrowableIntoCacheExceptionOnSave(): void
+    final public function testTransformsThrowableIntoCacheExceptionOnSave(): void
     {
         $this->expectException(CacheException::class);
 
@@ -1267,7 +1267,7 @@ class StatusTest extends TestCase
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class MockCacheException extends Exception implements PsrCacheException
+final class MockCacheException extends Exception implements PsrCacheException
 {
     // Intentionally left blank.
 }
