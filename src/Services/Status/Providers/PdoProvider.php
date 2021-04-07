@@ -41,10 +41,8 @@ class PdoProvider implements StatusServiceProvider
     /**
      * PDO connection instance. We use PDO here to decouple this provider from any 3rd party
      * library.
-     *
-     * @var \PDO
      */
-    protected $db;
+    protected PDO $db;
 
     /**
      * Constructs a new database status service provider.

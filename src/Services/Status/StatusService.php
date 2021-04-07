@@ -53,40 +53,30 @@ class StatusService implements StatusServiceInterface
 {
     /**
      * Application cache store.
-     *
-     * @var \Psr\SimpleCache\CacheInterface|null
      */
-    protected $cache;
+    protected ?CacheInterface $cache;
 
     /**
      * Whether to cache statuses as they are obtained.
-     *
-     * @var bool
      */
-    protected $isCacheEnabled;
+    protected bool $isCacheEnabled;
 
     /**
      * How long to cache the status for.
-     *
-     * @var int
      */
-    protected $cacheTtl;
+    protected int $cacheTtl;
 
     /**
      * Cache key.
-     *
-     * @var string
      */
-    protected $cacheKey;
+    protected string $cacheKey;
 
     /**
      * Associative array of 'name' => {@link \App\Contracts\Services\Status\StatusServiceProvider}.
      *
      * @psalm-var array<string, \App\Contracts\Services\Status\StatusServiceProvider>
-     *
-     * @var array
      */
-    protected $providers;
+    protected array $providers;
 
     /**
      * Construct a new status service.

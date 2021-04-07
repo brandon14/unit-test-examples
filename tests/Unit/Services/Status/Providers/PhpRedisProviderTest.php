@@ -46,7 +46,7 @@ class PhpRedisProviderTest extends TestCase
     /**
      * Test that the provider will handle when the Redis client throws an exception.
      */
-    public function testProviderHandlesExceptionThrownFromPhpRedis(): void
+    final public function testProviderHandlesExceptionThrownFromPhpRedis(): void
     {
         $mock = $this->createMock(Redis::class);
 
@@ -66,7 +66,7 @@ class PhpRedisProviderTest extends TestCase
     /**
      * Test that the provider will return an error status if it doesn't get a PONG from redis.
      */
-    public function testProvidersReturnsErrorStatusIfPingNotSuccessful(): void
+    final public function testProvidersReturnsErrorStatusIfPingNotSuccessful(): void
     {
         $mock = $this->createMock(Redis::class);
 
@@ -84,7 +84,7 @@ class PhpRedisProviderTest extends TestCase
     /**
      * Test that the provider will return an OK status when it gets a PONG from redis.
      */
-    public function testProviderReturnsOkStatusOnSuccessfulPong(): void
+    final public function testProviderReturnsOkStatusOnSuccessfulPong(): void
     {
         $mock = $this->createMock(Redis::class);
 

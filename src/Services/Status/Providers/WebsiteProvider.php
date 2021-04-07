@@ -44,24 +44,18 @@ class WebsiteProvider implements StatusServiceProvider
 {
     /**
      * PSR HTTP client.
-     *
-     * @var \Psr\Http\Client\ClientInterface
      */
-    protected $httpClient;
+    protected ClientInterface $httpClient;
 
     /**
      * PSR HTTP request factory.
-     *
-     * @var \Psr\Http\Message\RequestFactoryInterface
      */
-    protected $requestFactory;
+    protected RequestFactoryInterface $requestFactory;
 
     /**
      * Route to hit to check website status.
-     *
-     * @var string
      */
-    protected $routeToPing;
+    protected string $routeToPing;
 
     /**
      * Construct a new website status provider.

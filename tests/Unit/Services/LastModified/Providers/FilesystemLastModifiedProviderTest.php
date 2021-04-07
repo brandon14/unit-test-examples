@@ -58,7 +58,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
      * Test that if provided an invalid base path (i.e. non-existent directory) the
      * class will throw an {@link \InvalidArgumentException}.
      */
-    public function testThrowsInvalidArgumentExceptionForInvalidBasePath(): void
+    final public function testThrowsInvalidArgumentExceptionForInvalidBasePath(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -72,7 +72,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
      * Test that if provided an invalid included directory (i.e. non-existent directory) the
      * class will throw an {@link \InvalidArgumentException}.
      */
-    public function testThrowsInvalidArgumentExceptionForInvalidIncludedDIrectories(): void
+    final public function testThrowsInvalidArgumentExceptionForInvalidIncludedDIrectories(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -86,7 +86,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
      * Assert that the service will get the timestamp from the filesystem if it is
      * present.
      */
-    public function testGetsTimestampFromFilesystem(): void
+    final public function testGetsTimestampFromFilesystem(): void
     {
         // Set up virtual mocked filesystem
         $fs = VfsStream::setup('root');
@@ -143,7 +143,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
     /**
      * Test that if no files are found, the provider will return -1.
      */
-    public function testReturnsNegativeOneWithNoFiles(): void
+    final public function testReturnsNegativeOneWithNoFiles(): void
     {
         // Set up empty filesystem.
         $fs = VfsStream::setup('root');
@@ -163,7 +163,7 @@ class FilesystemLastModifiedProviderTest extends TestCase
      * Test that if provided no directories to recurse through, it will still find the last
      * modified time in the base directory.
      */
-    public function testReturnsLastModifiedTimeWithNoRecursiveDirectories(): void
+    final public function testReturnsLastModifiedTimeWithNoRecursiveDirectories(): void
     {
         // Set up virtual mocked filesystem
         $fs = VfsStream::setup('root');

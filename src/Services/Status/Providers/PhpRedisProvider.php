@@ -39,10 +39,8 @@ class PhpRedisProvider implements StatusServiceProvider
 {
     /**
      * Redis client instance.
-     *
-     * @var \Redis
      */
-    protected $redis;
+    protected Redis $redis;
 
     /**
      * Construct a new PHP redis status provider.

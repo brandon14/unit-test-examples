@@ -37,31 +37,23 @@ class LastModifiedOptions
 {
     /**
      * Whether to cache the timestamp or not.
-     *
-     * @var bool
      */
-    protected $isCacheEnabled;
+    protected bool $isCacheEnabled;
 
     /**
      * How long to cache the last modified timestamp for.
-     *
-     * @var int
      */
-    protected $cacheTtl;
+    protected int $cacheTtl;
 
     /**
      * Cache key.
-     *
-     * @var string
      */
-    protected $cacheKey;
+    protected string $cacheKey;
 
     /**
      * Default timestamp format.
-     *
-     * @var string
      */
-    protected $timestampFormat;
+    protected string $timestampFormat;
 
     /**
      * Constructs a new set of {@link \App\Contracts\Services\LastModified\LastModifiedService} options.

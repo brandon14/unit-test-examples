@@ -57,7 +57,7 @@ class CacheLastModifiedTimeProviderTest extends TestCase
      * Assert that the service will get the timestamp from the cache if it is
      * present.
      */
-    public function testGetsTimestampFromCache(): void
+    final public function testGetsTimestampFromCache(): void
     {
         $cache = $this->createMock(CacheInterface::class);
         $cacheKey = 'last_modified';
@@ -83,7 +83,7 @@ class CacheLastModifiedTimeProviderTest extends TestCase
     /**
      * Test that if no cache entry is found, the provider will return -1.
      */
-    public function testReturnsNegativeOneWithNoCacheEntry(): void
+    final public function testReturnsNegativeOneWithNoCacheEntry(): void
     {
         $cache = $this->createMock(CacheInterface::class);
         $cacheKey = 'last_modified';
@@ -105,7 +105,7 @@ class CacheLastModifiedTimeProviderTest extends TestCase
     /**
      * Test that if the cache has method throws an exception, -1 will be returned.
      */
-    public function testReturnsNegativeOneWithExceptionOnHasCall(): void
+    final public function testReturnsNegativeOneWithExceptionOnHasCall(): void
     {
         $cache = $this->createMock(CacheInterface::class);
         $cacheKey = 'last_modified';
@@ -127,7 +127,7 @@ class CacheLastModifiedTimeProviderTest extends TestCase
     /**
      * Test that if the cache get method throws an exception, -1 will be returned.
      */
-    public function testReturnsNegativeOneWithExceptionOnGetCall(): void
+    final public function testReturnsNegativeOneWithExceptionOnGetCall(): void
     {
         $cache = $this->createMock(CacheInterface::class);
         $cacheKey = 'last_modified';

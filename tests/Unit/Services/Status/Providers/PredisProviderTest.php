@@ -26,6 +26,7 @@ namespace Tests\Unit\Services\Status\Providers;
 use Predis\ClientInterface;
 use Predis\PredisException;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use App\Services\Status\Providers\PredisProvider;
 use App\Contracts\Services\Status\StatusServiceProvider;
 
@@ -45,25 +46,34 @@ use App\Contracts\Services\Status\StatusServiceProvider;
 class PredisProviderTest extends TestCase
 {
     /**
+     * Get mocked Predis client class.
+     *
+     * @return \Predis\ClientInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getPredisMock(): MockObject
+    {
+        return $this->getMockBuilder(ClientInterface::class)
+                    ->addMethods(['ping'])
+                    ->onlyMethods(
+                        [
+                            'getProfile',
+                            'getOptions',
+                            'connect',
+                            'disconnect',
+                            'getConnection',
+                            'createCommand',
+                            'executeCommand',
+                            '__call',
+                        ]
+                    )->getMock();
+    }
+
+    /**
      * Test that the provider will handle when Predis client throws an exception.
      */
-    public function testProviderHandlesExceptionThrownFromPredis(): void
+    final public function testProviderHandlesExceptionThrownFromPredis(): void
     {
-        $mock = $this->getMockBuilder(ClientInterface::class)
-            ->setMethods(
-                [
-                    'ping',
-                    'getProfile',
-                    'getOptions',
-                    'connect',
-                    'disconnect',
-                    'getConnection',
-                    'createCommand',
-                    'executeCommand',
-                    '__call',
-                ]
-            )
-            ->getMock();
+        $mock = $this->getPredisMock();
 
         // Tell mocked Predis client to throw an exception when we hit the ping method.
         $mock->expects($this::once())->method('ping')->will(
@@ -81,23 +91,9 @@ class PredisProviderTest extends TestCase
     /**
      * Test that provider will return an error status if it gets not PONG from redis.
      */
-    public function testProvidersReturnsErrorStatusIfPingNotSuccessful(): void
+    final public function testProvidersReturnsErrorStatusIfPingNotSuccessful(): void
     {
-        $mock = $this->getMockBuilder(ClientInterface::class)
-            ->setMethods(
-                [
-                    'ping',
-                    'getProfile',
-                    'getOptions',
-                    'connect',
-                    'disconnect',
-                    'getConnection',
-                    'createCommand',
-                    'executeCommand',
-                    '__call',
-                ]
-            )
-            ->getMock();
+        $mock = $this->getPredisMock();
 
         // Tell mocked Predis client to return a string other than PONG.
         $mock->expects($this::once())->method('ping')->willReturn('NOT PONG');
@@ -113,23 +109,9 @@ class PredisProviderTest extends TestCase
     /**
      * Test that provider will return an OK status when it gets a PONG back from redis.
      */
-    public function testProviderReturnsOkStatusOnSuccessfulPong(): void
+    final public function testProviderReturnsOkStatusOnSuccessfulPong(): void
     {
-        $mock = $this->getMockBuilder(ClientInterface::class)
-            ->setMethods(
-                [
-                    'ping',
-                    'getProfile',
-                    'getOptions',
-                    'connect',
-                    'disconnect',
-                    'getConnection',
-                    'createCommand',
-                    'executeCommand',
-                    '__call',
-                ]
-            )
-            ->getMock();
+        $mock = $this->getPredisMock();
 
         // Tell mocked Predis client to return PONG.
         $mock->expects($this::once())->method('ping')->willReturn('PONG');
@@ -150,7 +132,7 @@ class PredisProviderTest extends TestCase
  *
  * @author Brandon Clothier <brandon14125@gmail.com>
  */
-class MockPredisException extends PredisException
+final class MockPredisException extends PredisException
 {
     // intentionally left blank.
 }

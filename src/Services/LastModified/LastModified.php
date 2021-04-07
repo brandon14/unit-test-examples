@@ -52,47 +52,35 @@ class LastModified implements LastModifiedService
 {
     /**
      * Application cache store.
-     *
-     * @var \Psr\SimpleCache\CacheInterface|null
      */
-    protected $cache;
+    protected ?CacheInterface $cache;
 
     /**
      * Whether to cache the timestamp or not.
-     *
-     * @var bool
      */
-    protected $isCacheEnabled;
+    protected bool $isCacheEnabled;
 
     /**
      * How long to cache the last modified timestamp for.
-     *
-     * @var int
      */
-    protected $cacheTtl;
+    protected int $cacheTtl;
 
     /**
      * Cache key.
-     *
-     * @var string
      */
-    protected $cacheKey;
+    protected string $cacheKey;
 
     /**
      * Timestamp format.
-     *
-     * @var string
      */
-    protected $timestampFormat;
+    protected string $timestampFormat;
 
     /**
      * Associative array of 'name' => {@link \App\Contracts\Services\LastModified\LastModifiedTimeProvider}.
      *
      * @psalm-var array<string, \App\Contracts\Services\LastModified\LastModifiedTimeProvider>
-     *
-     * @var array
      */
-    protected $providers;
+    protected array $providers;
 
     /**
      * Constructs a LastModified service object.
