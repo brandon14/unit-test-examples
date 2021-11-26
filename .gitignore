@@ -14,6 +14,10 @@ coverage/
 .php_cs.cache
 .php-cs-fixer.cache
 
+# PHP Documentor files
+docs
+.phpdoc
+
 # Editor files.
 .vscode
 .idea

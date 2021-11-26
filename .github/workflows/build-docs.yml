@@ -1,0 +1,4 @@
+- name: PhpDocumentor
+  uses: gpupo/actions-phpDocumentor@1.0
+  with:
+    dir: './src'
