@@ -130,7 +130,7 @@ class StatusTest extends TestCase
 
         $providers = $instance->getProviders();
 
-        $this::assertEquals(array_values($this->providers), $providers);
+        $this::assertSame(array_values($this->providers), $providers);
     }
 
     /**
@@ -148,7 +148,7 @@ class StatusTest extends TestCase
 
         $providerNames = $instance->getProviderNames();
 
-        $this::assertEquals(array_keys($this->providers), $providerNames);
+        $this::assertSame(array_keys($this->providers), $providerNames);
     }
 
     /**
@@ -167,7 +167,7 @@ class StatusTest extends TestCase
         $providerNames = $instance->getProviderNames();
 
         // Should be no provider names registered since the one we provided was invalid.
-        $this::assertEquals([], $providerNames);
+        $this::assertSame([], $providerNames);
     }
 
     /**
@@ -247,7 +247,7 @@ class StatusTest extends TestCase
 
         $result = $instance->addProvider('provider', $this->createMock(StatusServiceProvider::class));
 
-        $this::assertEquals(true, $result);
+        $this::assertTrue($result);
     }
 
     /**
@@ -267,7 +267,7 @@ class StatusTest extends TestCase
 
         $result = $instance->removeProvider('provider');
 
-        $this::assertEquals(true, $result);
+        $this::assertTrue($result);
     }
 
     /**
@@ -304,7 +304,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatus();
 
         // Assert the status returned is the status from our provider.
-        $this::assertEquals(['null_provider' => $status], $statusCall);
+        $this::assertSame(['null_provider' => $status], $statusCall);
     }
 
     /**
@@ -364,7 +364,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatus();
 
         // Assert the status returned is our fixed status..
-        $this::assertEquals(['null_provider' => $status], $statusCall);
+        $this::assertSame(['null_provider' => $status], $statusCall);
     }
 
     /**
@@ -423,7 +423,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatus();
 
         // Assert the status returned is the right status.
-        $this::assertEquals(['null_provider' => $status], $statusCall);
+        $this::assertSame(['null_provider' => $status], $statusCall);
     }
 
     /**
@@ -481,7 +481,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatus();
 
         // Assert the status returned is the right status.
-        $this::assertEquals(['null_provider' => $status], $statusCall);
+        $this::assertSame(['null_provider' => $status], $statusCall);
     }
 
     /**
@@ -539,7 +539,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatus();
 
         // Assert the status returned is the right status.
-        $this::assertEquals(['null_provider' => $status], $statusCall);
+        $this::assertSame(['null_provider' => $status], $statusCall);
     }
 
     /**
@@ -575,7 +575,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatus('null_provider');
 
         // Assert the status returned is right status.
-        $this::assertEquals(['null_provider' => $status], $statusCall);
+        $this::assertSame(['null_provider' => $status], $statusCall);
     }
 
     /**
@@ -622,7 +622,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatus('null_provider');
 
         // Assert the status returned is right status.
-        $this::assertEquals(['null_provider' => $status], $statusCall);
+        $this::assertSame(['null_provider' => $status], $statusCall);
     }
 
     /**
@@ -670,7 +670,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatus('null_provider');
 
         // Assert the status returned is right status.
-        $this::assertEquals(['null_provider' => $status], $statusCall);
+        $this::assertSame(['null_provider' => $status], $statusCall);
     }
 
     /**
@@ -713,7 +713,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatusByArray(['null_provider', 'null_provider_2']);
 
         // Assert the service returns both our provider statuses.
-        $this::assertEquals(['null_provider' => $status, 'null_provider_2' => $statusTwo], $statusCall);
+        $this::assertSame(['null_provider' => $status, 'null_provider_2' => $statusTwo], $statusCall);
     }
 
     /**
@@ -787,7 +787,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatusByArray(['null_provider', 'null_provider_2']);
 
         // Assert the statuses returned are right.
-        $this::assertEquals(['null_provider' => $status, 'null_provider_2' => $statusTwo], $statusCall);
+        $this::assertSame(['null_provider' => $status, 'null_provider_2' => $statusTwo], $statusCall);
     }
 
     /**
@@ -862,7 +862,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatusByArray(['null_provider', 'null_provider_2']);
 
         // Assert the statuses are right.
-        $this::assertEquals(['null_provider' => $status, 'null_provider_2' => $statusTwo], $statusCall);
+        $this::assertSame(['null_provider' => $status, 'null_provider_2' => $statusTwo], $statusCall);
     }
 
     /**
@@ -910,7 +910,7 @@ class StatusTest extends TestCase
         $statusCall = $instance->getStatusByArray(['null_provider', 'null_provider_2']);
 
         // Assert the statuses is correct.
-        $this::assertEquals($status, $statusCall);
+        $this::assertSame($status, $statusCall);
     }
 
     /**

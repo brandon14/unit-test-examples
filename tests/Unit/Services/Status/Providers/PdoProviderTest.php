@@ -62,7 +62,7 @@ class PdoProviderTest extends TestCase
 
         $status = $instance->getStatus();
 
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
     /**
@@ -80,7 +80,7 @@ class PdoProviderTest extends TestCase
 
         $status = $instance->getStatus();
 
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
     /**
@@ -102,7 +102,7 @@ class PdoProviderTest extends TestCase
 
         $status = $instance->getStatus();
 
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
     /**
@@ -127,7 +127,7 @@ class PdoProviderTest extends TestCase
 
         $status = $instance->getStatus();
 
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
     /**
@@ -152,7 +152,7 @@ class PdoProviderTest extends TestCase
 
         $status = $instance->getStatus();
 
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
     /**
@@ -180,7 +180,7 @@ class PdoProviderTest extends TestCase
 
         $status = $instance->getStatus();
 
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
     /**
@@ -208,7 +208,7 @@ class PdoProviderTest extends TestCase
 
         $status = $instance->getStatus();
 
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
     /**
@@ -236,6 +236,6 @@ class PdoProviderTest extends TestCase
 
         $status = $instance->getStatus();
 
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_OK], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_OK], $status);
     }
 }

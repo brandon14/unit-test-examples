@@ -77,7 +77,7 @@ class CacheLastModifiedTimeProviderTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is our most "last modified file".
-        $this::assertEquals($lastModified->timestamp, $lastModifiedCall);
+        $this::assertSame($lastModified->timestamp, $lastModifiedCall);
     }
 
     /**
@@ -99,7 +99,7 @@ class CacheLastModifiedTimeProviderTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is -1.
-        $this::assertEquals(-1, $lastModifiedCall);
+        $this::assertSame(-1, $lastModifiedCall);
     }
 
     /**
@@ -121,7 +121,7 @@ class CacheLastModifiedTimeProviderTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is -1.
-        $this::assertEquals(-1, $lastModifiedCall);
+        $this::assertSame(-1, $lastModifiedCall);
     }
 
     /**
@@ -143,6 +143,6 @@ class CacheLastModifiedTimeProviderTest extends TestCase
         $lastModifiedCall = $instance->getLastModifiedTime();
 
         // Assert the timestamp returned is -1.
-        $this::assertEquals(-1, $lastModifiedCall);
+        $this::assertSame(-1, $lastModifiedCall);
     }
 }

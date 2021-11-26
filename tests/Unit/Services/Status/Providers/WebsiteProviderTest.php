@@ -97,7 +97,7 @@ class WebsiteProviderTest extends TestCase
         $status = $instance->getStatus();
 
         // Should return a status of an error.
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
     /**
@@ -135,7 +135,7 @@ class WebsiteProviderTest extends TestCase
         $status = $instance->getStatus();
 
         // Should be an OK status.
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_OK], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_OK], $status);
     }
 
     /**
@@ -172,7 +172,7 @@ class WebsiteProviderTest extends TestCase
         $status = $instance->getStatus();
 
         // Should be an error status.
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 }
 

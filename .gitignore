@@ -12,6 +12,7 @@ coverage/
 
 # PHP Coding Standards Fixer cache file
 .php_cs.cache
+.php-cs-fixer.cache
 
 # Editor files.
 .vscode

@@ -28,7 +28,7 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
-                  extensions: pdo, redis
+                  extensions: pdo, redis, json
                   coverage: xdebug
 
             - name: Cache dependencies
@@ -46,7 +46,9 @@ jobs:
                   composer validate --no-check-all --strict
 
             - name: Execute tests
-              uses: codecov/codecov-action@v2
-              with:
-                fail_ci_if_error: true
               run: composer run-script test
+
+            - name: Upload coverage
+              uses: codecov/codecov-action@v2
+                with:
+                  fail_ci_if_error: true
