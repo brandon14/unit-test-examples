@@ -1,4 +1,4 @@
-name: 'brand0n.gg run-tests'
+name: Run tests
 on:
     push:
         branches: [main]

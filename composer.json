@@ -73,10 +73,6 @@
         "post-update-cmd": [
             "composer run-script test:phpunit",
             "composer run-script licenses:generate"
-        ],
-        "post-install-cmd": [
-            "composer run-script test:phpunit",
-            "composer run-script licenses:generate"
         ]
     },
     "minimum-stability": "dev",
