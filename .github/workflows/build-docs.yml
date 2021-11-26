@@ -4,6 +4,9 @@ on:
         branches: [main]
 jobs:
     build-docs:
-        uses: gpupo/actions-phpDocumentor@1
-        with:
-            dir: './'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Build docs
+              uses: gpupo/actions-phpDocumentor@1
+              with:
+                dir: './'
