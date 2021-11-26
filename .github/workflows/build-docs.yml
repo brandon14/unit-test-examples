@@ -1,4 +1,9 @@
-- name: PhpDocumentor
-  uses: gpupo/actions-phpDocumentor@1.0
-  with:
-    dir: './src'
+name: PHP Docs
+on:
+    push:
+        branches: [main]
+jobs:
+    build-docs:
+        uses: gpupo/actions-phpDocumentor@1
+        with:
+            dir: './'

@@ -38,9 +38,9 @@ jobs:
             - name: Cache dependencies
               uses: actions/cache@v2
               with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                restore-keys: ${{ runner.os }}-composer-
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies
               run: |
@@ -55,4 +55,4 @@ jobs:
             - name: Upload coverage
               uses: codecov/codecov-action@v2
               with:
-                fail_ci_if_error: true
+                  fail_ci_if_error: true
