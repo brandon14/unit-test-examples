@@ -33,7 +33,7 @@
     },
     "require-dev": {
         "comcast/php-legal-licenses": "^1.1.6",
-        "friendsofphp/php-cs-fixer": "^2.19.3",
+        "friendsofphp/php-cs-fixer": "^3.3.2",
         "mikey179/vfsstream": "^1.6.10",
         "nesbot/carbon": "^2.54.0",
         "nyholm/psr7": "^1.4.1",
