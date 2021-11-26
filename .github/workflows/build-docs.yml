@@ -7,6 +7,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Build docs
-              uses: gpupo/actions-phpDocumentor@1
+              uses: gpupo/actions-phpDocumentor@1.2
               with:
-                dir: './'
+                  dir: './'
+            - name: Commit changes
+              uses: stefanzweifel/git-auto-commit-action@v4
+              with:
+                  commit_message: Build docs
