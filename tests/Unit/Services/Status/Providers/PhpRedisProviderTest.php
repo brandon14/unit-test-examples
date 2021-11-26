@@ -60,7 +60,7 @@ class PhpRedisProviderTest extends TestCase
         $status = $instance->getStatus();
 
         // Should return an error status array.
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
     /**
@@ -78,7 +78,7 @@ class PhpRedisProviderTest extends TestCase
         $status = $instance->getStatus();
 
         // Should return an error status array.
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_ERROR], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_ERROR], $status);
     }
 
     /**
@@ -96,6 +96,6 @@ class PhpRedisProviderTest extends TestCase
         $status = $instance->getStatus();
 
         // Should return an OK status array.
-        $this::assertEquals(['status' => StatusServiceProvider::STATUS_OK], $status);
+        $this::assertSame(['status' => StatusServiceProvider::STATUS_OK], $status);
     }
 }

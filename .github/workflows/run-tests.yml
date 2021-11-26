@@ -1,4 +1,4 @@
-name: 'brand0n.gg run-tests'
+name: Run tests
 on:
     push:
         branches: [main]
@@ -8,14 +8,14 @@ on:
         - cron: '0 0 * * *'
 jobs:
     run-tests:
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
             matrix:
+                os: [ubuntu-latest]
                 php: [7.4, 8.0, 8.1, 8.2]
-                dependency-version: [prefer-lowest, prefer-stable]
 
-        name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
+        name: PHP-${{ matrix.php }} - OS-${{ matrix.os }}
 
         steps:
             - name: Update apt
@@ -28,25 +28,32 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
-                  extensions: pdo, redis
+                  extensions: pdo, redis, json
                   coverage: xdebug
+
+            - name: Get composer cache directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
             - name: Cache dependencies
               uses: actions/cache@v2
               with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}-${{ matrix.dependency-version }}-
-                restore-keys: ${{ runner.os }}-composer-${{ matrix.dependency-version }}-
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies
               run: |
                   composer self-update
-                  composer install --prefer-source --no-interaction --${{ matrix.dependency-version }}
+                  composer install --prefer-source --no-interaction
                   composer dump-autoload
                   composer validate --no-check-all --strict
 
             - name: Execute tests
+              run: composer run-script test
+
+            - name: Upload coverage
               uses: codecov/codecov-action@v2
               with:
-                fail_ci_if_error: true
-              run: composer run-script test
+                  fail_ci_if_error: true
+                  files: ./coverage.xml

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $composer = json_decode(file_get_contents(__DIR__.'/composer.json'), true);
 
 $projectName = $composer['name'];
@@ -19,7 +21,7 @@ $finder = PhpCsFixer\Finder::create()
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
@@ -58,9 +60,6 @@ return PhpCsFixer\Config::create()
         ],
         'native_function_invocation'=> false,
         'native_constant_invocation' => false,
-        'is_null' => [
-            'use_yoda_style' => false,
-        ],
         'declare_strict_types' => true,
         'phpdoc_to_comment' => false,
     ])

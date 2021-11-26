@@ -1,0 +1,12 @@
+name: PHP Docs
+on:
+    push:
+        branches: [main]
+jobs:
+    build-docs:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Build docs
+              uses: gpupo/actions-phpDocumentor@1
+              with:
+                dir: './'
