@@ -1,4 +1,4 @@
-name: PHP Docs
+name: build-docs
 on:
     push:
         branches: [main]
@@ -21,4 +21,4 @@ jobs:
               with:
                   commit_message: Build docs
                   add_options: -f
-                  file_patern: docs/*
+                  file_pattern: docs/*
