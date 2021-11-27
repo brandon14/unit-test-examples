@@ -20,6 +20,8 @@
 3. [Standards](https://github.com/brandon14/unit-test-examples#standards)
 4. [Coverage](https://github.com/brandon14/unit-test-examples#coverage)
 5. [Contributing](https://github.com/brandon14/unit-test-examples#contributing)
+6. [Documentation](https://github.com/brandon14/unit-test-examples#documentation)
+7. [Contributors](https://github.com/brandon14/unit-test-examples#contributors)
 
 ## Requirements
 
@@ -99,6 +101,10 @@ requests to add in new features, fix bugs, or clean things up. Just be sure to f
 [Code of Conduct](https://github.com/brandon14/unit-test-examples/blob/master/.github/CODE_OF_CONDUCT.md)
 and [Contributing Guide](https://github.com/brandon14/brandonclothier.me/blob/master/.github/CONTRIBUTING.md),
 and I encourage creating clean and well described pull requests if possible.
+
+## Documentation
+
+The generated documentation to this project can be found [here](https://brandon14.github.io/unit-test-examples).
 
 This code is released under the MIT license.
 
