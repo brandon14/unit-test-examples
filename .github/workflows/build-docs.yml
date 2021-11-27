@@ -22,3 +22,4 @@ jobs:
                   commit_message: Build docs
                   add_options: -f
                   file_pattern: docs/*
+                  skip_dirty_check: true
