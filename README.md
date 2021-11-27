@@ -110,3 +110,15 @@ Copyright &copy; 2018-2019 Brandon Clothier
   <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/contains-technical-debt.svg" alt="Contains Technical Debt"></a>
   <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/built-by-neckbeards.svg" alt="Built By Neckbeards"></a>
 </p>
+
+---
+
+## Contributors
+
+![GitHub Contributors Image](https://contrib.rocks/image?repo=brandon14/unit-test-examples)
+
+---
+
+## 😂 Here is a random joke that'll make you laugh!
+
+![Jokes Card](https://readme-jokes.vercel.app/api)
