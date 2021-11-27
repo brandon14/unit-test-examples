@@ -20,3 +20,5 @@ jobs:
               uses: stefanzweifel/git-auto-commit-action@v4
               with:
                   commit_message: Build docs
+                  add_options: -f
+                  file_patern: docs/*
