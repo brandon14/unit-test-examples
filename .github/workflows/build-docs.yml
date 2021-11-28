@@ -25,4 +25,3 @@ jobs:
                   commit_message: Build docs
                   file_pattern: docs/*
                   add_options: '--force'
-                  skip_dirty_check: true
