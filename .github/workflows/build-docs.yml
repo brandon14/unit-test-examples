@@ -25,3 +25,4 @@ jobs:
                   commit_message: Build docs
                   file_pattern: "docs/*"
                   add_options: "-f"
+                  skip_dirty_check: true
