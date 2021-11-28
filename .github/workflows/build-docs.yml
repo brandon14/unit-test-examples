@@ -26,4 +26,3 @@ jobs:
                   file_pattern: docs/*
                   add_options: '--force'
                   skip_dirty_check: true
-                  skip_fetch: true
