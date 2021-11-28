@@ -24,5 +24,7 @@ jobs:
               with:
                   commit_message: Build docs
                   file_pattern: docs/*
+                  add_options: '-f'
+                  push_options: '-f'
                   skip_dirty_check: true
                   skip_fetch: true
