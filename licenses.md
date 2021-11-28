@@ -10,15 +10,8 @@ homepage, and license information for every dependency in this project.
 An example repository highlighting writing PHP unit tests.
 Homepage: Not configured.
 Licenses Used: MIT
-MIT License
 
-```
-            _ _       _          _                               _
-  _  _ _ _ (_) |_ ___| |_ ___ __| |_ ___ _____ ____ _ _ __  _ __| |___ ___
- | || | ' \| |  _|___|  _/ -_|_-<  _|___/ -_) \ / _` | '  \| '_ \ / -_|_-<
-  \_,_|_||_|_|\__|    \__\___/__/\__|   \___/_\_\__,_|_|_|_| .__/_\___/__/
-                                                           |_|
-```
+MIT License
 
 Copyright (c) 2018-2021 Brandon Clothier
 
