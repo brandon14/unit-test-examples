@@ -15,6 +15,10 @@
   <exclude-pattern>vendor</exclude-pattern>
   <!-- Exclude tests -->
   <exclude-pattern>tests/</exclude-pattern>
+  <!-- Exclude doctum cache -->
+  <exclude-pattern>doctum_cache/</exclude-pattern>
+  <!-- Exclude docs folder -->
+  <exclude-pattern>docs/</exclude-pattern>
 
   <rule ref="PSR2" />
 

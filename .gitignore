@@ -14,6 +14,10 @@ coverage/
 .php_cs.cache
 .php-cs-fixer.cache
 
+# Doctum docs
+docs
+doctum_cache
+
 # Editor files.
 .vscode
 .idea

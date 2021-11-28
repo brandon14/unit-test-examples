@@ -1,0 +1,27 @@
+name: build-docs
+on:
+    push:
+        branches-ignore:
+            - main
+jobs:
+    build-docs:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.head_ref }}
+
+            - name: Build doctum docs
+              uses: sudo-bot/action-doctum@v5
+              with:
+                  config-file: doctum.php
+                  method: "render"
+                  cli-args: "--output-format=github --no-ansi --no-progress -v"
+
+            - name: Commit changes
+              uses: stefanzweifel/git-auto-commit-action@v4
+              with:
+                  commit_message: Build docs
+                  file_pattern: docs/*
+                  add_options: '--force'

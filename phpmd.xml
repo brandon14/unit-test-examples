@@ -41,8 +41,12 @@
     </rule>
     <rule ref="rulesets/unusedcode.xml" />
 
-    <!-- Ignore vendor folder -->
+    <!-- Ignore vendor folder. -->
     <exclude-pattern>vendor</exclude-pattern>
-    <!-- Ignore tests folder -->
+    <!-- Exclude tests -->
     <exclude-pattern>tests</exclude-pattern>
+    <!-- Exclude doctum cache -->
+    <exclude-pattern>doctum_cache</exclude-pattern>
+    <!-- Exclude docs folder -->
+    <exclude-pattern>docs</exclude-pattern>
 </ruleset>
