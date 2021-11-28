@@ -109,7 +109,7 @@ to explore the possibilities with Github Actions.
 
 This code is released under the MIT license.
 
-Copyright &copy; 2018-2019 Brandon Clothier
+Copyright &copy; 2018-2021 Brandon Clothier
 
 <p align="center">
   <a href="https://forthebadge.com"><img src="https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg" alt="Works 60% Of The Time"></a>
