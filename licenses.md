@@ -35,7 +35,7 @@ SOFTWARE.
 
 ## Dependencies
 
-### predis/predis (Version v1.1.9 | c50c339)
+### predis/predis (Version v1.1.10 | a2fb02d)
 Flexible and feature-complete Redis client for PHP and HHVM
 Homepage: [http://github.com/predis/predis](http://github.com/predis/predis)
 Licenses Used: MIT
