@@ -35,7 +35,7 @@ SOFTWARE.
 
 ## Dependencies
 
-### predis/predis (Version v1.1.9 | c50c339)
+### predis/predis (Version v1.1.10 | a2fb02d)
 Flexible and feature-complete Redis client for PHP and HHVM
 Homepage: [http://github.com/predis/predis](http://github.com/predis/predis)
 Licenses Used: MIT
@@ -140,7 +140,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-### psr/simple-cache (Version 1.0.1 | 408d5ea)
+### psr/simple-cache (Version 3.0.0 | 764e0b3)
 Common interfaces for simple caching
 Homepage: Not configured.
 Licenses Used: MIT
